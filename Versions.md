@@ -1,0 +1,13 @@
+##### beta@1.1.0 - Em Andamento
+
+- ...
+- ...
+- ...
+- ... 
+
+
+##### beta@1.0.0 - 17/08/2022
+
+- Criação da nossa biblioteca "deps/nossaLivraria"
+- Estruturação do projeto
+- Created a new git
