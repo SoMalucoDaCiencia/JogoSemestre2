@@ -3,8 +3,7 @@
 //
 
 #include <stdbool.h>
-#include <string.h>
 
 bool isMAC() {
-    return __APPLE__ ? "true" : "false";
+    return __APPLE__;
 }
