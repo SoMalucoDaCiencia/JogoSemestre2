@@ -38,7 +38,7 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 ##############################
-## IntelliJ
+## JetBrains
 ##############################
 out/
 .idea/
