@@ -12,5 +12,7 @@
 
 int main() {
 
+    // Exemplo de verificação do sistema operacional usando nossa biblioteca
+    printf("%d", isMAC() ? 1 : 0);
     return 0;
 }
