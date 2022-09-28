@@ -4,7 +4,7 @@
 
 #include <stdbool.h>
 
-        bool isMAC() {
+bool isMAC() {
 #ifdef __APPLE__
     return 1;
 #endif
