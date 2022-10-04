@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(.)
 include_directories(deps)
+include_directories($ENV{ALLEGRO})
 
 add_executable(JogoSemestre2
         deps/nossaLivraria.c
