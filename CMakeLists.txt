@@ -10,3 +10,5 @@ add_executable(JogoSemestre2
         deps/nossaLivraria.c
         deps/nossaLivraria.h
         src/main.c)
+
+target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)
