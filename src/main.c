@@ -11,6 +11,9 @@
 #include <unistd.h>
 #include <allegro5/allegro_primitives.h>
 
+static bool FPS_POLARITY = false;
+static const float FPS = 60;
+
 int main() {
 
     al_init();
@@ -24,7 +27,6 @@ int main() {
     al_register_event_source(event_queue, al_get_display_event_source(display));
 
     // Inicia loops por FPS
-    float FPS = 60;
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
@@ -48,6 +50,7 @@ int main() {
                 break;
             }
             case ALLEGRO_EVENT_TIMER: {
+                FPS_POLARITY = !FPS_POLARITY;
                 printf("FPS rodando\n");
                 break;
             }
