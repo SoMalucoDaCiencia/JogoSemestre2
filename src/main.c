@@ -15,14 +15,14 @@
 int main() {
 
     al_init();
-    //al_init_image_addon();
-    //al_init_primitives_addon();
+//    al_init_image_addon();
+//    al_init_primitives_addon();
 
     al_create_display(1280,720);
 
     //ALLEGRO_BITMAP *image = al_load_bitmap(background);
     //al_draw_bitmap(image, 0, 0, 0);
     //al_destroy_bitmap(image);
-    while(TRUE){
+    while(1==1){
     }
 }
