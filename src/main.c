@@ -17,8 +17,6 @@ static const float FPS = 60;
 int main() {
 
     al_init();
-    al_init_image_addon();
-    al_init_primitives_addon();
 
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_DISPLAY* display = al_create_display(1280,720);
@@ -51,7 +49,8 @@ int main() {
             }
             case ALLEGRO_EVENT_TIMER: {
                 FPS_POLARITY = !FPS_POLARITY;
-                printf("FPS rodando\n");
+
+                insertSquare(100, 300, 400, 400, al_map_rgb(237, 66, 69), display);
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
