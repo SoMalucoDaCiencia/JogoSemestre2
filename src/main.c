@@ -21,8 +21,6 @@ int main() {
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_DISPLAY* display = al_create_display(1280,720);
 
-    al_init_image_addon();
-
     event_queue = al_create_event_queue();
     al_register_event_source(event_queue, al_get_display_event_source(display));
 
@@ -41,50 +39,40 @@ int main() {
 
     while (true) {
         ALLEGRO_EVENT ev;
-        ALLEGRO_BITMAP *bg = NULL, *play = NULL, *options = NULL, *quit = NULL;
-
         al_wait_for_event(event_queue, &ev);
 
         switch (ev.type) {
             case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
 
                 if (ev.mouse.x >= 490 && ev.mouse.x <= 790) {
-
-                    if(ev.mouse.y >= 450 && ev.mouse.y <= 550) {             // quit
-                        al_destroy_timer(timer);
-                        al_destroy_event_queue(event_queue);
-                        al_destroy_display(display);
-                        exit(0);
+                    if (ev.mouse.y >= 150 && ev.mouse.y <= 250) {     // play
+                        printf("start play\n");
                     } else if (ev.mouse.y >= 300 && ev.mouse.y <= 400) {     // config
-                        printf("config\n");
-                    } else if (ev.mouse.y >= 150 && ev.mouse.y <= 250) {     // play
-                        printf("play\n");
+                        printf("start config\n");
+                    } else if(ev.mouse.y >= 450 && ev.mouse.y <= 550) {             // quit
+                        killNine(timer, display, event_queue);
                     }
-
                 }
                 break;
             }
             case ALLEGRO_EVENT_TIMER: {
                 FPS_POLARITY = !FPS_POLARITY;
-                bg = al_load_bitmap("assets/background.png");
-                al_draw_bitmap(bg,0,0,0);
-                play = al_load_bitmap("assets/play.png");
-                al_draw_bitmap(play,490,150,0);
-                options = al_load_bitmap("assets/options.png");
-                al_draw_bitmap(options,490,300,0);
-                quit = al_load_bitmap("assets/quit.png");
-                al_draw_bitmap(quit,490,450,0);
+                if (al_init_image_addon()) {
+//                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/background.png");
+//                    al_draw_bitmap(bg, 0, 0, 0);
+                    ALLEGRO_BITMAP *play = al_load_bitmap("../src/assets/play.png");
+                    al_draw_bitmap(play, 490, 150, 0);
+                    ALLEGRO_BITMAP *options = al_load_bitmap("../src/assets/options.png");
+                    al_draw_bitmap(options, 490, 300, 0);
+                    ALLEGRO_BITMAP *quit = al_load_bitmap("../src/assets/quit.png");
+                    al_draw_bitmap(quit, 490, 450, 0);
+                }
                 al_flip_display();
-                insertSquare(100, 300, 490, 150, al_map_rgb(237, 66, 69), display);
-                insertSquare(100, 300, 490, 300, al_map_rgb(237, 66, 69), display);
-                insertSquare(100, 300, 490, 450, al_map_rgb(237, 66, 69), display);
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-                al_destroy_timer(timer);
-                al_destroy_event_queue(event_queue);
-                al_destroy_display(display);
-                exit(0);
+                killNine(timer, display, event_queue);
+                break;
             }
         }
     }

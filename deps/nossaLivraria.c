@@ -26,3 +26,10 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
     al_draw_bitmap(square, x, y, 0);
     al_flip_display();
 }
+
+void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue) {
+    al_destroy_timer(timer);
+    al_destroy_event_queue(event_queue);
+    al_destroy_display(display);
+    exit(0);
+}
