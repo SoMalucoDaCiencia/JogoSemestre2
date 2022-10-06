@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.23)
-project(JogoSemestre2 C)
+project(JogoSemestre2)
+EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
+message( STATUS "Architecture: ${ARCHITECTURE}")
 
-set(CMAKE_C_STANDARD 11)
+
+if (${ARCHITECTURE} STREQUAL "arm64")
+    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
+endif()
+set(CMAKE_CXX_STANDARD 11)
 
 include_directories(.)
 include_directories(deps)
