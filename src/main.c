@@ -10,6 +10,8 @@
 #include <allegro5/allegro_image.h>
 #include <unistd.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 static bool FPS_POLARITY = false;
 static const float FPS = 60;
@@ -29,28 +31,48 @@ int main() {
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
 
-    // Inicia eventos criadsos pelo mouse
+    // Inicia eventos criados pelo mouse
     al_install_mouse();
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
-    // Inicia eventos criadsos pelo teclado
+    // Inicia eventos criados pelo teclado
     al_install_keyboard();
     al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 
     while (true) {
         ALLEGRO_EVENT ev;
+        ALLEGRO_BITMAP *background, *play, *options, *quit;
         al_wait_for_event(event_queue, &ev);
 
         switch (ev.type) {
             case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
-                printf("Click\n");
+//                printf("Click\n");
+//                printf("%d\n",ev.mouse.x);
+
+                if (ev.mouse.x >= 490 && ev.mouse.x <= 790) {
+
+                    if(ev.mouse.y >= 450 && ev.mouse.y <= 550) {             // quit
+                        al_destroy_timer(timer);
+                        al_destroy_event_queue(event_queue);
+                        al_destroy_display(display);
+                        exit(0);
+                    } else if (ev.mouse.y >= 300 && ev.mouse.y <= 400) {     // config
+                        printf("config\n");
+                    } else if (ev.mouse.y >= 150 && ev.mouse.y <= 300) {     // play
+                        printf("play\n");
+                    }
+
+                }
                 break;
             }
             case ALLEGRO_EVENT_TIMER: {
                 FPS_POLARITY = !FPS_POLARITY;
-
-                insertSquare(100, 300, 400, 400, al_map_rgb(237, 66, 69), display);
+//                background = al_load_bitmap("assets/background.png");
+//                al_draw_bitmap(background,0,0,0);
+                insertSquare(100, 300, 490, 150, al_map_rgb(237, 66, 69), display);
+                insertSquare(100, 300, 490, 300, al_map_rgb(237, 66, 69), display);
+                insertSquare(100, 300, 490, 450, al_map_rgb(237, 66, 69), display);
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
