@@ -8,10 +8,13 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
 #include <unistd.h>
 #include <allegro5/allegro_primitives.h>
 
 static bool FPS_POLARITY = false;
+static int WINDOW_WIDTH = 1280;
+static int WINDOW_HEIGHT = 720;
 static const float FPS = 60;
 
 int main() {
@@ -19,7 +22,7 @@ int main() {
     al_init();
 
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-    ALLEGRO_DISPLAY* display = al_create_display(1280,720);
+    ALLEGRO_DISPLAY* display = al_create_display(WINDOW_WIDTH,WINDOW_HEIGHT);
 
     event_queue = al_create_event_queue();
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -44,12 +47,12 @@ int main() {
         switch (ev.type) {
             case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
 
-                if (ev.mouse.x >= 490 && ev.mouse.x <= 790) {
-                    if (ev.mouse.y >= 150 && ev.mouse.y <= 250) {     // play
+                if (ev.mouse.x >= (WINDOW_WIDTH/2)-200 && ev.mouse.x <= (WINDOW_WIDTH/2)+200) {
+                    if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
                         printf("start play\n");
-                    } else if (ev.mouse.y >= 300 && ev.mouse.y <= 400) {     // config
+                    } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                         printf("start config\n");
-                    } else if(ev.mouse.y >= 450 && ev.mouse.y <= 550) {             // quit
+                    } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
                         killNine(timer, display, event_queue);
                     }
                 }
@@ -57,16 +60,25 @@ int main() {
             }
             case ALLEGRO_EVENT_TIMER: {
                 FPS_POLARITY = !FPS_POLARITY;
+                al_clear_to_color(al_map_rgb(255, 255, 255));
+
                 if (al_init_image_addon()) {
-//                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/background.png");
-//                    al_draw_bitmap(bg, 0, 0, 0);
-                    ALLEGRO_BITMAP *play = al_load_bitmap("../src/assets/play.png");
-                    al_draw_bitmap(play, 490, 150, 0);
-                    ALLEGRO_BITMAP *options = al_load_bitmap("../src/assets/options.png");
-                    al_draw_bitmap(options, 490, 300, 0);
-                    ALLEGRO_BITMAP *quit = al_load_bitmap("../src/assets/quit.png");
-                    al_draw_bitmap(quit, 490, 450, 0);
+                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/as.png");
+                    al_draw_bitmap(bg, 870, 150, 0);
+                    ALLEGRO_BITMAP *tittle = al_load_bitmap("../src/assets/tittle.png");
+                    al_draw_bitmap(tittle, (WINDOW_WIDTH/2)-236, 50, 0);
                 }
+
+//                if (al_init_font_addon()) {
+//                    ALLEGRO_FONT *font = al_load_bitmap_font("../src/assets/fonts/Courier-New.tga");
+//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 465, 0, "Play");
+//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
+//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
+//                }
+
+                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
                 al_flip_display();
                 break;
             }
