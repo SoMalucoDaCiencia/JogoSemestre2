@@ -16,7 +16,7 @@ add_executable(JogoSemestre2
         src/main.c)
 
 if (WIN32)
-    target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-md-debug)
+    target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)
 elseif (APPLE)
     if (${ARCHITECTURE} STREQUAL "arm64")
         set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
