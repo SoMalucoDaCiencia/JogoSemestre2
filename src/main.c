@@ -63,10 +63,12 @@ int main() {
                 al_clear_to_color(al_map_rgb(255, 255, 255));
 
                 if (al_init_image_addon()) {
-                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/as.png");
-                    al_draw_bitmap(bg, 870, 150, 0);
-                    ALLEGRO_BITMAP *tittle = al_load_bitmap("../src/assets/tittle.png");
-                    al_draw_bitmap(tittle, (WINDOW_WIDTH/2)-236, 50, 0);
+                    al_init_primitives_addon();
+                    al_draw_filled_circle(100, 100, 25, al_map_rgb(100,100,100));
+//                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/as.png");
+//                    al_draw_bitmap(bg, 870, 150, 0);
+//                    ALLEGRO_BITMAP *tittle = al_load_bitmap("../src/assets/tittle.png");
+//                    al_draw_bitmap(tittle, (WINDOW_WIDTH/2)-236, 50, 0);
                 }
 
 //                if (al_init_font_addon()) {
@@ -76,9 +78,9 @@ int main() {
 //                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
 //                }
 
-                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
                 al_flip_display();
                 break;
             }
