@@ -33,9 +33,10 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
     insertFilledSquare(height, width, x + (borderSize/2), y + (borderSize/2), color, display);
 }
 
-void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue) {
+void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP* bitmap) {
     al_destroy_timer(timer);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
+    al_destroy_bitmap(bitmap);
     exit(0);
 }

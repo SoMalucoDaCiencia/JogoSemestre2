@@ -8,13 +8,10 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
 #include <unistd.h>
 #include <allegro5/allegro_primitives.h>
 
 static bool FPS_POLARITY = false;
-static int WINDOW_WIDTH = 1280;
-static int WINDOW_HEIGHT = 720;
 static const float FPS = 60;
 
 int main() {
@@ -22,7 +19,7 @@ int main() {
     al_init();
 
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-    ALLEGRO_DISPLAY* display = al_create_display(WINDOW_WIDTH,WINDOW_HEIGHT);
+    ALLEGRO_DISPLAY* display = al_create_display(1280,720);
 
     event_queue = al_create_event_queue();
     al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -40,54 +37,133 @@ int main() {
     al_install_keyboard();
     al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-    while (true) {
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
+    int gamestate = 0; // STATE INICIAL
 
-        switch (ev.type) {
+    while (true) {
+
+        ALLEGRO_EVENT ev;
+        ALLEGRO_BITMAP *play = NULL, *options = NULL, *quit = NULL, *back = NULL;
+
+        al_wait_for_event(event_queue, &ev); // ESPERANDO POR EVENTOS
+
+        switch(ev.type) {
+
             case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
 
-                if (ev.mouse.x >= (WINDOW_WIDTH/2)-200 && ev.mouse.x <= (WINDOW_WIDTH/2)+200) {
-                    if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
-                        printf("start play\n");
-                    } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
-                        printf("start config\n");
-                    } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
-                        killNine(timer, display, event_queue);
+                // EVENTO CLICK
+
+                switch(gamestate) {
+
+                    case 0: {
+                        // BOTÕES DO MENU
+
+                        if (ev.mouse.x >= 490 && ev.mouse.x <= 790) {
+                            if (ev.mouse.y >= 150 && ev.mouse.y <= 250) {
+                                // CLICK BOTÃO PLAY
+
+                                gamestate = 1;
+                            } else if (ev.mouse.y >= 300 && ev.mouse.y <= 400) {
+                                // CLICK BOTÃO CONFIG
+
+                                gamestate = 2;
+                            } else if (ev.mouse.y >= 450 && ev.mouse.y <= 550) {
+                                // CLICK BOTÃO QUIT
+
+                                al_destroy_bitmap(play);
+                                al_destroy_bitmap(options);
+                                al_destroy_bitmap(quit);
+                                al_destroy_bitmap(back);
+                                killNine(timer, display, event_queue);
+                                // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
+                            }
+                        }
+
+                        break;
                     }
+                    case 1: {
+                        // BOTÕES DA TELA PLAY
+
+
+                        break;
+                    }
+                    case 2: {
+                        // BOTÕES DA TELA CONFIG
+
+                        if (ev.mouse.x >= 30 && ev.mouse.x <= 150 && ev.mouse.y >= 30 && ev.mouse.y <= 70){
+
+                            gamestate = 0; // RETORNA A TELA DE MENU
+                        }
+                        break;
+                    }
+
                 }
-                break;
+
             }
             case ALLEGRO_EVENT_TIMER: {
-                FPS_POLARITY = !FPS_POLARITY;
-                al_clear_to_color(al_map_rgb(255, 255, 255));
+                FPS_POLARITY = !FPS_POLARITY; // POLARIDADE DO FPS
 
-                if (al_init_image_addon()) {
-                    al_init_primitives_addon();
-                    al_draw_filled_circle(100, 100, 25, al_map_rgb(100,100,100));
-//                    ALLEGRO_BITMAP *bg = al_load_bitmap("../src/assets/as.png");
-//                    al_draw_bitmap(bg, 870, 150, 0);
-//                    ALLEGRO_BITMAP *tittle = al_load_bitmap("../src/assets/tittle.png");
-//                    al_draw_bitmap(tittle, (WINDOW_WIDTH/2)-236, 50, 0);
+                if (!al_init_image_addon()) break; // AGUARDA O ADDON DE IMAGEM INICIAR -> SE NÂO TIVER INICIADO NÃO PARTE PARA PRÓXIMA PARTE DO CÓDIGO
+
+                switch(gamestate) {
+
+                    case 0: {
+                        // TELA DO MENU
+
+                        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+                        play = al_load_bitmap("../src/assets/play.png");
+                        if (play != NULL) {
+                            al_draw_bitmap(play, 490, 150, 0); // DRAW DO BOTÃO PLAY
+                        }
+                        options = al_load_bitmap("../src/assets/options.png");
+                        if (options != NULL) {
+                            al_draw_bitmap(options, 490, 300, 0); // DRAW DO BOTÃO OPTIONS
+                        }
+                        quit = al_load_bitmap("../src/assets/quit.png");
+                        if (quit != NULL) {
+                            al_draw_bitmap(quit, 490, 450, 0); // DRAW DO BOTÃO QUIT
+                        }
+
+                        break;
+                    }
+                    case 1: {
+                        // TELA PLAY
+
+                        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+                        break;
+                    }
+                    case 2: {
+                        // TELA CONFIG
+
+                        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+                        back = al_load_bitmap("../src/assets/back.png");
+                        if (back != NULL) {
+                            al_draw_bitmap(back, 30, 30, 0); // DRAW DO BOTÂO BACK
+                        }
+
+                        break;
+                    }
+
                 }
 
-//                if (al_init_font_addon()) {
-//                    ALLEGRO_FONT *font = al_load_bitmap_font("../src/assets/fonts/Courier-New.tga");
-//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 465, 0, "Play");
-//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
-//                    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
-//                }
+                al_flip_display(); // FLIP DISPLAY A TODO FRAME
+                break; // BREAK DO EVENTO TIMER
 
-//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-//                insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-                al_flip_display();
-                break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+                al_destroy_bitmap(play);
+                al_destroy_bitmap(options);
+                al_destroy_bitmap(quit);
+                al_destroy_bitmap(back);
                 killNine(timer, display, event_queue);
                 break;
+                // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
             }
+
         }
+
     }
+
 }
