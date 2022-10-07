@@ -24,6 +24,7 @@ void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color
     al_clear_to_color(color);
     al_set_target_bitmap(al_get_backbuffer(display));
     al_draw_bitmap(square, x, y, 0);
+    al_destroy_bitmap(square);
 }
 
 void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display, int borderSize, ALLEGRO_COLOR borderColor) {
