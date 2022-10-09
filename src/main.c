@@ -78,9 +78,12 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
 void drawConfig(ALLEGRO_DISPLAY* display) {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
+
     drawStars();
+
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+
     al_draw_text( font, WHITE, 90, 40, 0, "Back");
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
