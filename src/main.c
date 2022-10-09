@@ -33,14 +33,7 @@ ALLEGRO_COLOR PINK        ;
 ALLEGRO_COLOR ORANGE      ;
 ALLEGRO_COLOR BROWN       ;
 
-void drawMenu(ALLEGRO_DISPLAY* display) {
-    // TELA DO MENU
-    al_clear_to_color(BLACK);
-    al_draw_bitmap(astro, 870, 150, 0);
-    al_draw_bitmap(tittle, (float)(WINDOW_WIDTH/2)-236, 50, 0);
-
-
-    //DESENHA ESTRELAS
+void drawStars(){
     srand(time(NULL));
     int randomX = rand() % WINDOW_WIDTH;
     int randomY = rand() % WINDOW_HEIGHT;
@@ -52,6 +45,16 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
         randomR = rand() % 1 + 4;
         al_draw_filled_circle(randomX, randomY, randomR, WHITE);
     }
+}
+
+void drawMenu(ALLEGRO_DISPLAY* display) {
+    // TELA DO MENU
+    al_clear_to_color(BLACK);
+    al_draw_bitmap(astro, 870, 150, 0);
+    al_draw_bitmap(tittle, (float)(WINDOW_WIDTH/2)-236, 50, 0);
+
+    //DESENHA ESTRELAS
+    drawStars();
 
     //SOMBRA OPÇÕES MENU
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
@@ -75,7 +78,10 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
 void drawConfig(ALLEGRO_DISPLAY* display) {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
+    drawStars();
+    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    al_draw_text( font, WHITE, 90, 40, 0, "Back");
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
