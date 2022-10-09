@@ -69,6 +69,7 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
     al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-42, 535, 0, "Config");
     al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 615, 0, "Quit");
 
+    //IMAGENS MENU
     al_draw_bitmap(astro, 870, 150, 0);
     al_draw_bitmap(tittleWorbit, (float)(WINDOW_WIDTH/2)-250, 80, 0);
     insertFilledSquare(17, 150, (WINDOW_WIDTH/2)-75, 30, BLACK, display);
