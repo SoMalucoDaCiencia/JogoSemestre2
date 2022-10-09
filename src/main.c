@@ -75,7 +75,7 @@ int main() {
     }
 
     // Inicia paleta de cores
-    BLACK        = BLACK;
+    BLACK        = getColorByHex((char*) "#000000");
     WHITE        = getColorByHex((char*) "#ffffff");
     DARK_PURPLE  = getColorByHex((char*) "#491485");
     LIGHT_PURPLE = getColorByHex((char*) "#9547ed");
