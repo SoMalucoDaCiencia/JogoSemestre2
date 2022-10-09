@@ -8,6 +8,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <deps/nossaLivraria.h>
+#include <allegro5/allegro_primitives.h>
 
 bool FPS_POLARITY = false;
 int const WINDOW_WIDTH          = 1280;
@@ -41,6 +42,19 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
 
+    //DESENHA ESTRELAS
+    srand(time(NULL));
+    int randomX = rand() % WINDOW_WIDTH;
+    int randomY = rand() % WINDOW_HEIGHT;
+    int randomR = rand() % 1 + 4;
+
+    for (int i = 0; i < 90; ++i) {
+        randomX = rand() % WINDOW_WIDTH;
+        randomY = rand() % WINDOW_HEIGHT;
+        randomR = rand() % 1 + 4;
+        al_draw_filled_circle(randomX, randomY, randomR, WHITE);
+    }
+
     //SOMBRA OPÇÕES MENU
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 530, DARK_PURPLE, display);
@@ -70,13 +84,15 @@ int main() {
     // Inicia allegro
     al_init();
 
-    // Carrrega as imagens da jogo
+    // Carrega as imagens do jogo
     if (al_init_image_addon()) {
         astro = al_load_bitmap("../src/assets/as.png");
         tittle = al_load_bitmap("../src/assets/tittle.png");
     }
 
-    // Carrrega as fontes da jogo
+    al_init_primitives_addon();
+
+    // Carrega as fontes do jogo
     if (al_init_font_addon()) {
         font = al_load_bitmap_font("../src/assets/fonts/Courier-New.tga");
     }
