@@ -18,6 +18,15 @@ bool isMAC() {
     return 0;
 }
 
+char* getNow() {
+    time_t rawtime;
+    time(&rawtime);
+
+    char* now =  asctime(localtime(&rawtime));
+    now[strcspn(now, "\n")] = 0; // Tira quebra de linha do final da string
+    return now;
+}
+
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {
     ALLEGRO_BITMAP *square = al_create_bitmap(width, height);
     al_set_target_bitmap(square);
@@ -35,6 +44,8 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
 }
 
 void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue) {
+
+    printf(" - Killing app....[%s]\n", getNow());
     al_destroy_timer(timer);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);

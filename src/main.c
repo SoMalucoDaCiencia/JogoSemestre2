@@ -33,6 +33,8 @@ void drawManu(ALLEGRO_DISPLAY* display) {
     insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
     insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
     insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+
+    printf(" - Drawing MENU....[%s]\n", getNow());
     al_flip_display();
 }
 
@@ -40,6 +42,8 @@ void drawConfig(ALLEGRO_DISPLAY* display) {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(al_map_rgb(255, 255, 255));
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display);
+
+    printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
 }
 
@@ -152,6 +156,7 @@ int main() {
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+
                 al_destroy_bitmap(astro);
                 al_destroy_bitmap(tittle);
                 killNine(timer, display, event_queue);
