@@ -9,9 +9,6 @@
 #ifndef JOGOSEMESTRE2_LIVRARIA_H
 #define JOGOSEMESTRE2_LIVRARIA_H
 
-#include <stdbool.h>
-#include <allegro5/display.h>
-
     char* isMAC();
 
     char* getNow();
