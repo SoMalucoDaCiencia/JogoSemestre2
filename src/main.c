@@ -41,9 +41,16 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
 
+    //SOMBRA OPÇÕES MENU
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 530, DARK_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 610, DARK_PURPLE, display);
+
+    //OPÇÕES MENU
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, LIGHT_PURPLE, display);
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, LIGHT_PURPLE, display);
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
+
 
     printf(" - Drawing MENU....[%s]\n", getNow());
     al_flip_display();
