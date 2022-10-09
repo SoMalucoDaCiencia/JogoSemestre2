@@ -9,6 +9,7 @@
 #include <allegro5/allegro_font.h>
 #include <deps/nossaLivraria.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
 
 bool FPS_POLARITY = false;
 int const WINDOW_WIDTH          = 1280;
@@ -38,9 +39,6 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
     al_draw_bitmap(astro, 870, 150, 0);
     al_draw_bitmap(tittle, (float)(WINDOW_WIDTH/2)-236, 50, 0);
 
-//    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 465, 0, "Play");
-//    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
-//    al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
 
     //DESENHA ESTRELAS
     srand(time(NULL));
@@ -65,6 +63,10 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, LIGHT_PURPLE, display);
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
 
+    //FONTE MENU
+    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 455, 0, "Play");
+    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-42, 535, 0, "Config");
+    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 615, 0, "Quit");
 
     printf(" - Drawing MENU....[%s]\n", getNow());
     al_flip_display();
@@ -93,8 +95,8 @@ int main() {
     al_init_primitives_addon();
 
     // Carrega as fontes do jogo
-    if (al_init_font_addon()) {
-        font = al_load_bitmap_font("../src/assets/fonts/Courier-New.tga");
+    if (al_init_font_addon() && al_init_ttf_addon()) {
+        font = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
     }
 
     // Inicia paleta de cores
