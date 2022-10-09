@@ -31,7 +31,7 @@ ALLEGRO_COLOR PINK        ;
 ALLEGRO_COLOR ORANGE      ;
 ALLEGRO_COLOR BROWN       ;
 
-void drawManu(ALLEGRO_DISPLAY* display) {
+void drawMenu(ALLEGRO_DISPLAY* display) {
     // TELA DO MENU
     al_clear_to_color(BLACK);
     al_draw_bitmap(astro, 870, 150, 0);
@@ -160,7 +160,7 @@ int main() {
                 switch (GAMESTATE) {
                     case 0: {
                         if (orderRedraw) {
-                            drawManu(display);
+                            drawMenu(display);
                             orderRedraw = false;
                         }
                         break;
