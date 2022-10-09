@@ -5,11 +5,8 @@
 #include <stdbool.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_image.h>
-#include <unistd.h>
-#include <allegro5/allegro_primitives.h>
 
 bool isMAC() {
 #ifdef __APPLE__
@@ -34,6 +31,12 @@ void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color
     al_set_target_bitmap(al_get_backbuffer(display));
     al_draw_bitmap(square, x, y, 0);
     al_destroy_bitmap(square);
+}
+
+ALLEGRO_COLOR const getColorByHex(char* hexStringValue) {
+    int r, g, b;
+    sscanf(hexStringValue, "#%02x%02x%02x", &r, &g, &b);
+    return al_map_rgb(r, g, b);
 }
 
 void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display, int borderSize, ALLEGRO_COLOR borderColor) {

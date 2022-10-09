@@ -4,25 +4,36 @@
 #include <stdbool.h>
 #include <time.h>
 #include <stdlib.h>
-#include <deps/nossaLivraria.h>
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include <unistd.h>
-#include <allegro5/allegro_primitives.h>
+#include <deps/nossaLivraria.h>
 
-static bool FPS_POLARITY = false;
-static int WINDOW_WIDTH = 1280;
-static int WINDOW_HEIGHT = 720;
-static const float FPS = 60;
+bool FPS_POLARITY = false;
+int const WINDOW_WIDTH          = 1280;
+int const WINDOW_HEIGHT         = 720;
+float const FPS                 = 60;
 
 ALLEGRO_BITMAP *astro, *tittle;
 ALLEGRO_FONT *font;
 
+ALLEGRO_COLOR BLACK       ;
+ALLEGRO_COLOR WHITE       ;
+ALLEGRO_COLOR DARK_PURPLE ;
+ALLEGRO_COLOR LIGHT_PURPLE;
+ALLEGRO_COLOR RED         ;
+ALLEGRO_COLOR YELLOW      ;
+ALLEGRO_COLOR LIGHT_GREEN ;
+ALLEGRO_COLOR DARK_GREEN  ;
+ALLEGRO_COLOR LIGHT_BLUE  ;
+ALLEGRO_COLOR DARK_BLUE   ;
+ALLEGRO_COLOR PINK        ;
+ALLEGRO_COLOR ORANGE      ;
+ALLEGRO_COLOR BROWN       ;
+
 void drawManu(ALLEGRO_DISPLAY* display) {
     // TELA DO MENU
-    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_clear_to_color(BLACK);
     al_draw_bitmap(astro, 870, 150, 0);
     al_draw_bitmap(tittle, (float)(WINDOW_WIDTH/2)-236, 50, 0);
 
@@ -30,9 +41,9 @@ void drawManu(ALLEGRO_DISPLAY* display) {
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 555, 0, "Config");
 //                      al_draw_text( font, al_map_rgb(88, 43, 66), 200, 625, 0, "Quit");
 
-    insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-    insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
-    insertSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, al_map_rgb(255, 255, 255), display, 6, al_map_rgb(88, 43, 66));
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, LIGHT_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, LIGHT_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
 
     printf(" - Drawing MENU....[%s]\n", getNow());
     al_flip_display();
@@ -40,8 +51,8 @@ void drawManu(ALLEGRO_DISPLAY* display) {
 
 void drawConfig(ALLEGRO_DISPLAY* display) {
     // TELA DE CONFIGURAÇÕES
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, al_map_rgb(255, 255, 255), display);
+    al_clear_to_color(BLACK);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, BLACK, display);
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
@@ -63,6 +74,21 @@ int main() {
         font = al_load_bitmap_font("../src/assets/fonts/Courier-New.tga");
     }
 
+    // Inicia paleta de cores
+    BLACK        = BLACK;
+    WHITE        = getColorByHex((char*) "#ffffff");
+    DARK_PURPLE  = getColorByHex((char*) "#491485");
+    LIGHT_PURPLE = getColorByHex((char*) "#9547ed");
+    RED          = getColorByHex((char*) "#fa2347");
+    YELLOW       = getColorByHex((char*) "#ffcc00");
+    LIGHT_GREEN  = getColorByHex((char*) "#60d642");
+    DARK_GREEN   = getColorByHex((char*) "#143d09");
+    LIGHT_BLUE   = getColorByHex((char*) "#477eff");
+    DARK_BLUE    = getColorByHex((char*) "#0a2563");
+    PINK         = getColorByHex((char*) "#f227de");
+    ORANGE       = getColorByHex((char*) "#ff7b00");
+    BROWN        = getColorByHex((char*) "#4f2600");
+
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 
     // Inicia eventos criados pelo mouse
@@ -75,7 +101,7 @@ int main() {
 
     // Inicia display
     ALLEGRO_DISPLAY *display = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
-    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_clear_to_color(BLACK);
 
     // Inicia loops por FPS
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
@@ -130,7 +156,7 @@ int main() {
             }
             case ALLEGRO_EVENT_TIMER: {
                 FPS_POLARITY = !FPS_POLARITY; // POLARIDADE DO FPS
-                al_clear_to_color(al_map_rgb(255, 255, 255));
+                al_clear_to_color(BLACK);
                 switch (GAMESTATE) {
                     case 0: {
                         if (orderRedraw) {
