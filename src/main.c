@@ -16,7 +16,7 @@ int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
 float const FPS                 = 60;
 
-ALLEGRO_BITMAP *astro, *tittle;
+ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
 
 ALLEGRO_COLOR BLACK       ;
@@ -50,8 +50,6 @@ void drawStars(){
 void drawMenu(ALLEGRO_DISPLAY* display) {
     // TELA DO MENU
     al_clear_to_color(BLACK);
-    al_draw_bitmap(astro, 870, 150, 0);
-    al_draw_bitmap(tittle, (float)(WINDOW_WIDTH/2)-236, 50, 0);
 
     //DESENHA ESTRELAS
     drawStars();
@@ -70,6 +68,11 @@ void drawMenu(ALLEGRO_DISPLAY* display) {
     al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 455, 0, "Play");
     al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-42, 535, 0, "Config");
     al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 615, 0, "Quit");
+
+    al_draw_bitmap(astro, 870, 150, 0);
+    al_draw_bitmap(tittleWorbit, (float)(WINDOW_WIDTH/2)-250, 80, 0);
+    insertFilledSquare(17, 150, (WINDOW_WIDTH/2)-75, 30, BLACK, display);
+    al_draw_bitmap(tittleWelcome, (float)(WINDOW_WIDTH/2)-75, 30, 0);
 
     printf(" - Drawing MENU....[%s]\n", getNow());
     al_flip_display();
@@ -97,8 +100,10 @@ int main() {
 
     // Carrega as imagens do jogo
     if (al_init_image_addon()) {
-        astro = al_load_bitmap("../src/assets/as.png");
-        tittle = al_load_bitmap("../src/assets/tittle.png");
+        astro = al_load_bitmap("../src/assets/astronauta.png");
+        tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
+        tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
+
     }
 
     al_init_primitives_addon();
@@ -165,7 +170,8 @@ int main() {
                                 GAMESTATE = 2;
                             } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
                                 al_destroy_bitmap(astro);
-                                al_destroy_bitmap(tittle);
+                                al_destroy_bitmap(tittleWorbit);
+                                al_destroy_bitmap(tittleWelcome);
                                 killNine(timer, display, event_queue);
                             }
                         }
@@ -218,7 +224,9 @@ int main() {
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
 
                 al_destroy_bitmap(astro);
-                al_destroy_bitmap(tittle);
+                al_destroy_bitmap(tittleWorbit);
+                al_destroy_bitmap(tittleWelcome);
+
                 killNine(timer, display, event_queue);
                 // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
                 break;
