@@ -45,7 +45,7 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
 
 void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue) {
 
-    printf(" - Killing app....[%s]\n", getNow());
+    printf(" - Killing APP....[%s]\n", getNow());
     al_destroy_timer(timer);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
