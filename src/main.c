@@ -52,7 +52,7 @@ void drawManu(ALLEGRO_DISPLAY* display) {
 void drawConfig(ALLEGRO_DISPLAY* display) {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, BLACK, display);
+    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
@@ -145,7 +145,7 @@ int main() {
                     case 2: {
                         // BOTÕES DA TELA CONFIG
 
-                        if (ev.mouse.x >= 30 && ev.mouse.x <= 150 && ev.mouse.y >= 30 && ev.mouse.y <= 70) {
+                        if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                             orderRedraw = true;
                             GAMESTATE = 0; // RETORNA A TELA DE MENU
                         }
