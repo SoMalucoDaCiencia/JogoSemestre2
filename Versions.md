@@ -1,9 +1,14 @@
-##### beta@2.1.0 - Em andamento
+### beta@2.1.0 - Em andamento
 
--  
+- Definicao do tipo planeta
+- Otimizacao principal
+- Leitor de arquivos YAML
+- Definicao dos mapas do jogo
+- Definição da nova biblioteca "gameCore.h"
+- Definição de algumas variaveis referentes ao jogo
 
 
-##### beta@2.0.0 - 09/10/2022
+### beta@2.0.0 - 09/10/2022
 
 - Tela de menu
 - Tela de configurações
@@ -14,14 +19,14 @@
 - Background definido
 
 
-##### beta@1.1.0 - 05/10/2022
+### beta@1.1.0 - 05/10/2022
 
 - Tela inicial e botões de teste
 - FPS rodando
 - Novas features em "deps/nossaLivraria"
 
 
-##### beta@1.0.0 - 17/08/2022
+### beta@1.0.0 - 17/08/2022
 
 - Criação da nossa biblioteca "deps/nossaLivraria"
 - Estruturação do projeto
