@@ -25,6 +25,12 @@ char* getNow() {
     return now;
 }
 
+long getUnix() {
+    time_t rawMillis;
+    rawMillis = time(NULL)*1000;
+    return rawMillis;
+}
+
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {
     ALLEGRO_BITMAP *square = al_create_bitmap(width, height);
     al_set_target_bitmap(square);

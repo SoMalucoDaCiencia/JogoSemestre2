@@ -13,6 +13,8 @@ link_directories($ENV{ALLEGRO}/lib)
 add_executable(JogoSemestre2
         deps/nossaLivraria.c
         deps/nossaLivraria.h
+        deps/gameCore.c
+        deps/gameCore.h
         src/main.c)
 
 if (WIN32)

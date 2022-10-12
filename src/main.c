@@ -8,13 +8,28 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <deps/nossaLivraria.h>
+#include <deps/gameCore.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-bool FPS_POLARITY = false;
+bool GAME_FREQUENCY_POLARITY = false;
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
-float const FPS                 = 60;
+bool showFPS                    = false;
+
+float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
+float MAX_FPS                   = 60; // Maximo de vezes o jogo é renderizado
+float FPS_REAL                  = 59;  // Guarda quantas de vezes o jogo esta sendo renderizado
+
+double NEWTON;
+
+int ballRadius = 1;
+
+int ballSpeedX = -2;
+int ballSpeedY = 0;
+int ballXCoord = 950;
+int ballYCoord = 55;
+int limitWalls = false;
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
@@ -129,6 +144,9 @@ int main() {
     ORANGE       = getColorByHex((char*) "#ff7b00");
     BROWN        = getColorByHex((char*) "#4f2600");
 
+    // Inicia constante de newton
+    NEWTON = 6.6743 * pow(10, -11);
+
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 
     // Inicia eventos criados pelo mouse
@@ -143,8 +161,8 @@ int main() {
     ALLEGRO_DISPLAY *display = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
     al_clear_to_color(BLACK);
 
-    // Inicia loops por FPS
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
+    // Inicia loops por GAME_FREQUENCY
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
@@ -196,7 +214,7 @@ int main() {
                 break;
             }
             case ALLEGRO_EVENT_TIMER: {
-                FPS_POLARITY = !FPS_POLARITY; // POLARIDADE DO FPS
+                GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
                 al_clear_to_color(BLACK);
                 switch (GAMESTATE) {
                     case 0: {
