@@ -12,24 +12,23 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-bool GAME_FREQUENCY_POLARITY = false;
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
-bool showFPS                    = false;
+bool LIMIT_WALLS                  = false;
 
+bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
-float MAX_FPS                   = 60; // Maximo de vezes o jogo é renderizado
-float FPS_REAL                  = 59;  // Guarda quantas de vezes o jogo esta sendo renderizado
+float const MPS                 = 60; // Maximo de vezes o jogo é renderizado
+float FPS;                            // Guarda quantas de vezes o jogo esta sendo renderizado
+bool SHOW_FPS                   = false;
 
 double NEWTON;
 
-int ballRadius = 1;
-
-int ballSpeedX = -2;
-int ballSpeedY = 0;
-int ballXCoord = 950;
-int ballYCoord = 55;
-int limitWalls = false;
+int ballRadius                  = 1;
+int ballSpeedX                  = -2;
+int ballSpeedY                  = 0;
+int ballXCoord                  = 950;
+int ballYCoord                  = 55;
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
@@ -119,9 +118,9 @@ int main() {
         astro = al_load_bitmap("../src/assets/astronauta.png");
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
-
     }
 
+    // Inicia biblioteca de primitives
     al_init_primitives_addon();
 
     // Carrega as fontes do jogo
@@ -147,13 +146,14 @@ int main() {
     // Inicia constante de newton
     NEWTON = 6.6743 * pow(10, -11);
 
+    // Inicia pilha de eventos do allegro
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 
-    // Inicia eventos criados pelo mouse
+    // Inicia event listener do mouse
     al_install_mouse();
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
-    // Inicia eventos criados pelo teclado
+    // Inicia event listener do teclado
     al_install_keyboard();
     al_register_event_source(event_queue, al_get_keyboard_event_source());
 
@@ -241,11 +241,9 @@ int main() {
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-
                 al_destroy_bitmap(astro);
                 al_destroy_bitmap(tittleWorbit);
                 al_destroy_bitmap(tittleWelcome);
-
                 killNine(timer, display, event_queue);
                 // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
                 break;

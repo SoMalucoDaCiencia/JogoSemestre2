@@ -9,6 +9,10 @@ void readCreatePlanets() {
 
 }
 
-bool moveBall() {
-    return 0;
+void moveBall() {
+
+}
+
+Planeta* scanPlanetsYaml(int level) {
+
 }

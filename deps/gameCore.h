@@ -5,8 +5,19 @@
 #ifndef JOGOSEMESTRE2_GAMECORE_H
 #define JOGOSEMESTRE2_GAMECORE_H
 
+typedef struct planeta {
+    char nome[30];
+    int coordx;
+    int coordY;
+    int radius;
+    int mass;
+    char color[7];
+} Planeta;
+
+Planeta* scanPlanetsYaml(int level);
+
 void readCreatePlanets();
 
-bool moveBall();
+void moveBall();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H
