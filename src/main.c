@@ -20,6 +20,7 @@ bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
 float const MPS                 = 60; // Maximo de vezes o jogo é renderizado
 float FPS;                            // Guarda quantas de vezes o jogo esta sendo renderizado
+bool allow                      = true;
 bool SHOW_FPS                   = false;
 
 double NEWTON;
@@ -29,6 +30,7 @@ int ballSpeedX                  = -2;
 int ballSpeedY                  = 0;
 int ballXCoord                  = 950;
 int ballYCoord                  = 55;
+
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
@@ -226,6 +228,27 @@ int main() {
                     }
                     case 1: {
                         // TELA PLAY
+                        if(allow){
+                            int started = getUnix();
+                            al_flip_display();
+                            float millis = (float)(getUnix() - started);
+                            if(millis <= MPS/1000){
+                                FPS = MPS;
+                                allow = false;
+                            } else{
+                                FPS = 1000/millis;
+                            }
+
+                        } else{
+                            FPS -= 1;
+                            allow = true;
+                        }
+                        al_clear_to_color(WHITE);
+                        al_draw_filled_circle(560, 120, 100, BLACK);
+
+                        printf("%f\n", FPS);
+                        printf("\n%d\n", GAME_FREQUENCY_POLARITY);
+                        moveBall();
 
                         break;
                     }
