@@ -11,6 +11,7 @@
 #include <deps/gameCore.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <Cores.h>
 
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
@@ -35,19 +36,6 @@ int ballYCoord                  = 55;
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
 
-ALLEGRO_COLOR BLACK       ;
-ALLEGRO_COLOR WHITE       ;
-ALLEGRO_COLOR DARK_PURPLE ;
-ALLEGRO_COLOR LIGHT_PURPLE;
-ALLEGRO_COLOR RED         ;
-ALLEGRO_COLOR YELLOW      ;
-ALLEGRO_COLOR LIGHT_GREEN ;
-ALLEGRO_COLOR DARK_GREEN  ;
-ALLEGRO_COLOR LIGHT_BLUE  ;
-ALLEGRO_COLOR DARK_BLUE   ;
-ALLEGRO_COLOR PINK        ;
-ALLEGRO_COLOR ORANGE      ;
-ALLEGRO_COLOR BROWN       ;
 
 void drawStars(){
     srand(time(NULL));
@@ -130,20 +118,6 @@ int main() {
         font = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
     }
 
-    // Inicia paleta de cores
-    BLACK        = getColorByHex((char*) "#000000");
-    WHITE        = getColorByHex((char*) "#ffffff");
-    DARK_PURPLE  = getColorByHex((char*) "#491485");
-    LIGHT_PURPLE = getColorByHex((char*) "#9547ed");
-    RED          = getColorByHex((char*) "#fa2347");
-    YELLOW       = getColorByHex((char*) "#ffcc00");
-    LIGHT_GREEN  = getColorByHex((char*) "#60d642");
-    DARK_GREEN   = getColorByHex((char*) "#143d09");
-    LIGHT_BLUE   = getColorByHex((char*) "#477eff");
-    DARK_BLUE    = getColorByHex((char*) "#0a2563");
-    PINK         = getColorByHex((char*) "#f227de");
-    ORANGE       = getColorByHex((char*) "#ff7b00");
-    BROWN        = getColorByHex((char*) "#4f2600");
 
     // Inicia constante de newton
     NEWTON = 6.6743 * pow(10, -11);
@@ -217,7 +191,6 @@ int main() {
             }
             case ALLEGRO_EVENT_TIMER: {
                 GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
-                al_clear_to_color(BLACK);
                 switch (GAMESTATE) {
                     case 0: {
                         if (orderRedraw) {

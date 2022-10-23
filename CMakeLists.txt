@@ -15,7 +15,7 @@ add_executable(JogoSemestre2
         deps/nossaLivraria.h
         deps/gameCore.c
         deps/gameCore.h
-        src/main.c)
+        src/main.c deps/Cores.h deps/Cores.c)
 
 if (WIN32)
     target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)
