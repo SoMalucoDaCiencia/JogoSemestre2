@@ -13,9 +13,11 @@ link_directories($ENV{ALLEGRO}/lib)
 add_executable(JogoSemestre2
         deps/nossaLivraria.c
         deps/nossaLivraria.h
+        deps/Cores.c
+        deps/Cores.h
         deps/gameCore.c
         deps/gameCore.h
-        src/main.c deps/Cores.h deps/Cores.c)
+        src/main.c)
 
 if (WIN32)
     target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)

@@ -7,6 +7,20 @@
 #include <Cores.h>
 #include <deps/nossaLivraria.h>
 
+ALLEGRO_COLOR BLACK       ;
+ALLEGRO_COLOR WHITE       ;
+ALLEGRO_COLOR DARK_PURPLE ;
+ALLEGRO_COLOR LIGHT_PURPLE;
+ALLEGRO_COLOR RED         ;
+ALLEGRO_COLOR YELLOW      ;
+ALLEGRO_COLOR LIGHT_GREEN ;
+ALLEGRO_COLOR DARK_GREEN  ;
+ALLEGRO_COLOR LIGHT_BLUE  ;
+ALLEGRO_COLOR DARK_BLUE   ;
+ALLEGRO_COLOR PINK        ;
+ALLEGRO_COLOR ORANGE      ;
+ALLEGRO_COLOR BROWN       ;
+
 void init_colors(){
     //inicia paleta de cores
     BLACK        = getColorByHex((char*) "#000000");

@@ -24,8 +24,6 @@ float FPS;                            // Guarda quantas de vezes o jogo esta sen
 bool allow                      = true;
 bool SHOW_FPS                   = false;
 
-double NEWTON;
-
 int ballRadius                  = 1;
 int ballSpeedX                  = -2;
 int ballSpeedY                  = 0;
@@ -118,9 +116,7 @@ int main() {
         font = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
     }
 
-
-    // Inicia constante de newton
-    NEWTON = 6.6743 * pow(10, -11);
+    init_colors();
 
     // Inicia pilha de eventos do allegro
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
