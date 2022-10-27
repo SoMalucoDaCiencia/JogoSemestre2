@@ -13,8 +13,6 @@
 
     char* getNow();
 
-    long getUnix();
-
     int getRandomInt(int max, int min);
 
     void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display);

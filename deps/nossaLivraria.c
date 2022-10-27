@@ -25,14 +25,7 @@ char* getNow() {
     return now;
 }
 
-long getUnix() {
-    time_t rawMillis;
-    rawMillis = time(NULL)*1000;
-    return rawMillis;
-}
-
 int getRandomInt(int max, int min) {
-    srand(time(NULL));
     return (rand() % (max - min + 1)) + min;
 }
 
