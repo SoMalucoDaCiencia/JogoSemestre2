@@ -13,17 +13,24 @@
 #include <allegro5/allegro_ttf.h>
 #include <Cores.h>
 
+
+// ========== Window VARS ===========================================
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
 bool LIMIT_WALLS                  = false;
+// =================================================================
 
+// ========== Frame VARS ===========================================
 bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
-float const MPS                 = 60; // Maximo de vezes o jogo é renderizado
-float FPS;                            // Guarda quantas de vezes o jogo esta sendo renderizado
+float const MPS                 = GAME_FREQUENCY;  // Maximo de vezes o jogo é renderizado
+float FPS                       = 0;   // Guarda quantas de vezes o jogo esta sendo renderizado
 bool allow                      = true;
 bool SHOW_FPS                   = false;
+long global_counter;
+// ==================================================================
 
+// ========== Game VARS =============================================
 double NEWTON;
 
 int ballRadius                  = 1;
@@ -31,11 +38,10 @@ int ballSpeedX                  = -2;
 int ballSpeedY                  = 0;
 int ballXCoord                  = 950;
 int ballYCoord                  = 55;
-
+// ==================================================================
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_FONT *font;
-
 
 void drawStars(){
     srand(time(NULL));

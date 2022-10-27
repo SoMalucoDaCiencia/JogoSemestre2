@@ -31,6 +31,11 @@ long getUnix() {
     return rawMillis;
 }
 
+int getRandomInt(int max, int min) {
+    srand(time(NULL));
+    return (rand() % (max - min + 1)) + min;
+}
+
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {
     ALLEGRO_BITMAP *square = al_create_bitmap(width, height);
     al_set_target_bitmap(square);
