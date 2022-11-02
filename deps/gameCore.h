@@ -5,6 +5,13 @@
 #ifndef JOGOSEMESTRE2_GAMECORE_H
 #define JOGOSEMESTRE2_GAMECORE_H
 
+double acel;
+int ballRadius;
+int ballSpeedX;
+int ballSpeedY;
+int ballXCoord;
+int ballYCoord;
+
 #include <allegro5/color.h>
 
 typedef struct planeta {
