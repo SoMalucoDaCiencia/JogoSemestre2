@@ -9,8 +9,8 @@
 
 typedef struct planeta {
     ALLEGRO_COLOR color[7];
-    char nome[30];
-    int coordx;
+    char *nome;
+    int coordX;
     int coordY;
     int radius;
     int mass;

@@ -29,12 +29,6 @@ bool SHOW_FPS                   = false;
 long global_counter;
 // ==================================================================
 
-int ballRadius                  = 1;
-int ballSpeedX                  = -2;
-int ballSpeedY                  = 0;
-int ballXCoord                  = 950;
-int ballYCoord                  = 55;
-// ==================================================================
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;

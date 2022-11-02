@@ -7,6 +7,10 @@
 
 #include <allegro5/events.h>
 
+int const WINDOW_WIDTH;
+int const WINDOW_HEIGHT;
+bool LIMIT_WALLS;
+
 void drawStars();
 
 void drawMenu();
