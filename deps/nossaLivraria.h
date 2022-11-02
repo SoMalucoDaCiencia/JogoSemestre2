@@ -21,6 +21,4 @@
 
     ALLEGRO_COLOR getColorByHex(char* hexColor);
 
-    void killNine(struct ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue);
-
 #endif //JOGOSEMESTRE2_LIVRARIA_H

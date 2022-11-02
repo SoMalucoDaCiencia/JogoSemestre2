@@ -1,14 +1,13 @@
+
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
 #include <stdbool.h>
-#include <time.h>
 #include <stdlib.h>
+#include <src/main.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <deps/nossaLivraria.h>
-#include <deps/gameCore.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <Cores.h>
@@ -41,73 +40,18 @@ int ballYCoord                  = 55;
 // ==================================================================
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
+ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
+ALLEGRO_DISPLAY *display;
+ALLEGRO_TIMER* timer;
 ALLEGRO_FONT *font;
-
-void drawStars(){
-    srand(time(NULL));
-    int randomX = rand() % WINDOW_WIDTH;
-    int randomY = rand() % WINDOW_HEIGHT;
-    int randomR = rand() % 1 + 4;
-
-    for (int i = 0; i < 90; ++i) {
-        randomX = rand() % WINDOW_WIDTH;
-        randomY = rand() % WINDOW_HEIGHT;
-        randomR = rand() % 1 + 4;
-        al_draw_filled_circle(randomX, randomY, randomR, WHITE);
-    }
-}
-
-void drawMenu(ALLEGRO_DISPLAY* display) {
-    // TELA DO MENU
-    al_clear_to_color(BLACK);
-
-    //DESENHA ESTRELAS
-    drawStars();
-
-    //SOMBRA OPÇÕES MENU
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 530, DARK_PURPLE, display);
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 610, DARK_PURPLE, display);
-
-    //OPÇÕES MENU
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, LIGHT_PURPLE, display);
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, LIGHT_PURPLE, display);
-    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
-
-    //FONTE MENU
-    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 455, 0, "Play");
-    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-42, 535, 0, "Config");
-    al_draw_text( font, WHITE, (WINDOW_WIDTH/2)-30, 615, 0, "Quit");
-
-    //IMAGENS MENU
-    al_draw_bitmap(astro, 870, 150, 0);
-    al_draw_bitmap(tittleWorbit, (float)(WINDOW_WIDTH/2)-250, 80, 0);
-    insertFilledSquare(17, 150, (WINDOW_WIDTH/2)-75, 30, BLACK, display);
-    al_draw_bitmap(tittleWelcome, (float)(WINDOW_WIDTH/2)-75, 30, 0);
-
-    printf(" - Drawing MENU....[%s]\n", getNow());
-    al_flip_display();
-}
-
-void drawConfig(ALLEGRO_DISPLAY* display) {
-    // TELA DE CONFIGURAÇÕES
-    al_clear_to_color(BLACK);
-
-    drawStars();
-
-    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
-    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
-
-    al_draw_text( font, WHITE, 90, 40, 0, "Back");
-
-    printf(" - Drawing SETTINGS....[%s]\n", getNow());
-    al_flip_display();
-}
 
 int main() {
 
     // Inicia allegro
     al_init();
+
+    // Inicia paleta de cores
+    init_colors();
 
     // Carrega as imagens do jogo
     if (al_init_image_addon()) {
@@ -129,7 +73,8 @@ int main() {
     NEWTON = 6.6743 * pow(10, -11);
 
     // Inicia pilha de eventos do allegro
-    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    event_queue = al_create_event_queue();
+    timer_queue = al_create_event_queue();
 
     // Inicia event listener do mouse
     al_install_mouse();
@@ -140,12 +85,12 @@ int main() {
     al_register_event_source(event_queue, al_get_keyboard_event_source());
 
     // Inicia display
-    ALLEGRO_DISPLAY *display = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
+    display = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
+    al_register_event_source(event_queue, al_get_display_event_source(display));
     al_clear_to_color(BLACK);
 
     // Inicia loops por GAME_FREQUENCY
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / GAME_FREQUENCY);
-    al_register_event_source(event_queue, al_get_display_event_source(display));
+    timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
 
@@ -170,10 +115,7 @@ int main() {
                                 orderRedraw = true;
                                 GAMESTATE = 2;
                             } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
-                                al_destroy_bitmap(astro);
-                                al_destroy_bitmap(tittleWorbit);
-                                al_destroy_bitmap(tittleWelcome);
-                                killNine(timer, display, event_queue);
+                                killNine();
                             }
                         }
                         break;
@@ -200,41 +142,41 @@ int main() {
                 switch (GAMESTATE) {
                     case 0: {
                         if (orderRedraw) {
-                            drawMenu(display);
+                            drawMenu();
                             orderRedraw = false;
                         }
                         break;
                     }
                     case 1: {
                         // TELA PLAY
-                        if(allow){
-                            int started = getUnix();
-                            al_flip_display();
-                            float millis = (float)(getUnix() - started);
-                            if(millis <= MPS/1000){
-                                FPS = MPS;
-                                allow = false;
-                            } else{
-                                FPS = 1000/millis;
-                            }
-
-                        } else{
-                            FPS -= 1;
-                            allow = true;
-                        }
-                        al_clear_to_color(WHITE);
-                        al_draw_filled_circle(560, 120, 100, BLACK);
-
-                        printf("%f\n", FPS);
-                        printf("\n%d\n", GAME_FREQUENCY_POLARITY);
-                        moveBall();
+//                        if(allow){
+//                            int started = getUnix();
+//                            al_flip_display();
+//                            float millis = (float)(getUnix() - started);
+//                            if(millis <= MPS/1000){
+//                                FPS = MPS;
+//                                allow = false;
+//                            } else{
+//                                FPS = 1000/millis;
+//                            }
+//
+//                        } else{
+//                            FPS -= 1;
+//                            allow = true;
+//                        }
+//                        al_clear_to_color(WHITE);
+//                        al_draw_filled_circle(560, 120, 100, BLACK);
+//
+//                        printf("%f\n", FPS);
+//                        printf("\n%d\n", GAME_FREQUENCY_POLARITY);
+//                        moveBall();
 
                         break;
                     }
                     case 2: {
                         // TELA CONFIG
                         if (orderRedraw) {
-                            drawConfig(display);
+                            drawConfig();
                             orderRedraw = false;
                         }
                         break;
@@ -243,13 +185,80 @@ int main() {
                 break;
             }
             case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-                al_destroy_bitmap(astro);
-                al_destroy_bitmap(tittleWorbit);
-                al_destroy_bitmap(tittleWelcome);
-                killNine(timer, display, event_queue);
+                killNine();
                 // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
                 break;
             }
         }
     }
+}
+
+void drawStars(){
+
+    for (int i = 0; i < 90; ++i) {
+        int randomX = getRandomInt(WINDOW_WIDTH, 0);
+        int randomY = getRandomInt(WINDOW_HEIGHT, 0);
+        int randomR = getRandomInt(4, 0);
+        al_draw_filled_circle((float) randomX, (float) randomY, (float) randomR, WHITE);
+    }
+}
+
+void drawMenu() {
+    // TELA DO MENU
+    al_clear_to_color(BLACK);
+
+    //DESENHA ESTRELAS
+    drawStars();
+
+    //SOMBRA OPÇÕES MENU
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 530, DARK_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 610, DARK_PURPLE, display);
+
+    //OPÇÕES MENU
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 440, LIGHT_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 520, LIGHT_PURPLE, display);
+    insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
+
+    //FONTE MENU
+    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 455, 0, "Play");
+    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-42, 535, 0, "Config");
+    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 615, 0, "Quit");
+
+    //IMAGENS MENU
+    al_draw_bitmap(astro, 870, 150, 0);
+    al_draw_bitmap(tittleWorbit, (float) (WINDOW_WIDTH/2.0)-250, 80, 0);
+    insertFilledSquare(17, 150, (WINDOW_WIDTH/2)-75, 30, BLACK, display);
+    al_draw_bitmap(tittleWelcome, (float) (WINDOW_WIDTH/2.0)-75, 30, 0);
+
+    printf(" - Drawing MENU....[%s]\n", getNow());
+    al_flip_display();
+}
+
+void drawConfig() {
+    // TELA DE CONFIGURAÇÕES
+    al_clear_to_color(BLACK);
+
+    drawStars();
+
+    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
+    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+
+    al_draw_text( font, WHITE, 90, 40, 0, "Back");
+
+    printf(" - Drawing SETTINGS....[%s]\n", getNow());
+    al_flip_display();
+}
+
+void killNine() {
+    printf(" - Killing APP....[%s]\n", getNow());
+    al_destroy_bitmap(tittleWelcome);
+    al_destroy_bitmap(tittleWorbit);
+    al_destroy_bitmap(astro);
+    al_destroy_event_queue(timer_queue);
+    al_destroy_event_queue(event_queue);
+    al_destroy_display(display);
+    al_destroy_timer(timer);
+
+    exit(0);
 }

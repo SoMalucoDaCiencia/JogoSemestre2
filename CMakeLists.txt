@@ -11,11 +11,14 @@ include_directories($ENV{ALLEGRO}/include) # Definir pasta do alegro como uma va
 link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
-        deps/nossaLivraria.c
+        deps/Cores.h
+        deps/Cores.c
         deps/nossaLivraria.h
-        deps/gameCore.c
+        deps/nossaLivraria.c
         deps/gameCore.h
-        src/main.c deps/Cores.h deps/Cores.c)
+        deps/gameCore.c
+        src/main.h
+        src/main.c)
 
 if (WIN32)
     target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)
