@@ -5,33 +5,41 @@
 #ifndef JOGOSEMESTRE2_GAMECORE_H
 #define JOGOSEMESTRE2_GAMECORE_H
 
-float acel;
-int ballRadius;
-int ballSpeedX;
-int ballSpeedY;
-int ballXCoord;
-int ballYCoord;
-
 #include <allegro5/color.h>
 
-typedef struct planeta {
-    ALLEGRO_COLOR color;
-    char *nome;
-    int coordX;
-    int coordY;
-    int radius;
-    int mass;
-} Planeta;
+    typedef struct {
+        ALLEGRO_COLOR color;
+        char *nome;
+        int coordX;
+        int coordY;
+        int radius;
+        int mass;
+    } Planeta;
 
-typedef struct force {
-    float Vforce; // Vertical force
-    float Hforce; // Horizontal force
-} Force;
+    typedef struct {
+        float Vforce; // Vertical force
+        float Hforce; // Horizontal force
+    } Force;
 
-Planeta* scanPlanetsYaml(int level);
+    extern Planeta planetas[2];
+    extern Force* allForces;
+    extern int planetaSize;
+    extern int ballRadius;
+    extern int ballSpeedX;
+    extern int ballSpeedY;
+    extern int ballXCoord;
+    extern int ballYCoord;
+    extern double NEWTON;
+    extern double acel;
 
-void readCreatePlanets();
+    void initGame();
 
-void moveBall();
+    void moveBall();
+
+    Planeta* scanPlanetsYaml(int level);
+
+    void readCreatePlanets();
+
+    double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
 
 #endif //JOGOSEMESTRE2_GAMECORE_H

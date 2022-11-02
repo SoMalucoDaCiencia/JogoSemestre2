@@ -11,6 +11,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <Cores.h>
+#include <deps/gameCore.h>
 
 
 // ========== Window VARS ===========================================
@@ -64,7 +65,7 @@ int main() {
     }
 
     // Inicia constante de newton
-    NEWTON = 6.6743 * pow(10, -11);
+    initGame();
 
     // Inicia pilha de eventos do allegro
     event_queue = al_create_event_queue();

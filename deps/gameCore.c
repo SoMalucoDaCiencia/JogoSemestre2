@@ -11,27 +11,18 @@
 #include <allegro5/allegro_primitives.h>
 #include <src/main.h>
 
-double NEWTON;
+Planeta planetas[2];
 Force* allForces;
-bool gamePaused;
+int planetaSize;
 int ballRadius;
 int ballSpeedX;
 int ballSpeedY;
 int ballXCoord;
 int ballYCoord;
+double NEWTON;
+double acel;
 
-double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
-    const int x = (pointAX > pointBX ? (pointAX - pointBX) : (pointBX - pointAX));
-    const int y = (pointAY > pointBY ? (pointAY - pointBY) : (pointBY - pointAY));
-
-    return floor(sqrt(pow(x, 2) + pow(y, 2)));
-
-}
-
-int planetaSize;
-Planeta planetas[2];
-
-void initGame(){
+void initGame() {
 
     planetas[0].nome = "Arthur";
     planetas[0].coordX = 10;
@@ -45,30 +36,20 @@ void initGame(){
     planetas[1].radius = 20;
     planetas[1].mass = 20;
 
-    //Fazer malloc
-    // AllForces = malloc alguma coisa (linha 74)
+    planetaSize = sizeof(planetas) / sizeof(Planeta);
 
-    planetaSize = sizeof(planetas)/sizeof(Planeta);
-
-
-    allForces = malloc (planetaSize * sizeof (int));
-    for (int i = 0; i < planetaSize; ++i){
-        Force force = allForces[i];
-    }
-
-
-      NEWTON = 6.6743 * pow(10, -11);
-      gamePaused = false;
-      ballRadius = 1;
-      ballSpeedX = -2;
-      ballSpeedY = 0;
-      ballXCoord = 950;
-      ballYCoord = 55;
+    NEWTON = 6.6743 * pow(10, -11);
+//    gamePaused = false;
+    ballRadius = 1;
+    ballSpeedX = -2;
+    ballSpeedY = 0;
+    ballXCoord = 950;
+    ballYCoord = 55;
 }
 
 void moveBall() {
-        allForces = malloc (planetaSize * sizeof (int));
-        for (int i = 0; i < planetaSize; ++i) {
+    allForces = malloc(planetaSize * sizeof(Force));
+    for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
 
         acel = NEWTON * planeta.mass / twoPointsDistance(ballXCoord, ballYCoord, planeta.coordX, planeta.coordY);
@@ -90,14 +71,14 @@ void moveBall() {
 
         if (twoPointsDistance(ballXCoord, ballYCoord, planeta.coordX, planeta.coordY) <=
             ballRadius + planeta.radius) {
-            ballYCoord = floor(getRandomInt(WINDOW_HEIGHT , 0) * WINDOW_HEIGHT);
-            ballXCoord = floor(getRandomInt(WINDOW_WIDTH , 0) * WINDOW_WIDTH);
+            ballYCoord = floor(getRandomInt(WINDOW_HEIGHT, 0) * WINDOW_HEIGHT);
+            ballXCoord = floor(getRandomInt(WINDOW_WIDTH, 0) * WINDOW_WIDTH);
             ballSpeedY = 3;
             ballSpeedX = 3;
         }
-        if (twoPointsDistance(ballXCoord, ballYCoord, planeta.coordX, planeta.coordY)<=ballRadius+planeta.radius) {
-            ballYCoord = floor(getRandomInt(WINDOW_HEIGHT , 0) * WINDOW_HEIGHT);
-            ballXCoord = floor(getRandomInt(WINDOW_WIDTH , 0) * WINDOW_WIDTH);
+        if (twoPointsDistance(ballXCoord, ballYCoord, planeta.coordX, planeta.coordY) <= ballRadius + planeta.radius) {
+            ballYCoord = floor(getRandomInt(WINDOW_HEIGHT, 0) * WINDOW_HEIGHT);
+            ballXCoord = floor(getRandomInt(WINDOW_WIDTH, 0) * WINDOW_WIDTH);
             ballSpeedY = 5;
             ballSpeedX = 5;
         }
@@ -105,18 +86,17 @@ void moveBall() {
 
     float finalXAceleration = 0;
     float finalYAceleration = 0;
-    for(int i = 0; i < planetaSize; ++i){
+    for (int i = 0; i < planetaSize; ++i) {
         Force force = allForces[i];
         finalYAceleration += (force.Vforce);
         finalXAceleration += (force.Hforce);
     }
-    ballSpeedY += finalYAceleration/300;
-    ballSpeedX += finalXAceleration/300;
+    ballSpeedY += finalYAceleration / 300;
+    ballSpeedX += finalXAceleration / 300;
 
     ballYCoord += ballSpeedY;
     ballXCoord += ballSpeedX;
 } //acaba o moveball
-
 
 Planeta* scanPlanetsYaml(int level) {
 
@@ -129,5 +109,9 @@ void readCreatePlanets(){
     }
 }
 
+double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
+    const int x = (pointAX > pointBX ? (pointAX - pointBX) : (pointBX - pointAX));
+    const int y = (pointAY > pointBY ? (pointAY - pointBY) : (pointBY - pointAY));
 
-//}
+    return floor(sqrt(pow(x, 2) + pow(y, 2)));
+}

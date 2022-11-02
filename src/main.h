@@ -7,20 +7,19 @@
 
 #include <allegro5/events.h>
 
-int const WINDOW_WIDTH;
-int const WINDOW_HEIGHT;
-bool LIMIT_WALLS;
+    extern int const WINDOW_WIDTH;
+    extern int const WINDOW_HEIGHT;
 
-void drawStars();
+    void drawStars();
 
-void drawMenu();
+    void drawMenu();
 
-void drawConfig();
+    void drawConfig();
 
-void eventHandler(ALLEGRO_EVENT ev);
+    void eventHandler(ALLEGRO_EVENT ev);
 
-void render(ALLEGRO_EVENT ev);
+    void render(ALLEGRO_EVENT ev);
 
-void killNine();
+    void killNine();
 
 #endif //JOGOSEMESTRE2_MAIN_H
