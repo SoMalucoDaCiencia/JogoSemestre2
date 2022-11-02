@@ -5,7 +5,7 @@
 #ifndef JOGOSEMESTRE2_GAMECORE_H
 #define JOGOSEMESTRE2_GAMECORE_H
 
-double acel;
+float acel;
 int ballRadius;
 int ballSpeedX;
 int ballSpeedY;
@@ -15,7 +15,7 @@ int ballYCoord;
 #include <allegro5/color.h>
 
 typedef struct planeta {
-    ALLEGRO_COLOR color[7];
+    ALLEGRO_COLOR color;
     char *nome;
     int coordX;
     int coordY;
@@ -24,8 +24,8 @@ typedef struct planeta {
 } Planeta;
 
 typedef struct force {
-    int Vforce; // Vertical force
-    int Hforce; // Horizontal force
+    float Vforce; // Vertical force
+    float Hforce; // Horizontal force
 } Force;
 
 Planeta* scanPlanetsYaml(int level);

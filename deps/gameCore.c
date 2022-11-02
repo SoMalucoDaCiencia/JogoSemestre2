@@ -107,8 +107,15 @@ void moveBall() {
     float finalYAceleration = 0;
     for(int i = 0; i < planetaSize; ++i){
         Force force = allForces[i];
+        finalYAceleration += (force.Vforce);
+        finalXAceleration += (force.Hforce);
     }
-}
+    ballSpeedY += finalYAceleration/300;
+    ballSpeedX += finalXAceleration/300;
+
+    ballYCoord += ballSpeedY;
+    ballXCoord += ballSpeedX;
+} //acaba o moveball
 
 
 Planeta* scanPlanetsYaml(int level) {
@@ -118,6 +125,7 @@ Planeta* scanPlanetsYaml(int level) {
 void readCreatePlanets(){
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
+        al_draw_filled_circle(planeta.coordX, planeta.coordY, planeta.radius, planeta.color);
     }
 }
 
