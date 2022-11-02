@@ -45,6 +45,10 @@ ALLEGRO_DISPLAY *display;
 ALLEGRO_TIMER* timer;
 ALLEGRO_FONT *font;
 
+int GAMESTATE = 0; // STATE INICIAL
+bool orderRedraw = true;
+
+
 int main() {
 
     // Inicia allegro
@@ -68,7 +72,6 @@ int main() {
         font = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
     }
 
-
     // Inicia constante de newton
     NEWTON = 6.6743 * pow(10, -11);
 
@@ -91,102 +94,105 @@ int main() {
 
     // Inicia loops por GAME_FREQUENCY
     timer = al_create_timer(1.0 / GAME_FREQUENCY);
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+    al_register_event_source(timer_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
-
-    int GAMESTATE = 0; // STATE INICIAL
-    bool orderRedraw = true;
 
     while (1) {
         ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev); // ESPERANDO POR EVENTOS
-        switch (ev.type) {
-            case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
 
-                // EVENTO CLICK
-                switch (GAMESTATE) {
-                    case 0: {
-                        // BOTÕES DO MENU
-                        if (ev.mouse.x >= (WINDOW_WIDTH/2)-200 && ev.mouse.x <= (WINDOW_WIDTH/2)+200) {
-                            if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
-                                orderRedraw = true;
-                                GAMESTATE = 1;
-                            } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
-                                orderRedraw = true;
-                                GAMESTATE = 2;
-                            } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
-                                killNine();
-                            }
-                        }
-                        break;
-                    }
-                    case 1: {
-                        // BOTÕES DA TELA PLAY
+        do {
+            al_wait_for_event(event_queue, &ev); // ESPERANDO POR EVENTOS
+            if (ev.type != ALLEGRO_EVENT_MOUSE_AXES) {
+                eventHandler(ev);
+                render(ev);
+            }
+        } while (!al_is_event_queue_empty(event_queue));
 
-                        break;
-                    }
-                    case 2: {
-                        // BOTÕES DA TELA CONFIG
+        while(al_is_event_queue_empty(event_queue)) {
+            al_wait_for_event(timer_queue, &ev); // ESPERANDO POR EVENTOS
+            render(ev);
+        }
+    }
+}
 
-                        if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+void eventHandler(ALLEGRO_EVENT ev) {
+
+    switch (ev.type) {
+        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
+
+            // EVENTO CLICK
+            switch (GAMESTATE) {
+                case 0: {
+                    // BOTÕES DO MENU
+                    if (ev.mouse.x >= (WINDOW_WIDTH/2)-200 && ev.mouse.x <= (WINDOW_WIDTH/2)+200) {
+                        if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
                             orderRedraw = true;
-                            GAMESTATE = 0; // RETORNA A TELA DE MENU
+                            GAMESTATE = 1;
+                        } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
+                            orderRedraw = true;
+                            GAMESTATE = 2;
+                        } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
+                            killNine();
                         }
-                        break;
                     }
+                    break;
                 }
-                break;
-            }
-            case ALLEGRO_EVENT_TIMER: {
-                GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
-                switch (GAMESTATE) {
-                    case 0: {
-                        if (orderRedraw) {
-                            drawMenu();
-                            orderRedraw = false;
-                        }
-                        break;
-                    }
-                    case 1: {
-                        // TELA PLAY
-//                        if(allow){
-//                            int started = getUnix();
-//                            al_flip_display();
-//                            float millis = (float)(getUnix() - started);
-//                            if(millis <= MPS/1000){
-//                                FPS = MPS;
-//                                allow = false;
-//                            } else{
-//                                FPS = 1000/millis;
-//                            }
-//
-//                        } else{
-//                            FPS -= 1;
-//                            allow = true;
-//                        }
-//                        al_clear_to_color(WHITE);
-//                        al_draw_filled_circle(560, 120, 100, BLACK);
-//
-//                        printf("%f\n", FPS);
-//                        printf("\n%d\n", GAME_FREQUENCY_POLARITY);
-//                        moveBall();
+                case 1: {
+                    // BOTÕES DA TELA PLAY
 
-                        break;
+                    break;
+                }
+                case 2: {
+                    // BOTÕES DA TELA CONFIG
+
+                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+                        orderRedraw = true;
+                        GAMESTATE = 0; // RETORNA A TELA DE MENU
                     }
-                    case 2: {
-                        // TELA CONFIG
-                        if (orderRedraw) {
-                            drawConfig();
-                            orderRedraw = false;
-                        }
-                        break;
-                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+            break;
+        }
+        case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+            killNine();
+            break;
+        }
+    }
+}
+
+void render(ALLEGRO_EVENT ev) {
+    if (ev.type == ALLEGRO_EVENT_TIMER) {
+        GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
+        switch (GAMESTATE) {
+            case 0: {
+                if (orderRedraw) {
+                    drawMenu();
+                    orderRedraw = false;
                 }
                 break;
             }
-            case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-                killNine();
-                // ^^ SALVA SEU COMPUTADOR DE EXPLODIR
+            case 1: {
+                if (GAME_FREQUENCY_POLARITY) {
+                    al_clear_to_color(WHITE);
+                } else {
+                    al_clear_to_color(BLACK);
+                }
+                al_flip_display();
+                break;
+            }
+            case 2: {
+                // TELA CONFIG
+                if (orderRedraw) {
+                    drawConfig();
+                    orderRedraw = false;
+                }
+                break;
+            }
+            default: {
                 break;
             }
         }

@@ -13,6 +13,10 @@ void drawMenu();
 
 void drawConfig();
 
+void eventHandler(ALLEGRO_EVENT ev);
+
+void render(ALLEGRO_EVENT ev);
+
 void killNine();
 
 #endif //JOGOSEMESTRE2_MAIN_H
