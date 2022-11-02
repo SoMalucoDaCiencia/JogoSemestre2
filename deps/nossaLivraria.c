@@ -25,10 +25,8 @@ char* getNow() {
     return now;
 }
 
-long getUnix() {
-    time_t rawMillis;
-    rawMillis = time(NULL)*1000;
-    return rawMillis;
+int getRandomInt(int max, int min) {
+    return (rand() % (max - min + 1)) + min;
 }
 
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {
@@ -51,13 +49,4 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
         insertFilledSquare(height + borderSize, width + borderSize, x, y, borderColor, display);
     }
     insertFilledSquare(height, width, x + (borderSize/2), y + (borderSize/2), color, display);
-}
-
-void killNine(ALLEGRO_TIMER* timer, ALLEGRO_DISPLAY* display, ALLEGRO_EVENT_QUEUE *event_queue) {
-
-    printf(" - Killing APP....[%s]\n", getNow());
-    al_destroy_timer(timer);
-    al_destroy_event_queue(event_queue);
-    al_destroy_display(display);
-    exit(0);
 }
