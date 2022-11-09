@@ -7,6 +7,13 @@
 
 #include <allegro5/color.h>
 
+
+    typedef struct {
+        unsigned short ID;
+        int coordX;
+        int coordY;
+    } Bullet;
+
     typedef struct {
         ALLEGRO_COLOR color;
         char *nome;
@@ -22,13 +29,15 @@
     } Force;
 
     extern Planeta planetas[2];
+    extern Bullet* bullets;
+    extern float planetaSize;
+    extern float ballRadius;
+    extern float ballSpeedX;
+    extern float ballSpeedY;
+    extern float ballXCoord;
+    extern float ballYCoord;
     extern Force* allForces;
-    extern int planetaSize;
-    extern int ballRadius;
-    extern int ballSpeedX;
-    extern int ballSpeedY;
-    extern int ballXCoord;
-    extern int ballYCoord;
+    extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
 
@@ -41,5 +50,9 @@
     void readCreatePlanets();
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
+
+    bool hasXgap();
+
+    bool hasYgap();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H
