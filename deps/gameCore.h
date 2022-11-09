@@ -7,11 +7,20 @@
 
 #include <allegro5/color.h>
 
-
     typedef struct {
         unsigned short ID;
         int coordX;
         int coordY;
+    } User;
+
+    typedef struct {
+        unsigned short ID;
+        double coordX;
+        double coordY;
+        double speedX;
+        double speedY;
+        float Vforce; // Vertical force
+        float Hforce; // Horizontal force
     } Bullet;
 
     typedef struct {
@@ -23,11 +32,6 @@
         int mass;
     } Planeta;
 
-    typedef struct {
-        float Vforce; // Vertical force
-        float Hforce; // Horizontal force
-    } Force;
-
     extern Planeta planetas[2];
     extern Bullet* bullets;
     extern float planetaSize;
@@ -36,18 +40,21 @@
     extern float ballSpeedY;
     extern float ballXCoord;
     extern float ballYCoord;
-    extern Force* allForces;
     extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
 
     void initGame();
 
+    Bullet initBullet(int coordX, int coordY, int clickX, int clickY, int id);
+
+    void insertBullet(int clickX, int clickY);
+
     void moveBall();
 
     Planeta* scanPlanetsYaml(int level);
 
-    void readCreatePlanets();
+    void readCreatePlanetsBullets();
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
 
