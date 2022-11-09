@@ -131,7 +131,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case 1: {
                     // BOTÕES DA TELA PLAY
-
+                    insertBullet(ev.mouse.x, ev.mouse.y);
                     break;
                 }
                 case 2: {
@@ -171,7 +171,7 @@ void render(ALLEGRO_EVENT ev) {
                 al_clear_to_color(BLACK);
                 moveBall();
                 al_draw_filled_circle(ballXCoord, ballYCoord, ballRadius, WHITE);
-                readCreatePlanets();
+                readCreatePlanetsBullets();
                 al_flip_display();
                 break;
             }
