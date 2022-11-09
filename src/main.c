@@ -168,11 +168,10 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case 1: {
-                if (GAME_FREQUENCY_POLARITY) {
-                    al_clear_to_color(WHITE);
-                } else {
-                    al_clear_to_color(BLACK);
-                }
+                al_clear_to_color(BLACK);
+                moveBall();
+                al_draw_filled_circle(ballXCoord, ballYCoord, ballRadius, WHITE);
+                readCreatePlanets();
                 al_flip_display();
                 break;
             }
