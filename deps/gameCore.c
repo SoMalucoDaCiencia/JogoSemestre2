@@ -18,11 +18,6 @@ User user1;
 
 float planetaSize;
 int bulletsSize;
-float ballRadius;
-float ballSpeedX;
-float ballSpeedY;
-float ballXCoord;
-float ballYCoord;
 bool limitWalls;
 double NEWTON;
 double acel;
@@ -48,7 +43,6 @@ void initGame() {
 //    planetas[1].mass = 2;
 
     planetaSize = sizeof(planetas) / sizeof(Planeta);
-    bulletsSize = sizeof(bullets) / sizeof(Bullet);
 
     bullets = malloc(0);
 
@@ -60,40 +54,41 @@ void initGame() {
 void moveBall() {
     for (int j = 0; j < bulletsSize; ++j) {
 
-        float finalXAceleration = 0;
-        float finalYAceleration = 0;
         Bullet* b = &(bullets[j]);
+        double finalXAceleration = b->speedX;
+        double finalYAceleration = b->speedY;
 
-        for (int i = 0; i < planetaSize; ++i) {
-            Planeta planeta = planetas[i];
+//        for (int i = 0; i < planetaSize; ++i) {
+//            Planeta planeta = planetas[i];
+//
+//            acel = NEWTON * planeta.mass / twoPointsDistance(b->coordX, b->coordY, planeta.coordX, planeta.coordY);
+//            if (planeta.coordY >= b->coordY) {
+//                finalYAceleration += acel;
+//            } else if (planeta.coordY < b->coordY) {
+//                finalYAceleration += acel * (-1);
+//            }
+//
+//            if (planeta.coordX >= b->coordX) {
+//                finalXAceleration += acel;
+//            } else if (planeta.coordX < b->coordX) {
+//                finalXAceleration += acel * (-1);
+//            }
+//        }
+        (b)->coordY += finalYAceleration;
+        (b)->coordX += finalXAceleration;
 
-            acel = NEWTON * planeta.mass / twoPointsDistance(b->coordX, b->coordY, planeta.coordX, planeta.coordY);
-            if (planeta.coordY >= ballYCoord) {
-                finalYAceleration += acel;
-            } else if (planeta.coordY < ballYCoord) {
-                finalYAceleration += acel * (-1);
-            }
-
-            if (planeta.coordX >= ballXCoord) {
-                finalXAceleration += acel;
-            } else if (planeta.coordX < ballXCoord) {
-                finalXAceleration += acel * (-1);
-            }
-        }
-        (b)->speedY += finalYAceleration / 3;
-        (b)->speedX += finalXAceleration / 3;
-
-        if (limitWalls) {
-            if (hasYgap()) {
+        if (false) {
+            if (hasYgap(b->coordY, b->speedY)) {
                 b->speedY *= -1;
+
             }
-            if (hasXgap()) {
+            if (hasXgap(b->coordX, b->speedX)) {
                 b->speedX *= -1;
             }
         }
 
-        (b)->coordY += b->speedY;
-        (b)->coordX += b->speedY;
+//        (b)->coordY += floor(b->speedY);
+//        (b)->coordX += floor(b->speedX);
     }
 } //acaba o moveball
 
@@ -126,37 +121,47 @@ void insertBullet(int clickX, int clickY) {
     bulletsSize++;
 }
 
+void removeBullet(int id) {
+    for (int i = 0; i < bulletsSize; ++i) {
+        Bullet bullet = bullets[i];
+        al_draw_filled_circle((float) bullet.coordX, (float)  bullet.coordY, 1.0, WHITE);
+    }
+}
+
 Bullet initBullet(int coordX, int coordY, int clickX, int clickY, int id) {
     Bullet ret;
     ret.ID = id;
     ret.coordX = coordX;
     ret.coordY = coordY;
 
-    double m = ((double) (clickY - coordY) / (clickX - coordX)) * -1;
-    int velocidadeTiroSaida = 20;
-    ret.speedX = sqrt(velocidadeTiroSaida*velocidadeTiroSaida / (1 + m));
-    ret.speedY = ret.speedX * m;
-    ret.Vforce = 0;
-    ret.Hforce = 0;
+    double m = (((double) clickY - coordY) / ((double) clickX - coordX));
+    int velocidadeTiroSaida = 2;
+    ret.speedY = sqrt(velocidadeTiroSaida*velocidadeTiroSaida / (1 + m*m));
+    ret.speedX = ret.speedY * m;
+
+    // Correcao do bug e mapas
+    if (clickX <= coordX) {
+        ret.speedX *= -1;
+    }
 
     return ret;
 };
 
 // Verifica se a bolinha vai bater na esquerda ou na direita
-bool hasXgap() {
-    if (ballSpeedX>0) {
-        return (round(ballXCoord + ballSpeedX + ballRadius) >= WINDOW_WIDTH);
+bool hasXgap(int coordx, double speedX) {
+    if (speedX>0) {
+        return (round(coordx + speedX + 1.0) >= WINDOW_WIDTH);
     } else {
-        return (floor(ballXCoord - ballSpeedX - ballRadius) <= 0);
+        return (floor(coordx - speedX - 1.0) <= 0);
     }
 }
 
 // Verifica se a bolinha vai bater no teto ou no chao
-bool hasYgap() {
-    if (ballSpeedY>0) {
-        return (round(ballYCoord + ballSpeedY + ballRadius) >= WINDOW_HEIGHT);
+bool hasYgap(int coordy, double speedY) {
+    if (speedY>0) {
+        return (round(coordy + speedY + 1.0) >= WINDOW_HEIGHT);
     } else {
-        return (floor(ballYCoord - ballSpeedY - ballRadius) <= 0);
+        return (floor(coordy - speedY - 1.0) <= 0);
     }
 }
 
