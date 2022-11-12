@@ -134,14 +134,21 @@ Bullet initBullet(int coordX, int coordY, int clickX, int clickY, int id) {
     ret.coordX = coordX;
     ret.coordY = coordY;
 
-    double m = (((double) clickY - coordY) / ((double) clickX - coordX));
-    int velocidadeTiroSaida = 2;
-    ret.speedY = sqrt(velocidadeTiroSaida*velocidadeTiroSaida / (1 + m*m));
-    ret.speedX = ret.speedY * m;
+    int velInit = 2; // Velocidade inicial
+    double hip = twoPointsDistance(coordX, coordY, clickX, clickY);
+    double y2 = ((coordY*(hip - velInit)) + (velInit*clickY))/ ((int) pow(hip, 2));
+    double x2 = (double) sqrt(velInit*velInit - y2*y2);
+
+    ret.speedY = y2;
+    ret.speedX = x2;
 
     // Correcao do bug e mapas
     if (clickX <= coordX) {
         ret.speedX *= -1;
+    }
+
+    if (clickY <= coordY) {
+        ret.speedY *= -1;
     }
 
     return ret;

@@ -131,8 +131,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case 1: {
                     // BOTÕES DA TELA PLAY
-                    insertBullet(10, 10);
-                    Bullet b = initBullet(10, 10, WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - planetas[0].radius, 1);
+                    insertBullet(ev.mouse.x, ev.mouse.y);
+//                    Bullet b = initBullet(10, 10, WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - planetas[0].radius, 1);
 
                     break;
                 }
