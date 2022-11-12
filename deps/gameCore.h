@@ -19,8 +19,6 @@
         double coordY;
         double speedX;
         double speedY;
-        float Vforce; // Vertical force
-        float Hforce; // Horizontal force
     } Bullet;
 
     typedef struct {
@@ -35,11 +33,6 @@
     extern Planeta planetas[2];
     extern Bullet* bullets;
     extern float planetaSize;
-    extern float ballRadius;
-    extern float ballSpeedX;
-    extern float ballSpeedY;
-    extern float ballXCoord;
-    extern float ballYCoord;
     extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
@@ -58,8 +51,8 @@
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
 
-    bool hasXgap();
+    bool hasXgap(int coordX, double speedX);
 
-    bool hasYgap();
+    bool hasYgap(int coordy, double speedY);
 
 #endif //JOGOSEMESTRE2_GAMECORE_H
