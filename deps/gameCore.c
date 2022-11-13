@@ -9,15 +9,16 @@
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
 #include <src/main.h>
+#include <allegro5/allegro_font.h>
 
-Planeta planetas[1];
+Planeta planetas[2];
 Bullet b;
 
-User user1;
-//User user2;
+struct User player1 , player2;
 
 float planetaSize;
 bool limitWalls;
+bool gameRound = true; //True == player1 and False == player2
 double NEWTON;
 double acel;
 
@@ -31,14 +32,20 @@ void initGame() {
     planetas[0].coordX = WINDOW_WIDTH/2;
     planetas[0].coordY = WINDOW_HEIGHT/2;
     planetas[0].radius = 20;
-    planetas[0].mass = 0.13;
+    planetas[0].mass = 0;
 
-//    planetas[1].color = DARK_BLUE;
-//    planetas[1].nome = "Tais";
-//    planetas[1].coordX = 200;
-//    planetas[1].coordY = 590;
-//    planetas[1].radius = 30;
-//    planetas[1].mass = 2;
+    player1.coordY =  WINDOW_HEIGHT/2 - planetas[0].radius;
+    player1.coordX =  WINDOW_WIDTH/2;
+
+    player2.coordY =  WINDOW_HEIGHT/3 - planetas[1].radius;
+    player2.coordX =  WINDOW_WIDTH/3;
+
+    planetas[1].color = WHITE;
+    planetas[1].nome = "Tais";
+    planetas[1].coordX = 200;
+    planetas[1].coordY = 590;
+    planetas[1].radius = 30;
+    planetas[1].mass = 0;
 
     planetaSize = sizeof(planetas) / sizeof(Planeta);
 
@@ -100,8 +107,12 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 
 void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
 
-    int velInit = 10; // Velocidade inicial
-    b.speedY = getComposedCoefficient(velInit, coordX, coordY, clickX, clickY);
+    int velInit = 2; // Velocidade inicial
+    if(gameRound){
+        b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);
+    }else{
+        b.speedY = getComposedCoefficient(velInit, player2.coordX, player2.coordY, clickX, clickY);
+    }
     if (clickY<=coordY) {
         b.speedY *= -1;
     }

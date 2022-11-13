@@ -35,7 +35,8 @@ ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
 ALLEGRO_DISPLAY *display;
 ALLEGRO_TIMER* timer;
-ALLEGRO_FONT *font;
+ALLEGRO_FONT *font25 , *font90;
+
 
 int GAMESTATE = 0; // STATE INICIAL
 bool orderRedraw = true;
@@ -61,7 +62,8 @@ int main() {
 
     // Carrega as fontes do jogo
     if (al_init_font_addon() && al_init_ttf_addon()) {
-        font = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
+        font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
+        font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",90,0 );
     }
 
     // Inicia constante de newton
@@ -176,10 +178,7 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case 1: {
-                al_clear_to_color(BLACK);
-                moveBall();
-                readCreatePlanetsBullets();
-                al_flip_display();
+                    drawGame();
                 break;
             }
             case 2: {
@@ -225,9 +224,9 @@ void drawMenu() {
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-200, 600, LIGHT_PURPLE, display);
 
     //FONTE MENU
-    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 455, 0, "Play");
-    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-42, 535, 0, "Config");
-    al_draw_text( font, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 615, 0, "Quit");
+    al_draw_text( font25, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 455, 0, "Play");
+    al_draw_text( font25, WHITE, (float) (WINDOW_WIDTH/2.0)-42, 535, 0, "Config");
+    al_draw_text( font25, WHITE, (float) (WINDOW_WIDTH/2.0)-30, 615, 0, "Quit");
 
     //IMAGENS MENU
     al_draw_bitmap(astro, 870, 150, 0);
@@ -248,10 +247,28 @@ void drawConfig() {
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
 
-    al_draw_text( font, WHITE, 90, 40, 0, "Back");
+    al_draw_text( font25, WHITE, 90, 40, 0, "Back");
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
+}
+double distance; //Distancia do TwoPointsDistance
+
+void drawGame(){
+    //TELA DO JOGO
+    al_clear_to_color(BLACK);
+    printf("%d" , gameRound);
+    moveBall();
+    readCreatePlanetsBullets();
+    if(gameRound){
+    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
+    }else{
+        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
+    }
+    al_flip_display();
+
+
+    //printf(" - Drawing Play Screen....[%s]\n", getNow());
 }
 
 void killNine() {

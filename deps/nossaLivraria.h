@@ -23,4 +23,6 @@
 
     double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY);
 
+    void wait(unsigned int t);
+
 #endif //JOGOSEMESTRE2_LIVRARIA_H

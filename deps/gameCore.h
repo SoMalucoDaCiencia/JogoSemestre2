@@ -7,11 +7,10 @@
 
 #include <allegro5/color.h>
 
-    typedef struct {
-        unsigned short ID;
+    extern struct User {
         int coordX;
         int coordY;
-    } User;
+    } player1 , player2;
 
     typedef struct {
         double coordX;
@@ -29,12 +28,14 @@
         double mass;
     } Planeta;
 
-    extern Planeta planetas[1];
+    extern Planeta planetas[2];
     extern Bullet b;
     extern float planetaSize;
     extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
+    extern bool gameRound;
+    extern double distance;
 
     void initGame();
 
