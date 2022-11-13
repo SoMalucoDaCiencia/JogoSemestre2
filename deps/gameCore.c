@@ -68,10 +68,7 @@ void moveBall() {
         if(planeta.nome != NULL){
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
             if (1.0 + planeta.radius >= distance) {
-                b.coordX = WINDOW_WIDTH * 2;
-                b.coordY = WINDOW_HEIGHT * 2;   //Se a bolinha estará sendo isolada
-                b.speedX = 0;
-                b.speedY = 0;
+                b.active = false;
                 gameRound = !gameRound; //Inverte a rodada
             }
 
@@ -91,10 +88,7 @@ void moveBall() {
     }
 
     if(hasXgap() || hasYgap()){
-        b.coordX = WINDOW_WIDTH * 2;
-        b.coordY = WINDOW_HEIGHT * 2;   //Se a bolinha estará sendo isolada
-        b.speedX = 0;
-        b.speedY = 0;
+        b.active = false;
         gameRound = !gameRound; //Inverte a rodada
     }
 
@@ -110,12 +104,24 @@ Planeta* scanPlanetsYaml(int level) {
 
 }
 
+void gameSwitch(){
+    gameRound = !gameRound;
+    player1.active = !player1.active;
+    player2.active = !player2.active;
+}
+
 void readCreatePlanetsBullets(){
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
         al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
     }
+    if(b.active) {
     al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 1, WHITE);
+    }else {
+        al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
+        b.speedX = 0;
+        b.speedY = 0;
+    }
 }
 
 double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
@@ -126,7 +132,7 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 }
 
 void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
-
+    b.active = true;
     int velInit = 10; // Velocidade inicial
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);

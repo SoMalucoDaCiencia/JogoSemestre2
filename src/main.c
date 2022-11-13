@@ -133,7 +133,9 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case 1: {
                     // BOTÕES DA TELA PLAY
+                    if(){
                     setBulletTo(planetas[0].coordX, planetas[0].coordY - planetas[0].radius, ev.mouse.x, ev.mouse.y);
+                    }
 
                     break;
                 }

@@ -8,6 +8,7 @@
 #include <allegro5/color.h>
 
     extern struct User {
+        bool active;
         int coordX;
         int coordY;
     } player1 , player2;
@@ -17,6 +18,7 @@
         double coordY;
         double speedX;
         double speedY;
+        bool active;
     } Bullet;
 
     typedef struct {
@@ -26,7 +28,6 @@
         int coordY;
         int radius;
         double mass;
-        bool origin;
     } Planeta;
 
     extern Planeta planetas[2];
@@ -53,5 +54,7 @@
     bool hasXgap();
 
     bool hasYgap();
+
+    void gameSwitch();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H
