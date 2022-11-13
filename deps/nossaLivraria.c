@@ -56,7 +56,7 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
     insertFilledSquare(height, width, x + (borderSize/2), y + (borderSize/2), color, display);
 }
 
-void wait(unsigned int t){
+void waitTime(unsigned int t){
     sleep(t);
 }
 
