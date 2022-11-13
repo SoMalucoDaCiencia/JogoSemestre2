@@ -260,6 +260,8 @@ void drawGame(){
     printf("%d" , gameRound);
     moveBall();
     readCreatePlanetsBullets();
+    insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
+    insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
     if(gameRound){
     al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
     }else{

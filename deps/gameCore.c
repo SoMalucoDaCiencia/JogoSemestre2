@@ -34,11 +34,11 @@ void initGame() {
     planetas[0].radius = 20;
     planetas[0].mass = 0;
 
-    player1.coordY =  WINDOW_HEIGHT/2 - planetas[0].radius;
+    player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player1.coordX =  WINDOW_WIDTH/2;
 
-    player2.coordY =  WINDOW_HEIGHT/3 - planetas[1].radius;
-    player2.coordX =  WINDOW_WIDTH/3;
+    player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
+    player2.coordX =  WINDOW_WIDTH/5;
 
     planetas[1].color = WHITE;
     planetas[1].nome = "Tais";
@@ -65,19 +65,39 @@ void moveBall() {
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
 
-        acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
+        if(planeta.nome != NULL){
+            double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
+            if (1.0 + planeta.radius >= distance) {
+                b.coordX = WINDOW_WIDTH * 2;
+                b.coordY = WINDOW_HEIGHT * 2;   //Se a bolinha estará sendo isolada
+                b.speedX = 0;
+                b.speedY = 0;
+                gameRound = !gameRound; //Inverte a rodada
+            }
 
-        finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
-        if (planeta.coordY <= b.coordY &&  b.coordY <0) {
-            finalYAceleration *= -1;
-        }
+            acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
 
-        double forceX = (double) sqrt(acel*acel - finalYAceleration*finalYAceleration);
-        if (planeta.coordX <= b.coordX) {
-            forceX *= -1;
+            finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
+            if (planeta.coordY <= b.coordY && b.coordY < 0) {
+                finalYAceleration *= -1;
+            }
+
+            double forceX = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
+            if (planeta.coordX <= b.coordX) {
+                forceX *= -1;
+            }
+            finalXAceleration += forceX;
         }
-        finalXAceleration += forceX;
     }
+
+    if(hasXgap() || hasYgap()){
+        b.coordX = WINDOW_WIDTH * 2;
+        b.coordY = WINDOW_HEIGHT * 2;   //Se a bolinha estará sendo isolada
+        b.speedX = 0;
+        b.speedY = 0;
+        gameRound = !gameRound; //Inverte a rodada
+    }
+
     (b).speedY += finalYAceleration;
     (b).speedX += finalXAceleration;
 
@@ -107,11 +127,15 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 
 void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
 
-    int velInit = 2; // Velocidade inicial
+    int velInit = 10; // Velocidade inicial
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);
+        b.coordY = player1.coordY;
+        b.coordX = player1.coordX;
     }else{
         b.speedY = getComposedCoefficient(velInit, player2.coordX, player2.coordY, clickX, clickY);
+        b.coordY = player2.coordY;
+        b.coordX = player2.coordX;
     }
     if (clickY<=coordY) {
         b.speedY *= -1;
@@ -122,8 +146,7 @@ void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
         b.speedX *= -1;
     }
 
-    b.coordY = coordY;
-    b.coordX = coordX;
+
 }
 
 // Verifica se a bolinha vai bater na esquerda ou na direita

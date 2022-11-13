@@ -26,6 +26,7 @@
         int coordY;
         int radius;
         double mass;
+        bool origin;
     } Planeta;
 
     extern Planeta planetas[2];
