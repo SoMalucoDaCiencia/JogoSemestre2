@@ -14,7 +14,6 @@
     } User;
 
     typedef struct {
-        unsigned short ID;
         double coordX;
         double coordY;
         double speedX;
@@ -27,11 +26,11 @@
         int coordX;
         int coordY;
         int radius;
-        int mass;
+        double mass;
     } Planeta;
 
-    extern Planeta planetas[2];
-    extern Bullet* bullets;
+    extern Planeta planetas[1];
+    extern Bullet b;
     extern float planetaSize;
     extern bool limitWalls;
     extern double NEWTON;
@@ -39,9 +38,7 @@
 
     void initGame();
 
-    Bullet initBullet(int coordX, int coordY, int clickX, int clickY, int id);
-
-    void insertBullet(int clickX, int clickY);
+    void setBulletTo(int coordX, int coordY, int clickX, int clickY);
 
     void moveBall();
 
@@ -51,8 +48,8 @@
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
 
-    bool hasXgap(int coordX, double speedX);
+    bool hasXgap();
 
-    bool hasYgap(int coordy, double speedY);
+    bool hasYgap();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H

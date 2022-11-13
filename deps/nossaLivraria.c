@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
+#include <gameCore.h>
 #include <string.h>
 #include <allegro5/allegro.h>
 #include <stdio.h>
@@ -50,3 +52,11 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
     }
     insertFilledSquare(height, width, x + (borderSize/2), y + (borderSize/2), color, display);
 }
+
+double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY) {
+
+    double hip = twoPointsDistance(pointAX, pointAY, pointBX, pointBY);
+    double y2 = ((double)(pointBY - pointAY))*(force/hip);
+    return (y2 < 0 ? y2*(-1) : y2);
+}
+
