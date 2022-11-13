@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include "gameCore.h"
 #include "nossaLivraria.h"
-#include <Cores.h>
+#include "deps/Cores.h"
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
-#include <src/main.h>
+#include "src/main.h"
 #include <allegro5/allegro_font.h>
 
 Planeta planetas[2];
@@ -102,17 +102,13 @@ void moveBall() {
 
 } //acaba o moveball
 
-Planeta* scanPlanetsYaml(int level) {
-
-}
-
 void gameSwitch(){
     if (gameRound) {
         player1.active = true;
     } else {
         player2.active = true;
     };
-//    gameRound = !gameRound;
+    gameRound = !gameRound;
 }
 
 void readCreatePlanetsBullets(){
