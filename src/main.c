@@ -133,9 +133,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case 1: {
                     // BOTÕES DA TELA PLAY
-                    if(){
                     setBulletTo(planetas[0].coordX, planetas[0].coordY - planetas[0].radius, ev.mouse.x, ev.mouse.y);
-                    }
+                    gameRound = !gameRound;
 
                     break;
                 }
@@ -180,7 +179,7 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case 1: {
-                    drawGame();
+                drawGame();
                 break;
             }
             case 2: {
@@ -254,12 +253,10 @@ void drawConfig() {
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
 }
-double distance; //Distancia do TwoPointsDistance
 
 void drawGame(){
     //TELA DO JOGO
     al_clear_to_color(BLACK);
-    printf("%d" , gameRound);
     moveBall();
     readCreatePlanetsBullets();
     insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
