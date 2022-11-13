@@ -21,4 +21,6 @@
 
     ALLEGRO_COLOR getColorByHex(char* hexColor);
 
+    double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY);
+
 #endif //JOGOSEMESTRE2_LIVRARIA_H

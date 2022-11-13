@@ -131,8 +131,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case 1: {
                     // BOTÕES DA TELA PLAY
-                    insertBullet(ev.mouse.x, ev.mouse.y);
-//                    Bullet b = initBullet(10, 10, WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - planetas[0].radius, 1);
+                    setBulletTo(planetas[0].coordX, planetas[0].coordY - planetas[0].radius, ev.mouse.x, ev.mouse.y);
 
                     break;
                 }
@@ -148,6 +147,13 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 default: {
                     break;
                 }
+            }
+            break;
+        }
+        case ALLEGRO_EVENT_KEY_DOWN: {
+            if (ev.keyboard.keycode == 59) {
+                orderRedraw = true;
+                GAMESTATE = 0; // RETORNA A TELA DE MENU
             }
             break;
         }
@@ -173,7 +179,6 @@ void render(ALLEGRO_EVENT ev) {
                 al_clear_to_color(BLACK);
                 moveBall();
                 readCreatePlanetsBullets();
-                al_draw_filled_circle(10, 10 , 4, WHITE);
                 al_flip_display();
                 break;
             }
