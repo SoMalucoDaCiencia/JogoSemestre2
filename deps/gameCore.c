@@ -36,9 +36,11 @@ void initGame() {
 
     player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player1.coordX =  WINDOW_WIDTH/2;
+    player1.active = true;
 
     player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player2.coordX =  WINDOW_WIDTH/5;
+    player1.active = false;
 
     planetas[1].color = WHITE;
     planetas[1].nome = "Tais";
@@ -67,9 +69,9 @@ void moveBall() {
 
         if(planeta.nome != NULL){
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
-            if (1.0 + planeta.radius >= distance) {
+            if ((1.0 + planeta.radius >= distance) && b.active) {
                 b.active = false;
-                gameRound = !gameRound; //Inverte a rodada
+                gameSwitch();
             }
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
@@ -87,9 +89,9 @@ void moveBall() {
         }
     }
 
-    if(hasXgap() || hasYgap()){
+    if((hasXgap() || hasYgap()) && b.active){
         b.active = false;
-        gameRound = !gameRound; //Inverte a rodada
+        gameSwitch();
     }
 
     (b).speedY += finalYAceleration;
@@ -105,9 +107,12 @@ Planeta* scanPlanetsYaml(int level) {
 }
 
 void gameSwitch(){
-    gameRound = !gameRound;
-    player1.active = !player1.active;
-    player2.active = !player2.active;
+    if (gameRound) {
+        player1.active = true;
+    } else {
+        player2.active = true;
+    };
+//    gameRound = !gameRound;
 }
 
 void readCreatePlanetsBullets(){
@@ -132,27 +137,38 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 }
 
 void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
+
+    player1.active = false;
+    player2.active = false;
     b.active = true;
+
     int velInit = 10; // Velocidade inicial
+
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);
+        b.speedX = (double) sqrt(velInit*velInit - b.speedY*b.speedY);
+
         b.coordY = player1.coordY;
         b.coordX = player1.coordX;
+        if (clickY<=player1.coordY) {
+            b.speedY *= -1;
+        }
+        if (clickX <= player1.coordX) {
+            b.speedX *= -1;
+        }
     }else{
         b.speedY = getComposedCoefficient(velInit, player2.coordX, player2.coordY, clickX, clickY);
+        b.speedX = (double) sqrt(velInit*velInit - b.speedY*b.speedY);
+
         b.coordY = player2.coordY;
         b.coordX = player2.coordX;
+        if (clickY <= player2.coordY) {
+            b.speedY *= -1;
+        }
+        if (clickX <= player2.coordX) {
+            b.speedX *= -1;
+        }
     }
-    if (clickY<=coordY) {
-        b.speedY *= -1;
-    }
-
-    b.speedX = (double) sqrt(velInit*velInit - b.speedY*b.speedY);
-    if (clickX <= coordX) {
-        b.speedX *= -1;
-    }
-
-
 }
 
 // Verifica se a bolinha vai bater na esquerda ou na direita
