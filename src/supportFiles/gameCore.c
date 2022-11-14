@@ -27,7 +27,7 @@ void initGame() {
     b.speedX = 0;
     b.speedY = 0;
 
-    planetas[0].color = RED;
+    planetas[0].color = WHITE;
     planetas[0].nome = "Arthur";
     planetas[0].coordX = WINDOW_WIDTH/2;
     planetas[0].coordY = WINDOW_HEIGHT/2;
@@ -117,7 +117,7 @@ void readCreatePlanetsBullets(){
         al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
     }
     if(b.active) {
-    al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 1, WHITE);
+    al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
     }else {
         al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
         b.speedX = 0;
@@ -138,7 +138,7 @@ void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
     player2.active = false;
     b.active = true;
 
-    int velInit = 10; // Velocidade inicial
+    int velInit = 5; // Velocidade inicial
 
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);

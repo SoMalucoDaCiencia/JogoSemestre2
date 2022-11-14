@@ -24,7 +24,7 @@ bool LIMIT_WALLS                  = false;
 bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
 float const MPS                 = GAME_FREQUENCY;  // Maximo de vezes o jogo é renderizado
-float FPS                       = 0;   // Guarda quantas de vezes o jogo esta sendo renderizado
+float FPS                       = 0;   // Guarda quantas de vezes o jogo está sendo renderizado
 bool allow                      = true;
 bool SHOW_FPS                   = false;
 long global_counter;
@@ -35,7 +35,7 @@ ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
 ALLEGRO_DISPLAY *display;
 ALLEGRO_TIMER* timer;
-ALLEGRO_FONT *font25 , *font90;
+ALLEGRO_FONT *font25 , *font45;
 
 
 int GAMESTATE = 0; // STATE INICIAL
@@ -63,7 +63,7 @@ int main() {
     // Carrega as fontes do jogo
     if (al_init_font_addon() && al_init_ttf_addon()) {
         font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
-        font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",90,0 );
+        font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",45,0 );
     }
 
     // Inicia constante de newton
@@ -213,7 +213,8 @@ void drawMenu() {
     al_clear_to_color(BLACK);
 
     //DESENHA ESTRELAS
-    drawStars();
+        drawStars();
+
 
     //SOMBRA OPÇÕES MENU
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
@@ -260,12 +261,12 @@ void drawGame(){
     al_clear_to_color(BLACK);
     moveBall();
     readCreatePlanetsBullets();
-    insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
-    insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
+    insertFilledSquare(12, 12, player1.coordX, player1.coordY, LIGHT_BLUE, display);
+    insertFilledSquare(12, 12, player2.coordX, player2.coordY, RED, display);
     if(gameRound){
-    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
+        al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
     }else{
-        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
+        al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
     }
     al_flip_display();
 
