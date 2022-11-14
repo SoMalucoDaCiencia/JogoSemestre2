@@ -41,7 +41,7 @@
 
     void initGame();
 
-    void setBulletTo(int coordX, int coordY, int clickX, int clickY);
+    void setBulletTo(int clickX, int clickY);
 
     void moveBall();
 

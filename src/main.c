@@ -134,7 +134,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case 1: {
                     // BOTÕES DA TELA PLAY
                     if (!b.active) {
-                        setBulletTo(planetas[0].coordX, planetas[0].coordY - planetas[0].radius, ev.mouse.x, ev.mouse.y);
+                        setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
 
                     break;
@@ -262,11 +262,11 @@ void drawGame(){
     readCreatePlanetsBullets();
     insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
     insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
-    if(gameRound){
-    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
-    }else{
-        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
-    }
+//    if(gameRound){
+//    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
+//    }else{
+//        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
+//    }
     al_flip_display();
 
 
