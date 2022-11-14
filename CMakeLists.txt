@@ -17,6 +17,11 @@ add_executable(JogoSemestre2
         deps/nossaLivraria.c
         deps/gameCore.h
         deps/gameCore.c
+        deps/algif.c
+        deps/algif.h
+        deps/gif.c
+        deps/bitmap.c
+        deps/lzw.c
         src/main.h
         src/main.c)
 

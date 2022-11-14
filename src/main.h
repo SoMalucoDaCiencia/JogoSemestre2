@@ -7,6 +7,15 @@
 
 #include <allegro5/events.h>
 
+    typedef enum {
+        MENU,
+        PLAY,
+        TUTORIAL,
+        CONFIG
+    } GAMEMODE;
+
+    extern GAMEMODE GAMESTATE;
+
     extern int const WINDOW_WIDTH;
     extern int const WINDOW_HEIGHT;
 
