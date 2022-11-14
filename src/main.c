@@ -32,7 +32,7 @@ long global_counter;
 // ==================================================================
 
 
-ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
+ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
 ALLEGRO_FONT *font25 , *font90;
 ALLEGRO_DISPLAY *display;
@@ -56,6 +56,7 @@ int main() {
         astro = al_load_bitmap("../src/assets/astronauta.png");
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
+        lifeHeart = al_load_bitmap("../src/assets/vida.png");
     }
 
     const char *gif = "../src/assets/tutorial/giphy.gif";
@@ -236,7 +237,6 @@ void drawMenu() {
     //DESENHA ESTRELAS
         drawStars();
 
-
     //SOMBRA OPÇÕES MENU
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 450, DARK_PURPLE, display);
     insertFilledSquare(50, 400, (WINDOW_WIDTH/2)-190, 530, DARK_PURPLE, display);
@@ -296,24 +296,62 @@ void drawGame(){
     al_clear_to_color(BLACK);
     moveBall();
     readCreatePlanetsBullets();
-    insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
-    insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
-//    if(gameRound){
-//    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
-//    }else{
-//        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
-//    }
+    drawLifeBar();
+
+    if(player1.life != 0){
+        al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, LIGHT_BLUE);
+    }
+
+    if(player2.life != 0){
+        al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, RED);
+    }
+
+    if(gameRound){
+        al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+    }else{
+        al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+    }
     al_flip_display();
 
 
     //printf(" - Drawing Play Screen....[%s]\n", getNow());
 }
 
+//desenha os corações das vidas dos bonecos
+void drawLifeBar(){
+    int t = 30;
+    for(int i = 0; i < player1.life; i++){
+        al_draw_bitmap(lifeHeart, (float) t, 20, 0);
+        t += 30;
+    }
+
+    int w = 1220;
+    for(int i = 0; i < player2.life; i++){
+        al_draw_bitmap(lifeHeart, (float) w, 20, 0);
+        w -= 30;
+    }
+}
+
+//void drawSprite(){
+//    if(player1.coordX < WINDOW_WIDTH/2 || player2.coordX > WINDOW_WIDTH){
+//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
+//    } else{
+//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
+//    }
+//
+//    if(player2.coordX < WINDOW_WIDTH){
+//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
+//    } else{
+//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
+//    }
+//}
+
 void killNine() {
     printf(" - Killing APP....[%s]\n", getNow());
     al_destroy_bitmap(tittleWelcome);
     al_destroy_bitmap(tittleWorbit);
     al_destroy_bitmap(astro);
+    al_destroy_bitmap(lifeHeart);
     algif_destroy_animation(tuto);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);

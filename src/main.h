@@ -29,6 +29,8 @@
 
     void drawTutorial();
 
+    void drawLifeBar();
+
     void eventHandler(ALLEGRO_EVENT ev);
 
     void render(ALLEGRO_EVENT ev);

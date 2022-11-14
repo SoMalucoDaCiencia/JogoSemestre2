@@ -32,22 +32,26 @@ void initGame() {
     planetas[0].coordX = WINDOW_WIDTH/2;
     planetas[0].coordY = WINDOW_HEIGHT/2;
     planetas[0].radius = 20;
-    planetas[0].mass = 2;
+    planetas[0].mass = 0;
 
     player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player1.coordX =  WINDOW_WIDTH/2;
     player1.active = true;
+    player1.life   = 5;
+    player1.radius = 12;
 
     player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player2.coordX =  WINDOW_WIDTH/5;
     player1.active = false;
+    player2.life   = 5;
+    player2.radius = 12;
 
-    planetas[1].color = WHITE;
-    planetas[1].nome = "Tais";
+    planetas[1].color  = WHITE;
+    planetas[1].nome   = "Tais";
     planetas[1].coordX = 200;
     planetas[1].coordY = 590;
     planetas[1].radius = 30;
-    planetas[1].mass = 3;
+    planetas[1].mass   = 0;
 
     planetaSize = sizeof(planetas) / sizeof(Planeta);
 
@@ -72,9 +76,28 @@ void moveBall() {
         double finalYAceleration = 0;
 
         if(planeta.nome != NULL){
+            bool inverter = false;
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
-            if ((1.0 + planeta.radius >= distance) && b.active) {
+            if ((5.0 + planeta.radius >= distance) && b.active) {
                 b.active = false;
+                inverter = true;
+            }
+
+            double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
+            if ((5.0 + player1.radius >= distancePlayer1) && b.active && !gameRound) {
+                player2.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
+            if ((5.0 + player2.radius >= distancePlayer2) && b.active && gameRound) {
+                player1.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            if(inverter){
                 gameSwitch();
             }
 
