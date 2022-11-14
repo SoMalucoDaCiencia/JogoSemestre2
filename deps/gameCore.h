@@ -11,6 +11,8 @@
         bool active;
         int coordX;
         int coordY;
+        int life;
+        int radius;
     } player1 , player2;
 
     typedef struct {

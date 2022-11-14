@@ -3,9 +3,9 @@
 //
 
 #include <stdio.h>
-#include "gameCore.h"
-#include "nossaLivraria.h"
-#include "deps/Cores.h"
+#include "innerIncludes/headers/gameCore.h"
+#include "innerIncludes/headers/nossaLivraria.h"
+#include "innerIncludes/headers/Cores.h"
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
 #include "src/main.h"
@@ -37,13 +37,17 @@ void initGame() {
     player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player1.coordX =  WINDOW_WIDTH/2;
     player1.active = true;
+    player1.life   = 5;
+    player1.radius = 12;
 
     player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player2.coordX =  WINDOW_WIDTH/5;
     player1.active = false;
+    player2.life   = 5;
+    player2.radius = 12;
 
-    planetas[1].color = WHITE;
-    planetas[1].nome = "Tais";
+    planetas[1].color  = WHITE;
+    planetas[1].nome   = "Tais";
     planetas[1].coordX = 200;
     planetas[1].coordY = 590;
     planetas[1].radius = 30;
@@ -51,41 +55,69 @@ void initGame() {
 
     planetaSize = sizeof(planetas) / sizeof(Planeta);
 
-    b.coordX = planetas[0].coordX;
-    b.coordY = planetas[0].coordY - planetas[0].radius;
+    if (gameRound) {
+        b.coordY = player1.coordY;
+        b.coordX = player1.coordX;
+    } else {
+        b.coordY = player2.coordY;
+        b.coordX = player2.coordX;
+    }
 
 //    NEWTON = 6.6743 * pow(10, -11);
-    NEWTON = 6.6743 * pow(10, 0);
+    NEWTON = 6.6743 * innerPow(10, 1);
     limitWalls = false;
 }
 
 void moveBall() {
 
-    double finalXAceleration = 0;
-    double finalYAceleration = 0;
-
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
+        double finalXAceleration = 0;
+        double finalYAceleration = 0;
 
         if(planeta.nome != NULL){
+            bool inverter = false;
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
-            if ((1.0 + planeta.radius >= distance) && b.active) {
+            if ((5.0 + planeta.radius >= distance) && b.active) {
                 b.active = false;
+                inverter = true;
+            }
+
+            double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
+            if ((5.0 + player1.radius >= distancePlayer1) && b.active && !gameRound) {
+                player2.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
+            if ((5.0 + player2.radius >= distancePlayer2) && b.active && gameRound) {
+                player1.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            if(inverter){
                 gameSwitch();
             }
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
 
-            finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
-            if (planeta.coordY <= b.coordY && b.coordY < 0) {
-                finalYAceleration *= -1;
+            if (b.coordY!=planeta.coordY) {
+                finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
+                if (planeta.coordY <= b.coordY && b.coordY < 0) {
+                    finalYAceleration *= -1;
+                }
             }
+            (b).speedY += finalYAceleration;
 
-            double forceX = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
-            if (planeta.coordX <= b.coordX) {
-                forceX *= -1;
+            if (b.coordX!=planeta.coordX) {
+                finalXAceleration = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
+                if (planeta.coordX <= b.coordX) {
+                    finalXAceleration *= -1;
+                }
+                (b).speedX += finalXAceleration;
             }
-            finalXAceleration += forceX;
         }
     }
 
@@ -93,9 +125,6 @@ void moveBall() {
         b.active = false;
         gameSwitch();
     }
-
-    (b).speedY += finalYAceleration;
-    (b).speedX += finalXAceleration;
 
     (b).coordY += b.speedY;
     (b).coordX += b.speedX;
@@ -132,7 +161,7 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
     return floor(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
-void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
+void setBulletTo(int clickX, int clickY) {
 
     player1.active = false;
     player2.active = false;
