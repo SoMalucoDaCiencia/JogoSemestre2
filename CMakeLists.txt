@@ -12,11 +12,13 @@ link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
         deps/Cores.h
-        deps/Cores.c
+        src/supportFiles/Cores.c
+        deps/yamlReader.h
+        src/supportFiles/yamlReader.c
         deps/nossaLivraria.h
-        deps/nossaLivraria.c
+        src/supportFiles/nossaLivraria.c
         deps/gameCore.h
-        deps/gameCore.c
+        src/supportFiles/gameCore.c
         src/main.h
         src/main.c)
 

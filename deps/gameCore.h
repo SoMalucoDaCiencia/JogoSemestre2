@@ -45,8 +45,6 @@
 
     void moveBall();
 
-    Planeta* scanPlanetsYaml(int level);
-
     void readCreatePlanetsBullets();
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
