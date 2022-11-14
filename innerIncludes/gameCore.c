@@ -3,9 +3,9 @@
 //
 
 #include <stdio.h>
-#include "gameCore.h"
-#include "nossaLivraria.h"
-#include "deps/Cores.h"
+#include "innerIncludes/headers/gameCore.h"
+#include "innerIncludes/headers/nossaLivraria.h"
+#include "innerIncludes/headers/Cores.h"
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
 #include "src/main.h"
@@ -32,7 +32,7 @@ void initGame() {
     planetas[0].coordX = WINDOW_WIDTH/2;
     planetas[0].coordY = WINDOW_HEIGHT/2;
     planetas[0].radius = 20;
-    planetas[0].mass = 0;
+    planetas[0].mass = 2;
 
     player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
     player1.coordX =  WINDOW_WIDTH/2;
@@ -47,25 +47,29 @@ void initGame() {
     planetas[1].coordX = 200;
     planetas[1].coordY = 590;
     planetas[1].radius = 30;
-    planetas[1].mass = 0;
+    planetas[1].mass = 3;
 
     planetaSize = sizeof(planetas) / sizeof(Planeta);
 
-    b.coordX = planetas[0].coordX;
-    b.coordY = planetas[0].coordY - planetas[0].radius;
+    if (gameRound) {
+        b.coordY = player1.coordY;
+        b.coordX = player1.coordX;
+    } else {
+        b.coordY = player2.coordY;
+        b.coordX = player2.coordX;
+    }
 
 //    NEWTON = 6.6743 * pow(10, -11);
-    NEWTON = 6.6743 * pow(10, 0);
+    NEWTON = 6.6743 * innerPow(10, 1);
     limitWalls = false;
 }
 
 void moveBall() {
 
-    double finalXAceleration = 0;
-    double finalYAceleration = 0;
-
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
+        double finalXAceleration = 0;
+        double finalYAceleration = 0;
 
         if(planeta.nome != NULL){
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
@@ -76,16 +80,21 @@ void moveBall() {
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
 
-            finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
-            if (planeta.coordY <= b.coordY && b.coordY < 0) {
-                finalYAceleration *= -1;
+            if (b.coordY!=planeta.coordY) {
+                finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
+                if (planeta.coordY <= b.coordY && b.coordY < 0) {
+                    finalYAceleration *= -1;
+                }
             }
+            (b).speedY += finalYAceleration;
 
-            double forceX = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
-            if (planeta.coordX <= b.coordX) {
-                forceX *= -1;
+            if (b.coordX!=planeta.coordX) {
+                finalXAceleration = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
+                if (planeta.coordX <= b.coordX) {
+                    finalXAceleration *= -1;
+                }
+                (b).speedX += finalXAceleration;
             }
-            finalXAceleration += forceX;
         }
     }
 
@@ -93,9 +102,6 @@ void moveBall() {
         b.active = false;
         gameSwitch();
     }
-
-    (b).speedY += finalYAceleration;
-    (b).speedX += finalXAceleration;
 
     (b).coordY += b.speedY;
     (b).coordX += b.speedX;
@@ -132,13 +138,13 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
     return floor(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
-void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
+void setBulletTo(int clickX, int clickY) {
 
     player1.active = false;
     player2.active = false;
     b.active = true;
 
-    int velInit = 5; // Velocidade inicial
+    int velInit = 10; // Velocidade inicial
 
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);

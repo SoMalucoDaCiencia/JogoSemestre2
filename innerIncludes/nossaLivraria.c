@@ -6,7 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
-#include "deps/gameCore.h"
+#include "innerIncludes/headers/gameCore.h"
 #include <string.h>
 #include <allegro5/allegro.h>
 #include <stdio.h>
@@ -32,6 +32,27 @@ char* getNow() {
 
 int getRandomInt(int max, int min) {
     return (rand() % (max - min + 1)) + min;
+}
+
+//double root(int basis, int exponent) {
+//    return pow(basis, 1./exponent);
+//}
+
+double innerPow(double basis, int exponent) {
+    double ret;
+    if (exponent>0) {
+        ret = basis;
+        for (int i=1; i<exponent; i++) {
+            ret *= basis;
+        }
+    } else {
+        ret = 1/basis;
+        int i = -1;
+        for (; i>exponent; i--) {
+            ret *= 1/basis;
+        }
+    }
+    return ret;
 }
 
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {

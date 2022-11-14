@@ -7,17 +7,18 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include <deps/nossaLivraria.h>
+#include "innerIncludes/headers/nossaLivraria.h"
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
-#include <Cores.h>
-#include <deps/gameCore.h>
+#include "innerIncludes/headers/Cores.h"
+#include "innerIncludes/headers/gameCore.h"
+#include "outIncludes/headers/algif.h"
 
 
 // ========== Window VARS ===========================================
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
-bool LIMIT_WALLS                  = false;
+bool LIMIT_WALLS                = false;
 // =================================================================
 
 // ========== Frame VARS ===========================================
@@ -33,14 +34,14 @@ long global_counter;
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
+ALLEGRO_FONT *font25 , *font90;
 ALLEGRO_DISPLAY *display;
+ALGIF_ANIMATION *tuto;
 ALLEGRO_TIMER* timer;
-ALLEGRO_FONT *font25 , *font45;
+ALLEGRO_FONT *font25 , *font90, *font45;
 
-
-int GAMESTATE = 0; // STATE INICIAL
+GAMEMODE GAMESTATE;
 bool orderRedraw = true;
-
 
 int main() {
 
@@ -56,6 +57,9 @@ int main() {
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
     }
+
+    const char *gif = "../src/assets/tutorial/giphy.gif";
+    tuto = algif_load_animation(gif);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -116,35 +120,42 @@ void eventHandler(ALLEGRO_EVENT ev) {
 
             // EVENTO CLICK
             switch (GAMESTATE) {
-                case 0: {
+                case MENU: {
                     // BOTÕES DO MENU
                     if (ev.mouse.x >= (WINDOW_WIDTH/2)-200 && ev.mouse.x <= (WINDOW_WIDTH/2)+200) {
                         if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
                             orderRedraw = true;
-                            GAMESTATE = 1;
+                            GAMESTATE = TUTORIAL;
                         } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                             orderRedraw = true;
-                            GAMESTATE = 2;
+                            GAMESTATE = CONFIG;
                         } else if(ev.mouse.y >= 600 && ev.mouse.y <= 670) {             // quit
                             killNine();
                         }
                     }
                     break;
                 }
-                case 1: {
+                case PLAY: {
                     // BOTÕES DA TELA PLAY
                     if (!b.active) {
-                        setBulletTo(planetas[0].coordX, planetas[0].coordY - planetas[0].radius, ev.mouse.x, ev.mouse.y);
+                        setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
 
                     break;
                 }
-                case 2: {
+                case TUTORIAL: {
+                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+                        orderRedraw = true;
+                        GAMESTATE = PLAY; // RETORNA A TELA DE MENU
+                    }
+                    break;
+                }
+                case CONFIG: {
                     // BOTÕES DA TELA CONFIG
 
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
-                        GAMESTATE = 0; // RETORNA A TELA DE MENU
+                        GAMESTATE = MENU; // RETORNA A TELA DE MENU
                     }
                     break;
                 }
@@ -157,7 +168,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
-                GAMESTATE = 0; // RETORNA A TELA DE MENU
+                GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
             break;
         }
@@ -172,18 +183,28 @@ void render(ALLEGRO_EVENT ev) {
     if (ev.type == ALLEGRO_EVENT_TIMER) {
         GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
         switch (GAMESTATE) {
-            case 0: {
+            case MENU: {
                 if (orderRedraw) {
                     drawMenu();
                     orderRedraw = false;
                 }
                 break;
             }
-            case 1: {
+            case PLAY: {
                 drawGame();
                 break;
             }
-            case 2: {
+            case TUTORIAL: {
+                if (GAME_FREQUENCY_POLARITY) {
+                    drawTutorial();
+                    if (orderRedraw) {
+                        printf(" - Drawing Tutorial....[%s]\n", getNow());
+                        orderRedraw = false;
+                    }
+                }
+                break;
+            }
+            case CONFIG: {
                 // TELA CONFIG
                 if (orderRedraw) {
                     drawConfig();
@@ -241,6 +262,20 @@ void drawMenu() {
     al_flip_display();
 }
 
+void drawTutorial() {
+// TELA DE TUROTIAL
+    al_clear_to_color(BLACK);
+
+    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+
+    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
+    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+
+    al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
+
+    al_flip_display();
+}
+
 void drawConfig() {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
@@ -250,7 +285,7 @@ void drawConfig() {
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
 
-    al_draw_text( font25, WHITE, 90, 40, 0, "Back");
+    al_draw_text(font25, WHITE, 90, 40, 0, "Back");
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
@@ -261,13 +296,13 @@ void drawGame(){
     al_clear_to_color(BLACK);
     moveBall();
     readCreatePlanetsBullets();
-    insertFilledSquare(12, 12, player1.coordX, player1.coordY, LIGHT_BLUE, display);
-    insertFilledSquare(12, 12, player2.coordX, player2.coordY, RED, display);
-    if(gameRound){
-        al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
-    }else{
-        al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
-    }
+    insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
+    insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
+//    if(gameRound){
+//    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
+//    }else{
+//        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
+//    }
     al_flip_display();
 
 
@@ -279,6 +314,7 @@ void killNine() {
     al_destroy_bitmap(tittleWelcome);
     al_destroy_bitmap(tittleWorbit);
     al_destroy_bitmap(astro);
+    algif_destroy_animation(tuto);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
