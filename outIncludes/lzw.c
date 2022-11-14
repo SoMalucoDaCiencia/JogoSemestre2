@@ -1,4 +1,4 @@
-#include "algif.h"
+#include "outIncludes/headers/algif.h"
 
 static int
 read_code (ALLEGRO_FILE * file, char *buf, int *bit_pos, int bit_size)

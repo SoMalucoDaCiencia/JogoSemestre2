@@ -6,7 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
-#include "deps/gameCore.h"
+#include "innerIncludes/headers/gameCore.h"
 #include <string.h>
 #include <allegro5/allegro.h>
 #include <stdio.h>

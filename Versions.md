@@ -16,7 +16,7 @@
 
 - Tela de menu
 - Tela de configurações
-- Novas features em "deps/nossaLivraria"
+- Novas features em "innerIncludes/nossaLivraria"
 - Paleta de cores escolhida 
 - Imegens setadas no menu
 - Fonte do jogo dfinida
@@ -27,11 +27,11 @@
 
 - Tela inicial e botões de teste
 - FPS rodando
-- Novas features em "deps/nossaLivraria"
+- Novas features em "innerIncludes/nossaLivraria"
 
 
 ### beta@1.0.0 - 17/08/2022
 
-- Criação da nossa biblioteca "deps/nossaLivraria"
+- Criação da nossa biblioteca "innerIncludes/nossaLivraria"
 - Estruturação do projeto
 - Created a new git

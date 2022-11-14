@@ -27,6 +27,8 @@
 
     void drawGame();
 
+    void drawTutorial();
+
     void eventHandler(ALLEGRO_EVENT ev);
 
     void render(ALLEGRO_EVENT ev);

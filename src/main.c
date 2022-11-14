@@ -7,12 +7,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include <deps/nossaLivraria.h>
+#include "innerIncludes/headers/nossaLivraria.h"
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
-#include <Cores.h>
-#include <deps/gameCore.h>
-#include "algif.h"
+#include "innerIncludes/headers/Cores.h"
+#include "innerIncludes/headers/gameCore.h"
+#include "outIncludes/headers/algif.h"
 
 
 // ========== Window VARS ===========================================
@@ -196,7 +196,10 @@ void render(ALLEGRO_EVENT ev) {
             case TUTORIAL: {
                 if (GAME_FREQUENCY_POLARITY) {
                     drawTutorial();
-                    orderRedraw = false;
+                    if (orderRedraw) {
+                        printf(" - Drawing Tutorial....[%s]\n", getNow());
+                        orderRedraw = false;
+                    }
                 }
                 break;
             }
@@ -266,9 +269,8 @@ void drawTutorial() {
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
 
-    al_draw_text( font, WHITE, 90, 40, 0, "Skip");
+    al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
 
-    printf(" - Drawing Tutorial....[%s]\n", getNow());
     al_flip_display();
 }
 

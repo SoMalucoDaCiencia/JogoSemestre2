@@ -1,4 +1,4 @@
-#include "algif.h"
+#include "outIncludes/headers/algif.h"
 
 ALGIF_BITMAP *algif_create_bitmap(int w, int h) {
     ALGIF_BITMAP *bitmap = calloc(1, sizeof *bitmap);

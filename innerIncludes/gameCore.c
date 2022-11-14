@@ -3,9 +3,9 @@
 //
 
 #include <stdio.h>
-#include "gameCore.h"
-#include "nossaLivraria.h"
-#include "deps/Cores.h"
+#include "innerIncludes/headers/gameCore.h"
+#include "innerIncludes/headers/nossaLivraria.h"
+#include "innerIncludes/headers/Cores.h"
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
 #include "src/main.h"
