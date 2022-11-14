@@ -1,8 +1,12 @@
 ### beta@2.1.0 - Em andamento
 
 - Definicao do tipo planeta
-- Otimizacao principal
+- Definicao do tipo forca
+- Otimizacao principal de eventos 
+- Otimizacao de al_flip_display
 - Leitor de arquivos YAML
+- Separaco por bibliotecas
+- Definicao da paleta de cores com a biblioteca Cores.h
 - Definicao dos mapas do jogo
 - Definição da nova biblioteca "gameCore.h"
 - Definição de algumas variaveis referentes ao jogo
