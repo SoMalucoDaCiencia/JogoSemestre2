@@ -31,7 +31,8 @@ long global_counter;
 // ==================================================================
 
 
-ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome;
+ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *spritCatLeft, *spritCatRight, *spritMummyLeft, *spritMummyRight, *spritSullivanLeft,
+*spritSullivanRight, *spritDemonLeft, *spritDemonRight;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
 ALLEGRO_DISPLAY *display;
 ALLEGRO_TIMER* timer;
@@ -55,6 +56,15 @@ int main() {
         astro = al_load_bitmap("../src/assets/astronauta.png");
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
+
+        spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
+        spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+        spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+        spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
+        spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
+        spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
+        spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+        spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
     }
 
     // Inicia biblioteca de primitives
@@ -261,6 +271,38 @@ void drawGame(){
     al_clear_to_color(BLACK);
     moveBall();
     readCreatePlanetsBullets();
+
+    spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
+    al_draw_bitmap(spritCatLeft, (float) (WINDOW_WIDTH/2.0), 400, 0);
+
+    spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+    al_draw_bitmap(spritCatRight, (float) (WINDOW_WIDTH/2.0), 340, 0);
+
+
+
+    spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+    al_draw_bitmap(spritMummyLeft, (float) (WINDOW_WIDTH/2.0 + 80), 400, 0);
+
+    spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
+    al_draw_bitmap(spritMummyRight, (float) (WINDOW_WIDTH/2.0 + 80), 340, 0);
+
+
+
+    spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
+    al_draw_bitmap(spritSullivanLeft, (float) (WINDOW_WIDTH/2.0 + 160), 400, 0);
+
+    spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
+    al_draw_bitmap(spritSullivanRight, (float) (WINDOW_WIDTH/2.0 + 160), 340, 0);
+
+
+
+    spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+    al_draw_bitmap(spritDemonLeft, (float) (WINDOW_WIDTH/2.0 + 240), 400, 0);
+
+    spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
+    al_draw_bitmap(spritDemonRight, (float) (WINDOW_WIDTH/2.0 + 240), 340, 0);
+
+
     insertFilledSquare(12, 12, player1.coordX, player1.coordY, LIGHT_BLUE, display);
     insertFilledSquare(12, 12, player2.coordX, player2.coordY, RED, display);
     if(gameRound){

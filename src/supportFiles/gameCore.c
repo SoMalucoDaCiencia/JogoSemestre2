@@ -138,7 +138,7 @@ void setBulletTo(int coordX, int coordY, int clickX, int clickY) {
     player2.active = false;
     b.active = true;
 
-    int velInit = 5; // Velocidade inicial
+    int velInit = 15; // Velocidade inicial
 
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);
