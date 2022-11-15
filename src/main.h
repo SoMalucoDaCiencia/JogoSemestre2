@@ -11,7 +11,8 @@
         MENU,
         PLAY,
         TUTORIAL,
-        CONFIG
+        CONFIG,
+        CHARACTER
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;
@@ -24,6 +25,8 @@
     void drawMenu();
 
     void drawConfig();
+
+    void characterSelection();
 
     void drawGame();
 

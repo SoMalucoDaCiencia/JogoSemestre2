@@ -4,8 +4,8 @@
 
 #include <stdlib.h>
 #include <allegro5/allegro.h>
-#include "deps/Cores.h"
-#include "deps/nossaLivraria.h"
+#include "innerIncludes/headers/Cores.h"
+#include "innerIncludes/headers/nossaLivraria.h"
 
 ALLEGRO_COLOR BLACK       ;
 ALLEGRO_COLOR WHITE       ;

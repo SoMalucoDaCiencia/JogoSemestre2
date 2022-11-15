@@ -6,7 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
-#include "deps/gameCore.h"
+#include "innerIncludes/headers/gameCore.h"
 #include <string.h>
 #include <allegro5/allegro.h>
 #include <stdio.h>
@@ -66,5 +66,22 @@ double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX
     double hip = twoPointsDistance(pointAX, pointAY, pointBX, pointBY);
     double y2 = ((double)(pointBY - pointAY))*(force/hip);
     return (y2 < 0 ? y2*(-1) : y2);
+}
+
+double innerPow(double basis, int exponent) {
+    double ret;
+    if (exponent>0) {
+        ret = basis;
+        for (int i=1; i<exponent; i++) {
+            ret = basis;
+        }
+    } else {
+        ret = 1/basis;
+        int i = -1;
+        for (; i>exponent; i--) {
+            ret= 1/basis;
+        }
+    }
+    return ret;
 }
 

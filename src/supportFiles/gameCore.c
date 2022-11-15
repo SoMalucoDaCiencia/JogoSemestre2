@@ -34,17 +34,17 @@ void initGame() {
     planetas[0].radius = 20;
     planetas[0].mass = 0;
 
-    player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
-    player1.coordX =  WINDOW_WIDTH/2;
+    player1.coordY =  450;
+    player1.coordX =  800;
     player1.active = true;
     player1.life   = 5;
-    player1.radius = 12;
+    player1.radius = 22;
 
-    player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
-    player2.coordX =  WINDOW_WIDTH/5;
+    player2.coordY =  357;
+    player2.coordX = 255;
     player1.active = false;
     player2.life   = 5;
-    player2.radius = 12;
+    player2.radius = 22;
 
     planetas[1].color  = WHITE;
     planetas[1].nome   = "Tais";

@@ -32,14 +32,14 @@ long global_counter;
 // ==================================================================
 
 
-ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *spritCatLeft, *spritCatRight, *spritMummyLeft, *spritMummyRight, *spritSullivanLeft,
-*spritSullivanRight, *spritDemonLeft, *spritDemonRight , *lifeHeart;
+ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *spritCatLeft, *spritCatRight, *spritCatSelection, *spritMummyLeft, *spritMummyRight,
+*spritMummySelection, *spritSullivanLeft, *spritSullivanRight, *spritSullivanSelection, *spritDemonLeft, *spritDemonRight , *spritDemonSelection,
+*spritWaterMonsterLeft, *spritWaterMonsterRight, *spritWaterMonsterSelection, *spritZombieLeft, *spritZombieRight, *spritZombieSelection, *lifeHeart;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
-ALLEGRO_FONT *font25 , *font90;
+ALLEGRO_FONT *font25 , *font90, *font45;
 ALLEGRO_DISPLAY *display;
 ALGIF_ANIMATION *tuto;
 ALLEGRO_TIMER* timer;
-ALLEGRO_FONT *font25 , *font90, *font45;
 
 GAMEMODE GAMESTATE;
 bool orderRedraw = true;
@@ -58,18 +58,29 @@ int main() {
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
         lifeHeart = al_load_bitmap("../src/assets/vida.png");
+        spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
+        spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+        spritCatSelection = al_load_bitmap("../src/assets/characters/spritCatSelection.png");
+        spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+        spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
+        spritMummySelection = al_load_bitmap("../src/assets/characters/spritMummySelection.png");
+        spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
+        spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
+        spritSullivanSelection = al_load_bitmap("../src/assets/characters/spritSullivanSelection.png");
+        spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+        spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
+        spritDemonSelection = al_load_bitmap("../src/assets/characters/spritDemonSelection.png");
+        spritWaterMonsterLeft = al_load_bitmap("../src/assets/characters/spritWaterMonsterLeft.png");
+        spritWaterMonsterRight = al_load_bitmap("../src/assets/characters/spritWaterMonsterRight.png");
+        spritWaterMonsterSelection = al_load_bitmap("../src/assets/characters/spritDemonSelection.png");
+        spritZombieLeft = al_load_bitmap("../src/assets/characters/spritZombieLeft.png");
+        spritZombieRight = al_load_bitmap("../src/assets/characters/spritZombieRight.png");
+        spritZombieSelection = al_load_bitmap("../src/assets/characters/spritZombieSelection.png");
     }
 
-    const char *gif = "../src/assets/tutorial/giphy.gif";
-    tuto = algif_load_animation(gif);
-    spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
-    spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
-    spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
-    spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
-    spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
-    spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
-    spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
-    spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
+//    const char *gif = "../src/assets/tutorial/giphy.gif";
+//    tuto = algif_load_animation(gif);
+
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -78,6 +89,7 @@ int main() {
     if (al_init_font_addon() && al_init_ttf_addon()) {
         font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
         font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",45,0 );
+        font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",90,0 );
     }
 
     // Inicia constante de newton
@@ -162,10 +174,12 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case CONFIG: {
                     // BOTÕES DA TELA CONFIG
-
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = MENU; // RETORNA A TELA DE MENU
+                    }else if(ev.mouse.x >= 270 && ev.mouse.x <= 1020 && ev.mouse.y >= 180 && ev.mouse.y <= 300){
+                        orderRedraw = true;
+                        GAMESTATE = CHARACTER;
                     }
                     break;
                 }
@@ -218,6 +232,14 @@ void render(ALLEGRO_EVENT ev) {
                 // TELA CONFIG
                 if (orderRedraw) {
                     drawConfig();
+                    orderRedraw = false;
+                }
+                break;
+            }
+            case CHARACTER: {
+                // TELA PERSONAGENS
+                if (orderRedraw) {
+                    characterSelection();
                     orderRedraw = false;
                 }
                 break;
@@ -275,7 +297,7 @@ void drawTutorial() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+//    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
@@ -285,7 +307,9 @@ void drawTutorial() {
     al_flip_display();
 }
 
+
 void drawConfig() {
+
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
 
@@ -293,12 +317,71 @@ void drawConfig() {
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
-
     al_draw_text(font25, WHITE, 90, 40, 0, "Back");
+
+    insertFilledSquare(120, 750, 290, 200, DARK_PURPLE, display);
+    insertFilledSquare(120, 750, 270, 180, LIGHT_PURPLE, display);
+    al_draw_text(font45, WHITE, 330, 220, 0, "SELEÇÃO DE PERSONAGEM");
+
+    insertFilledSquare(120, 750, 290, 370, DARK_PURPLE, display);
+    insertFilledSquare(120, 750, 270, 350, LIGHT_PURPLE, display);
+
+    insertFilledSquare(120, 750, 290, 540, DARK_PURPLE, display);
+    insertFilledSquare(120, 750, 270, 520, LIGHT_PURPLE, display);
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
 }
+    //TELA DE SELEÇÃO DE PERSONAGEM
+void characterSelection(){
+    al_clear_to_color(BLACK);
+    drawStars();
+
+        insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
+        insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+        al_draw_text(font25, WHITE, 90, 40, 0, "Back");
+
+        //3 RETÂNGULOS DE CIMA
+        //SKIN GATO
+        insertFilledSquare(250, 200, 240, 110, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 230, 120, LIGHT_PURPLE, display);
+        spritCatSelection = al_load_bitmap("../src/assets/characters/spritCatSelection.png");
+        al_draw_bitmap(spritCatSelection, (float) 250, 155, 0);
+
+        //SKIN DEMÔNIO
+        insertFilledSquare(250, 200, 540, 110, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 530, 120, LIGHT_PURPLE, display);
+        spritDemonSelection = al_load_bitmap("../src/assets/characters/spritDemonSelection.png");
+        al_draw_bitmap(spritDemonSelection, (float) 550, 155, 0);
+
+        //SKIN SULLIVAN
+        insertFilledSquare(250, 200, 840, 110, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 830, 120, LIGHT_PURPLE, display);
+        spritSullivanSelection = al_load_bitmap("../src/assets/characters/spritSullivanSelection.png");
+        al_draw_bitmap(spritSullivanSelection, (float) 840, 155, 0);
+
+        //3 RETÂNGULOS DE BAIXO
+        //SKIN MÚMIA
+        insertFilledSquare(250, 200, 240, 410, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 230, 420, LIGHT_PURPLE, display);
+        spritMummySelection = al_load_bitmap("../src/assets/characters/spritMummySelection.png");
+        al_draw_bitmap(spritMummySelection, (float) 250, 445, 0);
+
+        //SKIN MONSTRO DO LAGO
+        insertFilledSquare(250, 200, 540, 410, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 530, 420, LIGHT_PURPLE, display);
+        spritWaterMonsterSelection = al_load_bitmap("../src/assets/characters/spritWaterMonsterSelection.png");
+        al_draw_bitmap(spritWaterMonsterSelection, (float) 550, 445, 0);
+
+        //SKIN ZUMBI
+        insertFilledSquare(250, 200, 840, 410, DARK_PURPLE, display);
+        insertFilledSquare(250, 200, 830, 420, LIGHT_PURPLE, display);
+        spritZombieSelection = al_load_bitmap("../src/assets/characters/spritZombieSelection.png");
+        al_draw_bitmap(spritZombieSelection, (float) 850, 445, 0);
+
+    al_flip_display();
+}
+
 
 void drawGame(){
     //TELA DO JOGO
@@ -307,48 +390,30 @@ void drawGame(){
     readCreatePlanetsBullets();
     drawLifeBar();
 
-    if(player1.life != 0){
-        al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, LIGHT_BLUE);
-    }
 
+
+    //Some com o jogador eliminado
     if(player2.life != 0){
-        al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, RED);
+        al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, BLACK);
+            spritWaterMonsterLeft = al_load_bitmap("../src/assets/characters/spritWaterMonsterLeft.png");
+            al_draw_bitmap(spritWaterMonsterLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+            al_draw_bitmap(spritDemonLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+            al_draw_bitmap(spritMummyLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+    }else{
+        al_draw_text( font90, LIGHT_BLUE, 185, 250, 0, "JOGADOR 2 VENCEU");
     }
 
+    if(player1.life != 0){
+        al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, BLACK);
+        spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+        al_draw_bitmap(spritCatRight, (float) player2.coordX - 41, player2.coordY - 38, 0);
+    }else{
+        al_draw_text( font90, LIGHT_BLUE, 185, 250, 0, "JOGADOR 1 VENCEU");
 
-    spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
-    al_draw_bitmap(spritCatLeft, (float) (WINDOW_WIDTH/2.0), 400, 0);
+    }
 
-    spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
-    al_draw_bitmap(spritCatRight, (float) (WINDOW_WIDTH/2.0), 340, 0);
-
-
-
-    spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
-    al_draw_bitmap(spritMummyLeft, (float) (WINDOW_WIDTH/2.0 + 80), 400, 0);
-
-    spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
-    al_draw_bitmap(spritMummyRight, (float) (WINDOW_WIDTH/2.0 + 80), 340, 0);
-
-
-
-    spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
-    al_draw_bitmap(spritSullivanLeft, (float) (WINDOW_WIDTH/2.0 + 160), 400, 0);
-
-    spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
-    al_draw_bitmap(spritSullivanRight, (float) (WINDOW_WIDTH/2.0 + 160), 340, 0);
-
-
-
-    spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
-    al_draw_bitmap(spritDemonLeft, (float) (WINDOW_WIDTH/2.0 + 240), 400, 0);
-
-    spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
-    al_draw_bitmap(spritDemonRight, (float) (WINDOW_WIDTH/2.0 + 240), 340, 0);
-
-
-    insertFilledSquare(12, 12, player1.coordX, player1.coordY, LIGHT_BLUE, display);
-    insertFilledSquare(12, 12, player2.coordX, player2.coordY, RED, display);
     if(gameRound){
         al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
     }else{
@@ -395,7 +460,7 @@ void killNine() {
     al_destroy_bitmap(tittleWorbit);
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
-    algif_destroy_animation(tuto);
+//    algif_destroy_animation(tuto);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
