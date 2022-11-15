@@ -13,6 +13,7 @@
         int coordY;
         int life;
         int radius;
+        int character;
     } player1 , player2;
 
     typedef struct {
@@ -40,6 +41,7 @@
     extern double acel;
     extern bool gameRound;
     extern double distance;
+    extern bool wichPlayer; // ASSUME TRUE PARA PLAYER 1 E FALSE PARA PLAYER 2
 
     void initGame();
 

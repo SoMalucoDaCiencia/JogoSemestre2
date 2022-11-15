@@ -28,6 +28,8 @@
 
     void characterSelection();
 
+    void drawSprite();
+
     void drawGame();
 
     void drawTutorial();

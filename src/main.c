@@ -44,7 +44,12 @@ ALLEGRO_TIMER* timer;
 GAMEMODE GAMESTATE;
 bool orderRedraw = true;
 
+//INSTRUÇÕES DO CHARACTER SELECTION
+bool wichPlayer;
+
+
 int main() {
+
 
     // Inicia allegro
     al_init();
@@ -92,6 +97,7 @@ int main() {
         font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",90,0 );
     }
 
+
     // Inicia constante de newton
     initGame();
 
@@ -116,6 +122,11 @@ int main() {
     timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(timer_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
+
+    //PERSONAGENS DEFAULT
+    player1.character = 1;
+    player2.character = 2;
+
 
     while (1) {
         ALLEGRO_EVENT ev;
@@ -179,8 +190,75 @@ void eventHandler(ALLEGRO_EVENT ev) {
                         GAMESTATE = MENU; // RETORNA A TELA DE MENU
                     }else if(ev.mouse.x >= 270 && ev.mouse.x <= 1020 && ev.mouse.y >= 180 && ev.mouse.y <= 300){
                         orderRedraw = true;
-                        GAMESTATE = CHARACTER;
+                        GAMESTATE = CHARACTER; //VAI PARA TELA DE SELEÇÃO DE PERSONAGEM
+                    }else if(ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80){
+                        orderRedraw = true;
+                        GAMESTATE = CONFIG; //RETORNA PARA AS CONFIGURAÇÕES
                     }
+                    break;
+                }
+                case CHARACTER: {
+                    // BOTÕES DA TELA CONFIG
+                     if(ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80){
+                        orderRedraw = true;
+                        GAMESTATE = CONFIG; //RETORNA PARA AS CONFIGURAÇÕES
+                    }else if (ev.mouse.x >= 410 && ev.mouse.x <= 610 && ev.mouse.y >= 35 && ev.mouse.y <= 75){
+                    // SELECIONA O PLAYER 1 PARA ESCOLHER A SKIN
+                         wichPlayer = true;
+
+                     }else if(ev.mouse.x >= 710 && ev.mouse.x <= 910 && ev.mouse.y >= 35 && ev.mouse.y <= 75){
+                     //SELECIONA O PLAYER 2 PARA ESCOLHER A SKIN
+                        wichPlayer = false;
+
+                     }else if(ev.mouse.x >= 230 && ev.mouse.x <= 430 && ev.mouse.y >= 120 && ev.mouse.y <= 370){
+                         //SKIN CAT
+                         if(wichPlayer){
+                             player1.character = 1;
+                         }else{
+                             player2.character = 1;
+                         }
+
+                     }else if(ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 120 && ev.mouse.y <= 370){
+                         //SKIN DEMON
+                         if(wichPlayer){
+                             player1.character = 2;
+                         }else{
+                             player2.character = 2;
+                         }
+
+
+                     }else if(ev.mouse.x >= 830 && ev.mouse.x <= 1030 && ev.mouse.y >= 120 && ev.mouse.y <= 370){
+                         //SKIN SULLIVAN
+                         if(wichPlayer){
+                             player1.character = 3;
+                         }else{
+                             player2.character = 3;
+                         }
+
+                     }else if(ev.mouse.x >= 230 && ev.mouse.x <= 430 && ev.mouse.y >= 420 && ev.mouse.y <= 670){
+                         //SKIN MUMMY
+                         if(wichPlayer){
+                             player1.character = 4;
+                         }else{
+                             player2.character = 4;
+                         }
+
+                     }else if(ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 420 && ev.mouse.y <= 670){
+                         //SKIN WATER MONSTER
+                         if(wichPlayer){
+                             player1.character = 5;
+                         }else{
+                             player2.character = 5;
+                         }
+
+                     }else if(ev.mouse.x >= 830 && ev.mouse.x <= 1030 && ev.mouse.y >= 420 && ev.mouse.y <= 670){
+                         //SKIN ZOMBIE
+                         if(wichPlayer){
+                             player1.character = 6;
+                         }else{
+                             player2.character = 6;
+                         }
+                     }
                     break;
                 }
                 default: {
@@ -321,7 +399,7 @@ void drawConfig() {
 
     insertFilledSquare(120, 750, 290, 200, DARK_PURPLE, display);
     insertFilledSquare(120, 750, 270, 180, LIGHT_PURPLE, display);
-    al_draw_text(font45, WHITE, 330, 220, 0, "SELEÇÃO DE PERSONAGEM");
+    al_draw_text(font45, WHITE, 360, 220, 0, "CHARACTER SELECTION");
 
     insertFilledSquare(120, 750, 290, 370, DARK_PURPLE, display);
     insertFilledSquare(120, 750, 270, 350, LIGHT_PURPLE, display);
@@ -340,6 +418,14 @@ void characterSelection(){
         insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
         insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
         al_draw_text(font25, WHITE, 90, 40, 0, "Back");
+
+        insertFilledSquare(50, 220, 400, 30, DARK_PURPLE, display);
+        insertFilledSquare(40, 200, 410, 35, LIGHT_PURPLE, display);
+        al_draw_text(font25, WHITE, 446, 40, 0, "PLAYER 1");
+
+        insertFilledSquare(50, 220, 700, 30, DARK_PURPLE, display);
+        insertFilledSquare(40, 200, 710, 35, LIGHT_PURPLE, display);
+        al_draw_text(font25, WHITE, 742, 40, 0, "PLAYER 2");
 
         //3 RETÂNGULOS DE CIMA
         //SKIN GATO
@@ -390,27 +476,108 @@ void drawGame(){
     readCreatePlanetsBullets();
     drawLifeBar();
 
-
+//--------------------------------------------------PLAYER 1-----------------------------------------------
 
     //Some com o jogador eliminado
     if(player2.life != 0){
         al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, BLACK);
-            spritWaterMonsterLeft = al_load_bitmap("../src/assets/characters/spritWaterMonsterLeft.png");
-            al_draw_bitmap(spritWaterMonsterLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
-            spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
-            al_draw_bitmap(spritDemonLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
-            spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
-            al_draw_bitmap(spritMummyLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+//-----------------VÊ QUAL A DIREÇÃO O PERSONAGEM ESTÁ VOLTADO---------------
+        if(player1.coordX > WINDOW_WIDTH/2) {
+//-----------------VÊ QUAL PERSONAGEM O PLAYER 1 SELECIONOU------------------
+            if (player1.character == 1) {
+                spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
+                al_draw_bitmap(spritCatLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 2) {
+                spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+                al_draw_bitmap(spritDemonLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 3) {
+                spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
+                al_draw_bitmap(spritSullivanLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 4) {
+                spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+                al_draw_bitmap(spritMummyLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 5) {
+                spritWaterMonsterLeft = al_load_bitmap("../src/assets/characters/spritWaterMonsterLeft.png");
+                al_draw_bitmap(spritWaterMonsterLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 6) {
+                spritZombieLeft = al_load_bitmap("../src/assets/characters/spritZombieLeft.png");
+                al_draw_bitmap(spritZombieLeft, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            }
+        }else if(player1.coordX < WINDOW_WIDTH/2) {
+            if (player1.character == 1) {
+                spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+                al_draw_bitmap(spritCatRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 2) {
+                spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
+                al_draw_bitmap(spritDemonRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 3) {
+                spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
+                al_draw_bitmap(spritSullivanRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 4) {
+                spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
+                al_draw_bitmap(spritMummyRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 5) {
+                spritWaterMonsterRight = al_load_bitmap("../src/assets/characters/spritWaterMonsterRight.png");
+                al_draw_bitmap(spritWaterMonsterRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            } else if (player1.character == 6) {
+                spritZombieRight = al_load_bitmap("../src/assets/characters/spritZombieRight.png");
+                al_draw_bitmap(spritZombieRight, (float) player1.coordX - 36, player1.coordY - 36, 0);
+            }
+        }
     }else{
-        al_draw_text( font90, LIGHT_BLUE, 185, 250, 0, "JOGADOR 2 VENCEU");
+        al_draw_text( font90, WHITE, 185, 250, 0, "JOGADOR 2 VENCEU");
     }
 
-    if(player1.life != 0){
+    //--------------------------------------------------PLAYER 2-----------------------------------------------
+
+    if(player1.life > 0){
+//----------------------HITBOX DOS PERSONAGENS-------------------------------
         al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, BLACK);
-        spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
-        al_draw_bitmap(spritCatRight, (float) player2.coordX - 41, player2.coordY - 38, 0);
+//-----------------VÊ QUAL A DIREÇÃO O PERSONAGEM ESTÁ VOLTADO---------------
+        if(player2.coordX > WINDOW_WIDTH/2) {
+//-----------------VÊ QUAL PERSONAGEM O PLAYER 2 SELECIONOU------------------
+            if (player2.character == 1) {
+                spritCatLeft = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
+                al_draw_bitmap(spritCatLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 2) {
+                spritDemonLeft = al_load_bitmap("../src/assets/characters/spritDemonLeft.png");
+                al_draw_bitmap(spritDemonLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 3) {
+                spritSullivanLeft = al_load_bitmap("../src/assets/characters/spritSullivanLeft.png");
+                al_draw_bitmap(spritSullivanLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 4) {
+                spritMummyLeft = al_load_bitmap("../src/assets/characters/spritMummyLeft.png");
+                al_draw_bitmap(spritMummyLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 5) {
+                spritWaterMonsterLeft = al_load_bitmap("../src/assets/characters/spritWaterMonsterLeft.png");
+                al_draw_bitmap(spritWaterMonsterLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 6) {
+                spritZombieLeft = al_load_bitmap("../src/assets/characters/spritZombieLeft.png");
+                al_draw_bitmap(spritZombieLeft, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            }
+        }else if(player2.coordX < WINDOW_WIDTH/2){
+            if (player2.character == 1) {
+                spritCatRight = al_load_bitmap("../src/assets/characters/spritCatRight.png");
+                al_draw_bitmap(spritCatRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 2) {
+                spritDemonRight = al_load_bitmap("../src/assets/characters/spritDemonRight.png");
+                al_draw_bitmap(spritDemonRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 3) {
+                spritSullivanRight = al_load_bitmap("../src/assets/characters/spritSullivanRight.png");
+                al_draw_bitmap(spritSullivanRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 4) {
+                spritMummyRight = al_load_bitmap("../src/assets/characters/spritMummyRight.png");
+                al_draw_bitmap(spritMummyRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 5) {
+                spritWaterMonsterRight = al_load_bitmap("../src/assets/characters/spritWaterMonsterRight.png");
+                al_draw_bitmap(spritWaterMonsterRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            } else if (player2.character == 6) {
+                spritZombieRight = al_load_bitmap("../src/assets/characters/spritZombieRight.png");
+                al_draw_bitmap(spritZombieRight, (float) player2.coordX - 36, player2.coordY - 36, 0);
+            }
+        }
     }else{
-        al_draw_text( font90, LIGHT_BLUE, 185, 250, 0, "JOGADOR 1 VENCEU");
+        al_draw_text( font90, WHITE, 185, 250, 0, "JOGADOR 1 VENCEU");
 
     }
 
@@ -440,19 +607,7 @@ void drawLifeBar(){
     }
 }
 
-//void drawSprite(){
-//    if(player1.coordX < WINDOW_WIDTH/2 || player2.coordX > WINDOW_WIDTH){
-//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
-//    } else{
-//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
-//    }
-//
-//    if(player2.coordX < WINDOW_WIDTH){
-//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
-//    } else{
-//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
-//    }
-//}
+
 
 void killNine() {
     printf(" - Killing APP....[%s]\n", getNow());
