@@ -24,11 +24,6 @@ bool LIMIT_WALLS                = false;
 // ========== Frame VARS ===========================================
 bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
-float const MPS                 = GAME_FREQUENCY;  // Maximo de vezes o jogo é renderizado
-float FPS                       = 0;   // Guarda quantas de vezes o jogo esta sendo renderizado
-bool allow                      = true;
-bool SHOW_FPS                   = false;
-long global_counter;
 // ==================================================================
 
 
@@ -296,15 +291,7 @@ void drawGame(){
     readCreatePlanetsBullets();
     insertFilledSquare(4, 4, player1.coordX, player1.coordY, YELLOW, display);
     insertFilledSquare(4, 4, player2.coordX, player2.coordY, WHITE, display);
-//    if(gameRound){
-//    al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2-200, 0, "JOGADOR 1 - COMEÇA");
-//    }else{
-//        al_draw_text( font90, LIGHT_GREEN, 160, WINDOW_HEIGHT/2, 0, "VEZ DO JOGADOR 2");
-//    }
     al_flip_display();
-
-
-    //printf(" - Drawing Play Screen....[%s]\n", getNow());
 }
 
 void killNine() {
