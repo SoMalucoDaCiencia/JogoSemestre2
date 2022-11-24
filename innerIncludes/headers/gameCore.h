@@ -6,12 +6,23 @@
 #define JOGOSEMESTRE2_GAMECORE_H
 
 #include <allegro5/color.h>
+#include "sprites.h"
 
-
-    typedef struct {
-        unsigned short ID;
+extern struct User {
+        bool active;
         int coordX;
         int coordY;
+        int life;
+        int radius;
+        SPRITE character;
+    } player1 , player2;
+
+    typedef struct {
+        double coordX;
+        double coordY;
+        double speedX;
+        double speedY;
+        bool active;
     } Bullet;
 
     typedef struct {
@@ -20,7 +31,7 @@
         int coordX;
         int coordY;
         int radius;
-        int mass;
+        double mass;
     } Planeta;
 
     typedef struct {

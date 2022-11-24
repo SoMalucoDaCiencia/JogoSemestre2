@@ -7,6 +7,16 @@
 
 #include <allegro5/events.h>
 
+    typedef enum {
+        MENU,
+        PLAY,
+        TUTORIAL,
+        CONFIG,
+        CHARACTER
+    } GAMEMODE;
+
+    extern GAMEMODE GAMESTATE;
+
     extern int const WINDOW_WIDTH;
     extern int const WINDOW_HEIGHT;
 
@@ -15,6 +25,12 @@
     void drawMenu();
 
     void drawConfig();
+
+    void drawCharacterSelection(bool all);
+
+    void drawGame();
+
+    void drawTutorial();
 
     void eventHandler(ALLEGRO_EVENT ev);
 

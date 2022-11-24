@@ -11,12 +11,16 @@ include_directories($ENV{ALLEGRO}/include) # Definir pasta do alegro como uma va
 link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
-        deps/Cores.h
-        deps/Cores.c
-        deps/nossaLivraria.h
-        deps/nossaLivraria.c
-        deps/gameCore.h
-        deps/gameCore.c
+        innerIncludes/headers/sprites.h
+        src/supportFiles/sprites.c
+        innerIncludes/headers/Cores.h
+        src/supportFiles/Cores.c
+        innerIncludes/headers/yamlReader.h
+        src/supportFiles/yamlReader.c
+        innerIncludes/headers/nossaLivraria.h
+        src/supportFiles/nossaLivraria.c
+        innerIncludes/headers/gameCore.h
+        src/supportFiles/gameCore.c
         src/main.h
         src/main.c)
 

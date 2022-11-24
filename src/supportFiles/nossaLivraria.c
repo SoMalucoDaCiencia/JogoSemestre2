@@ -38,6 +38,11 @@ void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color
     al_destroy_bitmap(square);
 }
 
+void insertShadowSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_COLOR shadowColor, ALLEGRO_DISPLAY *display) {
+    insertFilledSquare(height, width, x+10, y+10, shadowColor, display);
+    insertFilledSquare(height, width, x, y, color, display);
+}
+
 ALLEGRO_COLOR const getColorByHex(char* hexStringValue) {
     int r, g, b;
     sscanf(hexStringValue, "#%02x%02x%02x", &r, &g, &b);
