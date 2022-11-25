@@ -8,7 +8,7 @@
 #include <allegro5/color.h>
 #include "sprites.h"
 
-extern struct User {
+    extern struct User {
         bool active;
         int coordX;
         int coordY;
@@ -40,30 +40,28 @@ extern struct User {
     } Force;
 
     extern Planeta planetas[2];
-    extern Bullet* bullets;
+    extern Bullet b;
     extern float planetaSize;
-    extern float ballRadius;
-    extern float ballSpeedX;
-    extern float ballSpeedY;
-    extern float ballXCoord;
-    extern float ballYCoord;
-    extern Force* allForces;
     extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
+    extern bool gameRound;
+    extern double distance;
 
     void initGame();
 
+    void setBulletTo(int clickX, int clickY);
+
     void moveBall();
 
-    Planeta* scanPlanetsYaml(int level);
-
-    void readCreatePlanets();
+    void readCreatePlanetsBullets();
 
     double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY);
 
     bool hasXgap();
 
     bool hasYgap();
+
+    void gameSwitch();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H

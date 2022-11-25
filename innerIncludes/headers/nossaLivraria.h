@@ -21,6 +21,14 @@
 
     void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display, int borderSize, ALLEGRO_COLOR borderColor);
 
+//    double root(int basis, int exponent);
+
+    double innerPow(double basis, int exponent);
+
     ALLEGRO_COLOR getColorByHex(char* hexColor);
+
+    double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY);
+
+    void waitTime(unsigned int t);
 
 #endif //JOGOSEMESTRE2_LIVRARIA_H

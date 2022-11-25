@@ -7,7 +7,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include "innerIncludes/headers/nossaLivraria.h"
+#include <innerIncludes/headers/nossaLivraria.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include "innerIncludes/headers/Cores.h"
@@ -17,14 +17,14 @@
 
 
 // ========== Window VARS ===========================================
-int const WINDOW_WIDTH = 1280;
-int const WINDOW_HEIGHT = 720;
-bool LIMIT_WALLS = false;
+int const WINDOW_WIDTH          = 1280;
+int const WINDOW_HEIGHT         = 720;
+bool LIMIT_WALLS                = false;
 // =================================================================
 
 // ========== Frame VARS ===========================================
-bool GAME_FREQUENCY_POLARITY = false;
-float const GAME_FREQUENCY = 60; // Quantos ciclos de atualizacao acontecem no jogo
+bool GAME_FREQUENCY_POLARITY    = false;
+float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
 // ==================================================================
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart;
@@ -59,7 +59,6 @@ int main() {
 
 //    const char *gif = "../src/assets/tutorial/giphy.gif";
 //    tuto = algif_load_animation(gif);
-
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -145,7 +144,6 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if (!b.active) {
                         setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
-
                     break;
                 }
                 case TUTORIAL: {
@@ -171,44 +169,45 @@ void eventHandler(ALLEGRO_EVENT ev) {
                      if(ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80){
                         orderRedraw = true;
                         GAMESTATE = CONFIG; //RETORNA PARA AS CONFIGURAÇÕES
-                     } else {
-                         if (ev.mouse.x >= 410 && ev.mouse.x <= 610) {
-                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                 player1.character = (SPRITE) (player1.character + 1);
-                                 drawCharacterSelection(false);
-                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                 player1.character = (SPRITE) (player1.character - 1);
-                                 drawCharacterSelection(false);
-                             }
-                         }
-                         if (ev.mouse.x >= 710 && ev.mouse.x <= 910) {
-                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                 player2.character = (SPRITE) (player1.character + 1);
-                                 drawCharacterSelection(false);
-                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                 player2.character = (SPRITE) (player1.character - 1);
-                                 drawCharacterSelection(false);
-                             }
-                         }
-                     }
-                    break;
+                    } else {
+                        if (ev.mouse.x >= 410 && ev.mouse.x <= 610) {
+                            if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
+                                player1.character = (SPRITE) (((int) player1.character + 1) > 5 ? 0 : player1.character + 1);
+                                drawCharacterSelection(false);
+                            } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
+                                player1.character = (SPRITE) (((int) player1.character - 1) < 0 ? 5 : player1.character - 1);
+                                drawCharacterSelection(false);
+                            }
+                        }
+                        if (ev.mouse.x >= 710 && ev.mouse.x <= 910) {
+                            if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
+                                player2.character = (SPRITE) (((int) player2.character + 1) > 5 ? 0 : player2.character + 1);
+                                drawCharacterSelection(false);
+                            } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
+                                player2.character = (SPRITE) (((int) player2.character - 1) < 0 ? 5 : player2.character - 1);
+                                drawCharacterSelection(false);
+                            }
+                        }
+
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
-                default: {
-                    break;
+                break;
+            }
+            case ALLEGRO_EVENT_KEY_DOWN: {
+                if (ev.keyboard.keycode == 59) {
+                    orderRedraw = true;
+                    GAMESTATE = MENU; // RETORNA A TELA DE MENU
                 }
+                break;
             }
-            break;
-        }
-        case ALLEGRO_EVENT_KEY_DOWN: {
-            if (ev.keyboard.keycode == 59) {
-                orderRedraw = true;
-                GAMESTATE = MENU; // RETORNA A TELA DE MENU
+            case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+                killNine();
+                break;
             }
-            break;
-        }
-        case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-            killNine();
-            break;
         }
     }
 }
@@ -311,7 +310,6 @@ void drawTutorial() {
 
     al_flip_display();
 }
-
 
 void drawConfig() {
     // TELA DE CONFIGURAÇÕES
