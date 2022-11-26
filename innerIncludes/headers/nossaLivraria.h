@@ -11,6 +11,12 @@
 
     char* isMAC();
 
+    void clearConsole();
+
+    int println (const String format, ...);
+
+    String readFile(String fileName);
+
     char* getNow();
 
     int getRandomInt(int max, int min);
@@ -28,5 +34,7 @@
     double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY);
 
     void waitTime(unsigned int t);
+
+    int err(const String format, ...);
 
 #endif //JOGOSEMESTRE2_LIVRARIA_H
