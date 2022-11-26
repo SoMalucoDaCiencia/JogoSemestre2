@@ -4,6 +4,7 @@
 
 #include <stdbool.h>
 #include <allegro5/display.h>
+#include <innerIncludes/headers/Suporte.h>
 
 
 #ifndef JOGOSEMESTRE2_LIVRARIA_H

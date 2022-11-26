@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <allegro5/allegro_ttf.h>
+#include <innerIncludes/headers/Suporte.h>
+
 extern ALLEGRO_FONT *font;
 
 bool isMAC() {

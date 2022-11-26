@@ -3,16 +3,17 @@
 //
 
 #include <stdio.h>
-#include "innerIncludes/headers/gameCore.h"
-#include "innerIncludes/headers/nossaLivraria.h"
-#include "innerIncludes/headers/Cores.h"
+#include <innerIncludes/headers/gameCore.h>
+#include <innerIncludes/headers/nossaLivraria.h>
+#include <innerIncludes/headers/Cores.h>
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
-#include "src/main.h"
+#include <src/main.h>
 #include <allegro5/allegro_font.h>
 
-Planeta planetas[2];
+Planeta *planetas;
 Bullet b;
+MAP activeMap;
 
 struct User player1 , player2;
 
@@ -27,33 +28,32 @@ void initGame() {
     b.speedX = 0;
     b.speedY = 0;
 
-    planetas[0].color = WHITE;
-    planetas[0].nome = "Arthur";
-    planetas[0].coordX = WINDOW_WIDTH/2;
-    planetas[0].coordY = WINDOW_HEIGHT/2;
-    planetas[0].radius = 20;
-    planetas[0].mass = 0;
+    readSetPlanet();
+//    planetas[0].color = WHITE;
+//    planetas[0].nome = "Arthur";
+//    planetas[0].coordX = WINDOW_WIDTH/2;
+//    planetas[0].coordY = WINDOW_HEIGHT/2;
+//    planetas[0].radius = 20;
+//    planetas[0].mass = 0.3;
+//
+//    planetas[1].color  = WHITE;
+//    planetas[1].nome   = "Tais";
+//    planetas[1].coordX = 200;
+//    planetas[1].coordY = 560;
+//    planetas[1].radius = 30;
+//    planetas[1].mass   = 0.3;
 
-    player1.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
-    player1.coordX =  WINDOW_WIDTH/2;
+    player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
+    player1.coordX =  planetas[0].coordX;
     player1.active = true;
-    player1.life   = 5;
+    player1.life   = 1;
     player1.radius = 12;
 
-    player2.coordY =  WINDOW_HEIGHT/4 - planetas[0].radius;
-    player2.coordX =  WINDOW_WIDTH/5;
+    player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
+    player2.coordX =  planetas[1].coordX;
     player1.active = false;
     player2.life   = 5;
     player2.radius = 12;
-
-    planetas[1].color  = WHITE;
-    planetas[1].nome   = "Tais";
-    planetas[1].coordX = 200;
-    planetas[1].coordY = 590;
-    planetas[1].radius = 30;
-    planetas[1].mass   = 0;
-
-    planetaSize = sizeof(planetas) / sizeof(Planeta);
 
     if (gameRound) {
         b.coordY = player1.coordY;
@@ -68,6 +68,17 @@ void initGame() {
     limitWalls = false;
 }
 
+void finishGame(){
+    int SAVEGAMEMODE = (int) GAMESTATE;
+    GAMESTATE = TRANSITION;
+//    al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
+//    al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
+    waitTime((float) 2.5);
+    initGame();
+    activeMap++;
+    GAMESTATE = (GAMEMODE) SAVEGAMEMODE;
+}
+
 void moveBall() {
 
     for (int i = 0; i < planetaSize; ++i) {
@@ -77,19 +88,22 @@ void moveBall() {
 
         if(planeta.nome != NULL){
             bool inverter = false;
+            //hitbox planeta
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
             if ((5.0 + planeta.radius >= distance) && b.active) {
                 b.active = false;
                 inverter = true;
             }
 
-            double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
+            //hitbox player1
+              double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
             if ((5.0 + player1.radius >= distancePlayer1) && b.active && !gameRound) {
                 player2.life--;
                 b.active = false;
                 inverter = true;
             }
 
+            //hitbox player2
             double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
             if ((5.0 + player2.radius >= distancePlayer2) && b.active && gameRound) {
                 player1.life--;
@@ -108,8 +122,8 @@ void moveBall() {
                 if (planeta.coordY <= b.coordY && b.coordY < 0) {
                     finalYAceleration *= -1;
                 }
+                (b).speedY += finalYAceleration;
             }
-            (b).speedY += finalYAceleration;
 
             if (b.coordX!=planeta.coordX) {
                 finalXAceleration = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
@@ -146,7 +160,7 @@ void readCreatePlanetsBullets(){
         al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
     }
     if(b.active) {
-    al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
+        al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
     }else {
         al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
         b.speedX = 0;

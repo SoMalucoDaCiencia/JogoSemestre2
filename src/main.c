@@ -7,12 +7,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include "innerIncludes/headers/nossaLivraria.h"
+#include <innerIncludes/headers/nossaLivraria.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
-#include "innerIncludes/headers/Cores.h"
-#include "innerIncludes/headers/gameCore.h"
-#include "outIncludes/headers/algif.h"
+#include <innerIncludes/headers/Cores.h>
+#include <innerIncludes/headers/gameCore.h>
+#include <outIncludes/headers/algif.h>
 
 
 // ========== Window VARS ===========================================
@@ -34,11 +34,10 @@ long global_counter;
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart;
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
-ALLEGRO_FONT *font25 , *font90;
+ALLEGRO_FONT *font25 , *font90, *font45;
 ALLEGRO_DISPLAY *display;
 ALGIF_ANIMATION *tuto;
 ALLEGRO_TIMER* timer;
-ALLEGRO_FONT *font25 , *font90, *font45;
 
 GAMEMODE GAMESTATE;
 bool orderRedraw = true;
@@ -59,6 +58,9 @@ int main() {
         lifeHeart = al_load_bitmap("../src/assets/vida.png");
     }
 
+    // Inicia o primeiro mapa
+    activeMap = 0;
+
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
 
@@ -69,6 +71,7 @@ int main() {
     if (al_init_font_addon() && al_init_ttf_addon()) {
         font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",25,0 );
         font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",45,0 );
+        font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf",90,0 );
     }
 
     // Inicia constante de newton
@@ -138,7 +141,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case PLAY: {
                     // BOTÕES DA TELA PLAY
-                    if (!b.active) {
+                    if (!b.active && player1.life > 0 && player2.life > 0) {
                         setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
 
@@ -147,7 +150,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TUTORIAL: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
-                        GAMESTATE = PLAY; // RETORNA A TELA DE MENU
+                        GAMESTATE = PLAY; // SKIPA PARA O JOGO
                     }
                     break;
                 }
@@ -211,6 +214,10 @@ void render(ALLEGRO_EVENT ev) {
                     drawConfig();
                     orderRedraw = false;
                 }
+                break;
+            }
+            case TRANSITION: {
+
                 break;
             }
             default: {
@@ -298,23 +305,27 @@ void drawGame(){
     readCreatePlanetsBullets();
     drawLifeBar();
 
-    if(player1.life != 0){
+    if(player2.life > 0){
         al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, LIGHT_BLUE);
+        if(gameRound){
+            al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
     }
 
-    if(player2.life != 0){
+    if(player1.life > 0){
         al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, RED);
+        if(!gameRound){
+            al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     }
 
-    if(gameRound){
-        al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
-    }else{
-        al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
-    }
     al_flip_display();
-
-
-    //printf(" - Drawing Play Screen....[%s]\n", getNow());
 }
 
 //desenha os corações das vidas dos bonecos
@@ -331,20 +342,6 @@ void drawLifeBar(){
         w -= 30;
     }
 }
-
-//void drawSprite(){
-//    if(player1.coordX < WINDOW_WIDTH/2 || player2.coordX > WINDOW_WIDTH){
-//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
-//    } else{
-//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
-//    }
-//
-//    if(player2.coordX < WINDOW_WIDTH){
-//        al_draw_bitmap(SpritRight, player1.coordX, player1.coordY, 0);
-//    } else{
-//        al_draw_bitmap(SpritLeft, player1.coordX, player1.coordY, 0);
-//    }
-//}
 
 void killNine() {
     printf(" - Killing APP....[%s]\n", getNow());

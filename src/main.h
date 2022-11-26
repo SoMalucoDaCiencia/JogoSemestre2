@@ -11,7 +11,8 @@
         MENU,
         PLAY,
         TUTORIAL,
-        CONFIG
+        CONFIG,
+        TRANSITION
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;

@@ -6,6 +6,7 @@
 #define JOGOSEMESTRE2_GAMECORE_H
 
 #include <allegro5/color.h>
+#include <innerIncludes/headers/Interpreter.h>
 
     extern struct User {
         bool active;
@@ -32,7 +33,7 @@
         double mass;
     } Planeta;
 
-    extern Planeta planetas[2];
+    extern Planeta *planetas;
     extern Bullet b;
     extern float planetaSize;
     extern bool limitWalls;
@@ -41,7 +42,11 @@
     extern bool gameRound;
     extern double distance;
 
+    extern MAP activeMap;
+
     void initGame();
+
+    void finishGame();
 
     void setBulletTo(int clickX, int clickY);
 
