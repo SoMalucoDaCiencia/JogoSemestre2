@@ -37,7 +37,7 @@ void loadSprites() {
 ALLEGRO_BITMAP* getSide(SPRITE im, bool right) {
     switch (im) {
         case CAT      : return right ? spritCatRight : spritCatLeft;
-        case MUMMY    : return right ? spritCatRight : spritMummyLeft;
+        case MUMMY    : return right ? spritMummyRight : spritMummyLeft;
         case SULLIVAN : return right ? spritSullivanRight : spritSullivanLeft;
         case DEMON    : return right ? spritDemonRight : spritDemonLeft;
         case WATER    : return right ? spritWaterMonsterRight : spritWaterMonsterLeft;

@@ -55,6 +55,7 @@ int main() {
         astro = al_load_bitmap("../src/assets/astronauta.png");
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
+        lifeHeart = al_load_bitmap("../src/assets/heart.png");
     }
 
 //    const char *gif = "../src/assets/tutorial/giphy.gif";
@@ -365,11 +366,11 @@ void drawGame() {
     moveBall();
     readCreatePlanetsBullets();
 
-    for (int i = 0; i < player1.life; i++) {
+    for (int i = 1; i <= player1.life; i++) {
         al_draw_bitmap(lifeHeart, 30 * i, 20, 0);
     }
 
-    for (int i = 0; i < player2.life; i++) {
+    for (int i = 1; i <= player2.life; i++) {
         al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
     }
 

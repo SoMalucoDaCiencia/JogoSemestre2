@@ -27,6 +27,9 @@ void initGame() {
     b.speedX = 0;
     b.speedY = 0;
 
+    player1.life = 5;
+    player2.life = 5;
+
     planetas[0].color = RED;
     planetas[0].nome = "Arthur";
     planetas[0].coordX = WINDOW_WIDTH/2 - 30;
