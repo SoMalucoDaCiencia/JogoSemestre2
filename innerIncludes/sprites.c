@@ -13,6 +13,7 @@ ALLEGRO_BITMAP *spritDemonLeft;             ALLEGRO_BITMAP *spritDemonSelection;
 ALLEGRO_BITMAP *spritWaterMonsterLeft;      ALLEGRO_BITMAP *spritWaterMonsterSelection; ALLEGRO_BITMAP *spritWaterMonsterRight;
 ALLEGRO_BITMAP *spritZombieLeft;            ALLEGRO_BITMAP *spritZombieSelection;       ALLEGRO_BITMAP *spritZombieRight;
 
+// Carrega as imagens dos sprites
 void loadSprites() {
     spritCatLeft               = al_load_bitmap("../src/assets/characters/spritCatLeft.png");
     spritCatRight              = al_load_bitmap("../src/assets/characters/spritCatRight.png");
@@ -34,6 +35,29 @@ void loadSprites() {
     spritZombieSelection       = al_load_bitmap("../src/assets/characters/spritZombieSelection.png");
 }
 
+// Libera a memoria usada pelos sprites
+void killSprites() {
+    free(spritCatLeft);
+    free(spritCatRight);
+    free(spritCatSelection);
+    free(spritMummyLeft);
+    free(spritMummyRight);
+    free(spritMummySelection);
+    free(spritSullivanLeft);
+    free(spritSullivanRight);
+    free(spritSullivanSelection);
+    free(spritDemonLeft);
+    free(spritDemonRight);
+    free(spritDemonSelection);
+    free(spritWaterMonsterLeft);
+    free(spritWaterMonsterRight);
+    free(spritWaterMonsterSelection);
+    free(spritZombieLeft);
+    free(spritZombieRight);
+    free(spritZombieSelection);
+}
+
+// Pega um sprite por um lado especifico
 ALLEGRO_BITMAP* getSide(SPRITE im, bool right) {
     switch (im) {
         case CAT      : return right ? spritCatRight : spritCatLeft;
@@ -45,6 +69,7 @@ ALLEGRO_BITMAP* getSide(SPRITE im, bool right) {
     }
 }
 
+// Pega os sprite grande
 ALLEGRO_BITMAP* getBig(SPRITE im) {
     switch (im) {
         case CAT      : return spritCatSelection         ;

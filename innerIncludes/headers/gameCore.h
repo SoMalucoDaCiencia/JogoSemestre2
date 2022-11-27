@@ -6,15 +6,16 @@
 #define JOGOSEMESTRE2_GAMECORE_H
 
 #include <allegro5/color.h>
-#include "sprites.h"
+#include <innerIncludes/headers/Interpreter.h>
+#include <innerIncludes/headers/sprites.h>
+
 
     extern struct User {
-        bool active;
+        SPRITE character;
         int coordX;
         int coordY;
-        int life;
         int radius;
-        SPRITE character;
+        int life;
     } player1 , player2;
 
     typedef struct {
@@ -23,6 +24,7 @@
         double speedX;
         double speedY;
         bool active;
+        float radius;
     } Bullet;
 
     typedef struct {
@@ -34,12 +36,7 @@
         double mass;
     } Planeta;
 
-    typedef struct {
-        float Vforce; // Vertical force
-        float Hforce; // Horizontal force
-    } Force;
-
-    extern Planeta planetas[2];
+    extern Planeta *planetas;
     extern Bullet b;
     extern float planetaSize;
     extern bool limitWalls;
@@ -48,7 +45,11 @@
     extern bool gameRound;
     extern double distance;
 
+    extern MAP activeMap;
+
     void initGame();
+
+    void finishGame();
 
     void setBulletTo(int clickX, int clickY);
 
@@ -61,7 +62,5 @@
     bool hasXgap();
 
     bool hasYgap();
-
-    void gameSwitch();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H

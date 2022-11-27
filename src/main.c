@@ -10,16 +10,15 @@
 #include <innerIncludes/headers/nossaLivraria.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
-#include "innerIncludes/headers/Cores.h"
-#include "innerIncludes/headers/gameCore.h"
-#include "outIncludes/headers/algif.h"
-#include "innerIncludes/headers/sprites.h"
+#include <innerIncludes/headers/Cores.h>
+#include <innerIncludes/headers/gameCore.h>
+#include <outIncludes/headers/algif.h>
+#include <innerIncludes/headers/sprites.h>
 
 
 // ========== Window VARS ===========================================
 int const WINDOW_WIDTH          = 1280;
 int const WINDOW_HEIGHT         = 720;
-bool LIMIT_WALLS                = false;
 // =================================================================
 
 // ========== Frame VARS ===========================================
@@ -27,19 +26,15 @@ bool GAME_FREQUENCY_POLARITY    = false;
 float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem no jogo
 // ==================================================================
 
-ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart;
-ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue;
-ALLEGRO_FONT *font25, *font90, *font45;
-ALLEGRO_DISPLAY *display;
-ALGIF_ANIMATION *tuto;
+ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart; // Imagens principais do jogo
+ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue; // Fila de eventos do usuario e FPS
+ALLEGRO_FONT *font25, *font90, *font45; // Fontes do jogo
+ALLEGRO_DISPLAY *display; // Display do jogo
+ALGIF_ANIMATION *tuto; // gif do tutorial
 ALLEGRO_TIMER *timer;
 
-GAMEMODE GAMESTATE;
+GAMEMODE GAMESTATE; //  Estado do q o usuario esta fazendo
 bool orderRedraw = true;
-
-//INSTRUÇÕES DO CHARACTER SELECTION
-bool whichPlayer;
-
 
 int main() {
 
@@ -55,11 +50,14 @@ int main() {
         astro = al_load_bitmap("../src/assets/astronauta.png");
         tittleWorbit = al_load_bitmap("../src/assets/worbit.png");
         tittleWelcome = al_load_bitmap("../src/assets/welcome.png");
-        lifeHeart = al_load_bitmap("../src/assets/heart.png");
+        lifeHeart = al_load_bitmap("../src/assets/vida.png");
     }
 
-//    const char *gif = "../src/assets/tutorial/giphy.gif";
-//    tuto = algif_load_animation(gif);
+    // Inicia o primeiro mapa
+    activeMap = MAP1;
+
+    const char *gif = "../src/assets/tutorial/giphy.gif";
+    tuto = algif_load_animation(gif);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -70,9 +68,6 @@ int main() {
         font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 45, 0);
         font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 90, 0);
     }
-
-    // Inicia constante de newton
-    initGame();
 
     // Inicia pilha de eventos do allegro
     event_queue = al_create_event_queue();
@@ -118,6 +113,7 @@ int main() {
     }
 }
 
+// Lida com os eventos criados pelo usuario
 void eventHandler(ALLEGRO_EVENT ev) {
 
     switch (ev.type) {
@@ -130,6 +126,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if (ev.mouse.x >= (WINDOW_WIDTH / 2) - 200 && ev.mouse.x <= (WINDOW_WIDTH / 2) + 200) {
                         if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
                             orderRedraw = true;
+                            // Inicia constante de newton
+                            initGame();
                             GAMESTATE = TUTORIAL;
                         } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                             orderRedraw = true;
@@ -142,7 +140,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case PLAY: {
                     // BOTÕES DA TELA PLAY
-                    if (!b.active) {
+                    if (!b.active && player1.life > 0 && player2.life > 0) {
                         setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
                     break;
@@ -150,7 +148,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TUTORIAL: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
-                        GAMESTATE = PLAY; // RETORNA A TELA DE MENU
+                        GAMESTATE = PLAY; // SKIPA PARA O JOGO
                     }
                     break;
                 }
@@ -196,23 +194,35 @@ void eventHandler(ALLEGRO_EVENT ev) {
                         break;
                     }
                 }
-                break;
-            }
-            case ALLEGRO_EVENT_KEY_DOWN: {
-                if (ev.keyboard.keycode == 59) {
-                    orderRedraw = true;
-                    GAMESTATE = MENU; // RETORNA A TELA DE MENU
+                case TRANSITION: {
+                    // BOTÕES DA tela de transicao
+                    // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
+                    if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
+                        orderRedraw = true;
+                        activeMap = (MAP) (((int) activeMap) + 1);
+                        initGame();
+                        GAMESTATE = PLAY;
+                    }
                 }
+
                 break;
             }
-            case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-                killNine();
-                break;
+        }
+        case ALLEGRO_EVENT_KEY_DOWN: {
+            if (ev.keyboard.keycode == 59) {
+                orderRedraw = true;
+                GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
+            break;
+        }
+        case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+            killNine();
+            break;
         }
     }
 }
 
+// Renderiza qualquer tela
 void render(ALLEGRO_EVENT ev) {
     if (ev.type == ALLEGRO_EVENT_TIMER) {
         GAME_FREQUENCY_POLARITY = !GAME_FREQUENCY_POLARITY; // POLARIDADE DO GAME_FREQUENCY
@@ -254,6 +264,13 @@ void render(ALLEGRO_EVENT ev) {
                 }
                 break;
             }
+            case TRANSITION: {
+                if (orderRedraw) {
+                    drawTransition();
+                    orderRedraw = false;
+                }
+                break;
+            }
             default: {
                 break;
             }
@@ -261,6 +278,7 @@ void render(ALLEGRO_EVENT ev) {
     }
 }
 
+// Desenha as estrelas de fundo
 void drawStars() {
 
     for (int i = 0; i < 90; ++i) {
@@ -271,12 +289,13 @@ void drawStars() {
     }
 }
 
+// Desenha o menu
 void drawMenu() {
     // TELA DO MENU
     al_clear_to_color(BLACK);
 
     //DESENHA ESTRELAS
-        drawStars();
+    drawStars();
 
     //OPÇÕES MENU
     insertShadowSquare(50, 400, (WINDOW_WIDTH / 2) - 200, 440, LIGHT_PURPLE, DARK_PURPLE, display);
@@ -298,11 +317,20 @@ void drawMenu() {
     al_flip_display();
 }
 
+void drawTransition() {
+    al_clear_to_color(BLACK);
+    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    insertShadowSquare(80, 300, (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
+    al_flip_display();
+}
+
+// Desenha as tutoriais
 void drawTutorial() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-//    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
@@ -312,6 +340,7 @@ void drawTutorial() {
     al_flip_display();
 }
 
+// Desenha as configurações
 void drawConfig() {
     // TELA DE CONFIGURAÇÕES
     al_clear_to_color(BLACK);
@@ -359,66 +388,62 @@ void drawCharacterSelection(bool all) {
     al_flip_display();
 }
 
-
+// Desenha o jogo
 void drawGame() {
     //TELA DO JOGO
     al_clear_to_color(BLACK);
     moveBall();
     readCreatePlanetsBullets();
 
-    for (int i = 1; i <= player1.life; i++) {
-        al_draw_bitmap(lifeHeart, 30 * i, 20, 0);
-    }
+    if (player1.life * player2.life != 0) {
+        for (int i = 1; i <= player1.life; i++) {
+            al_draw_bitmap(lifeHeart, 30 * i, 20, 0);
+        }
 
-    for (int i = 1; i <= player2.life; i++) {
-        al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
-    }
+        for (int i = 1; i <= player2.life; i++) {
+            al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
+        }
 
-    if (player1.life * player2.life == 0) {
-        char* str = ((player1.life > 0) ? "JOGADOR 1 VENCEU" : "JOGADOR 2 VENCEU");
-        al_draw_text(font90, WHITE, 185, 250, 0, str);
-    } else {
         al_draw_filled_circle((float) player1.coordX, (float) player1.coordY, (float) player1.radius, BLACK);
         al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
         al_draw_filled_circle((float) player2.coordX, (float) player2.coordY, (float) player2.radius, BLACK);
         al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
     }
 
-    al_draw_text(font45,  (gameRound ? LIGHT_BLUE : RED), 400, 25, 0, (gameRound ? "- VEZ DO JOGADOR 1 -" : "- VEZ DO JOGADOR 2 -"));
+    if(player2.life > 0){
+        if(gameRound){
+            al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
+    }
+
+    if(player1.life > 0){
+        if(!gameRound){
+            al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
+    }
+
     al_flip_display();
-
-
-    //printf(" - Drawing Play Screen....[%s]\n", getNow());
 }
 
-//desenha os corações das vidas dos bonecos
-//void drawLifeBar(){
-//    int t = 30;
-//    for(int i = 0; i < player1.life; i++){
-//        al_draw_bitmap(lifeHeart, (float) t, 20, 0);
-//        t += 30;
-//    }
-//
-//    int w = 1220;
-//    for(int i = 0; i < player2.life; i++){
-//        al_draw_bitmap(lifeHeart, (float) w, 20, 0);
-//        w -= 30;
-//    }
-//}
-
-
-
+// Mata o progrma e libera a memoria
 void killNine() {
     printf(" - Killing APP....[%s]\n", getNow());
     al_destroy_bitmap(tittleWelcome);
     al_destroy_bitmap(tittleWorbit);
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
-//    algif_destroy_animation(tuto);
+    algif_destroy_animation(tuto);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
     al_destroy_timer(timer);
+    killSprites();
 
     exit(0);
 }

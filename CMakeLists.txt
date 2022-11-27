@@ -12,20 +12,25 @@ link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
         innerIncludes/headers/sprites.h
-        src/supportFiles/sprites.c
+        innerIncludes/sprites.c
         innerIncludes/headers/Cores.h
-        src/supportFiles/Cores.c
+        innerIncludes/Cores.c
         innerIncludes/headers/nossaLivraria.h
-        src/supportFiles/nossaLivraria.c
+        innerIncludes/nossaLivraria.c
         innerIncludes/headers/gameCore.h
-        src/supportFiles/gameCore.c
+        innerIncludes/gameCore.c
         outIncludes/algif.c
         outIncludes/headers/algif.h
         outIncludes/gif.c
         outIncludes/bitmap.c
         outIncludes/lzw.c
         src/main.h
-        src/main.c)
+        src/main.c
+        innerIncludes/Interpreter.c
+        innerIncludes/headers/Interpreter.h
+        innerIncludes/headers/Suporte.h
+        innerIncludes/Suporte.c)
+
 
 if (WIN32)
     target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)

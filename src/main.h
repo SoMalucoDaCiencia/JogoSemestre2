@@ -12,10 +12,12 @@
         PLAY,
         TUTORIAL,
         CONFIG,
-        CHARACTER
+        CHARACTER,
+        TRANSITION,
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;
+    extern bool orderRedraw;
 
     extern int const WINDOW_WIDTH;
     extern int const WINDOW_HEIGHT;
@@ -24,6 +26,8 @@
 
     void drawMenu();
 
+    void drawTransition();
+
     void drawConfig();
 
     void drawCharacterSelection(bool all);
@@ -31,8 +35,6 @@
     void drawGame();
 
     void drawTutorial();
-
-//    void drawLifeBar();
 
     void eventHandler(ALLEGRO_EVENT ev);
 

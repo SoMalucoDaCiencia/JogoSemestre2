@@ -1,7 +1,14 @@
+-tais-:
+    c: #ffffff
+    r: 20
+    m: 0.3
+    x: 640
+    y: 360
 
-pleneta1:
-    nome: sol
-    radius: 30
-    mass: 150
-    coordX: 300
-    coordY: 450
+-arthur-:
+    c: #fa2347
+    r: 30
+    m: 0.3
+    x: 300
+    y: 450
+
