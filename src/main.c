@@ -194,19 +194,30 @@ void eventHandler(ALLEGRO_EVENT ev) {
                         break;
                     }
                 }
-                break;
-            }
-            case ALLEGRO_EVENT_KEY_DOWN: {
-                if (ev.keyboard.keycode == 59) {
-                    orderRedraw = true;
-                    GAMESTATE = MENU; // RETORNA A TELA DE MENU
+                case TRANSITION: {
+                    // BOTÕES DA tela de transicao
+                    // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
+                    if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
+                        orderRedraw = true;
+                        activeMap = (MAP) (((int) activeMap) + 1);
+                        initGame();
+                        GAMESTATE = PLAY;
+                    }
                 }
+
                 break;
             }
-            case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-                killNine();
-                break;
+        }
+        case ALLEGRO_EVENT_KEY_DOWN: {
+            if (ev.keyboard.keycode == 59) {
+                orderRedraw = true;
+                GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
+            break;
+        }
+        case ALLEGRO_EVENT_DISPLAY_CLOSE: {
+            killNine();
+            break;
         }
     }
 }
@@ -254,7 +265,10 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case TRANSITION: {
-                insertShadowSquare(400, 300, WINDOW_HEIGHT/2 - 400, WINDOW_WIDTH/2 - 300, LIGHT_PURPLE, DARK_PURPLE, display);
+                if (orderRedraw) {
+                    drawTransition();
+                    orderRedraw = false;
+                }
                 break;
             }
             default: {
@@ -300,6 +314,14 @@ void drawMenu() {
     al_draw_bitmap(tittleWelcome, (float) (WINDOW_WIDTH / 2.0) - 75, 30, 0);
 
     printf(" - Drawing MENU....[%s]\n", getNow());
+    al_flip_display();
+}
+
+void drawTransition() {
+    al_clear_to_color(BLACK);
+    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    insertShadowSquare(80, 300, (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
 }
 

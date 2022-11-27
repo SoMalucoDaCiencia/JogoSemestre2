@@ -17,6 +17,7 @@
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;
+    extern bool orderRedraw;
 
     extern int const WINDOW_WIDTH;
     extern int const WINDOW_HEIGHT;
@@ -24,6 +25,8 @@
     void drawStars();
 
     void drawMenu();
+
+    void drawTransition();
 
     void drawConfig();
 

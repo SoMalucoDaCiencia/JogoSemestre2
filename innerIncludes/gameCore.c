@@ -32,18 +32,14 @@ void initGame() {
     readSetPlanet();
 
     if(getRandomInt(1, 0) == 0) {
-        player1.active = true;
-        player2.active = false;
         gameRound = true;
     } else {
-        player1.active = false;
-        player2.active = true;
         gameRound = false;
     }
 
     player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
     player1.coordX =  planetas[0].coordX;
-    player1.life   = 5;
+    player1.life   = 1;
     player1.radius = 12;
 
     player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
@@ -66,6 +62,7 @@ void initGame() {
 // Encerra uma partida
 void finishGame(){
     GAMESTATE = TRANSITION;
+    orderRedraw = true;
 }
 
 // Processa a gravidade
@@ -80,14 +77,14 @@ void moveBall() {
             bool inverter = false;
             //hitbox planeta
             double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
-            if ((5.0 + planeta.radius >= distance) && b.active) {
+            if ((b.radius + planeta.radius >= distance) && b.active) {
                 b.active = false;
                 inverter = true;
             }
 
             //hitbox player1
               double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
-            if ((5.0 + player1.radius >= distancePlayer1) && b.active && !gameRound) {
+            if ((b.radius + player1.radius >= distancePlayer1) && b.active && !gameRound) {
                 player2.life--;
                 b.active = false;
                 inverter = true;
@@ -95,14 +92,14 @@ void moveBall() {
 
             //hitbox player2
             double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
-            if ((5.0 + player2.radius >= distancePlayer2) && b.active && gameRound) {
+            if ((b.radius + player2.radius >= distancePlayer2) && b.active && gameRound) {
                 player1.life--;
                 b.active = false;
                 inverter = true;
             }
 
             if(inverter){
-                gameSwitch();
+                gameRound = !gameRound;
             }
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
@@ -127,23 +124,13 @@ void moveBall() {
 
     if((hasXgap() || hasYgap()) && b.active){
         b.active = false;
-        gameSwitch();
+        gameRound = !gameRound;
     }
 
     (b).coordY += b.speedY;
     (b).coordX += b.speedX;
 
 } //acaba o moveball
-
-// Alterna as partidas dos jogadores
-void gameSwitch(){
-    if (gameRound) {
-        player1.active = true;
-    } else {
-        player2.active = true;
-    };
-    gameRound = !gameRound;
-}
 
 // Renderiza os planetas
 void readCreatePlanetsBullets(){
@@ -155,9 +142,9 @@ void readCreatePlanetsBullets(){
         }
 
         if(b.active) {
-            al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
+            al_draw_filled_circle((float) b.coordX, (float)  b.coordY, b.radius, WHITE);
         }else {
-            al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
+            al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, b.radius, WHITE);
             b.speedX = 0;
             b.speedY = 0;
         }
@@ -174,9 +161,6 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 
 // Muda a posicao da bolinha para as coordenadas passadas
 void setBulletTo(int clickX, int clickY) {
-
-    player1.active = false;
-    player2.active = false;
     b.active = true;
 
     int velInit = 10; // Velocidade inicial
