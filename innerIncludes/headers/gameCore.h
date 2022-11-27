@@ -7,13 +7,16 @@
 
 #include <allegro5/color.h>
 #include <innerIncludes/headers/Interpreter.h>
+#include <innerIncludes/headers/sprites.h>
+
 
     extern struct User {
+        SPRITE character;
         bool active;
         int coordX;
         int coordY;
-        int life;
         int radius;
+        int life;
     } player1 , player2;
 
     typedef struct {
@@ -22,6 +25,7 @@
         double speedX;
         double speedY;
         bool active;
+        int radius;
     } Bullet;
 
     typedef struct {
@@ -36,7 +40,6 @@
     extern Planeta *planetas;
     extern Bullet b;
     extern float planetaSize;
-    extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
     extern bool gameRound;

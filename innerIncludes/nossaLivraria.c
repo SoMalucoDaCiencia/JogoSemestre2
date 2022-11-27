@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <allegro5/allegro_ttf.h>
-#include <innerIncludes/headers/Suporte.h>
+#include "innerIncludes/headers/Suporte.h"
 
 extern ALLEGRO_FONT *font;
 
@@ -100,6 +100,11 @@ void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color
     al_set_target_bitmap(al_get_backbuffer(display));
     al_draw_bitmap(square, x, y, 0);
     al_destroy_bitmap(square);
+}
+
+void insertShadowSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_COLOR shadowColor, ALLEGRO_DISPLAY *display) {
+    insertFilledSquare(height, width, x+10, y+10, shadowColor, display);
+    insertFilledSquare(height, width, x, y, color, display);
 }
 
 ALLEGRO_COLOR const getColorByHex(char* hexStringValue) {
