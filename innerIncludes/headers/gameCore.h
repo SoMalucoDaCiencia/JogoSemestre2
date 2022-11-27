@@ -12,7 +12,6 @@
 
     extern struct User {
         SPRITE character;
-        bool active;
         int coordX;
         int coordY;
         int radius;
@@ -25,7 +24,7 @@
         double speedX;
         double speedY;
         bool active;
-        int radius;
+        float radius;
     } Bullet;
 
     typedef struct {
@@ -62,7 +61,5 @@
     bool hasXgap();
 
     bool hasYgap();
-
-    void gameSwitch();
 
 #endif //JOGOSEMESTRE2_GAMECORE_H
