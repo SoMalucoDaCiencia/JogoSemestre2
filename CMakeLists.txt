@@ -6,19 +6,24 @@ message( STATUS "Architecture: ${ARCHITECTURE}")
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(.)
-include_directories(deps)
+include_directories(innerIncludes)
 include_directories($ENV{ALLEGRO}/include) # Definir pasta do alegro como uma variavel de ambiente com nome "ALLEGRO"
 link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
-        deps/Cores.h
+        innerIncludes/headers/sprites.h
+        src/supportFiles/sprites.c
+        innerIncludes/headers/Cores.h
         src/supportFiles/Cores.c
-        deps/yamlReader.h
-        src/supportFiles/yamlReader.c
-        deps/nossaLivraria.h
+        innerIncludes/headers/nossaLivraria.h
         src/supportFiles/nossaLivraria.c
-        deps/gameCore.h
+        innerIncludes/headers/gameCore.h
         src/supportFiles/gameCore.c
+        outIncludes/algif.c
+        outIncludes/headers/algif.h
+        outIncludes/gif.c
+        outIncludes/bitmap.c
+        outIncludes/lzw.c
         src/main.h
         src/main.c)
 

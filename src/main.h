@@ -26,15 +26,13 @@
 
     void drawConfig();
 
-    void characterSelection();
-
-    void drawSprite();
+    void drawCharacterSelection(bool all);
 
     void drawGame();
 
     void drawTutorial();
 
-    void drawLifeBar();
+//    void drawLifeBar();
 
     void eventHandler(ALLEGRO_EVENT ev);
 
