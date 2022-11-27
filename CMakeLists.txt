@@ -12,13 +12,13 @@ link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
         innerIncludes/headers/sprites.h
-        src/supportFiles/sprites.c
+        innerIncludes/sprites.c
         innerIncludes/headers/Cores.h
-        src/supportFiles/Cores.c
+        innerIncludes/Cores.c
         innerIncludes/headers/nossaLivraria.h
-        src/supportFiles/nossaLivraria.c
+        innerIncludes/nossaLivraria.c
         innerIncludes/headers/gameCore.h
-        src/supportFiles/gameCore.c
+        innerIncludes/gameCore.c
         outIncludes/algif.c
         outIncludes/headers/algif.h
         outIncludes/gif.c

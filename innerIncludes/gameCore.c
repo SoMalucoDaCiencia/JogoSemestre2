@@ -11,37 +11,25 @@
 #include <src/main.h>
 #include <allegro5/allegro_font.h>
 
-Planeta *planetas;
-MAP activeMap;
-Bullet b;
+Planeta *planetas; // Lista de planetas
+MAP activeMap; // Mapa atual sendo usado
+Bullet b; // Bolinha
 
 struct User player1 , player2;
 
-float planetaSize;
-bool limitWalls;
-bool gameRound; //True == player1 and False == player2
-double NEWTON;
-double acel;
+float planetaSize; // Quantidade de planetas
+bool gameRound; // True == player1 and False == player2
+double NEWTON;  // Constante newtoniana
+double acel; // Aceleracao somada da grade
 
+// Inicia as variaveis necessarias do jogo
 void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
+    b.radius = 1;
 
     readSetPlanet();
-//    planetas[0].color = WHITE;
-//    planetas[0].nome = "Arthur";
-//    planetas[0].coordX = WINDOW_WIDTH/2;
-//    planetas[0].coordY = WINDOW_HEIGHT/2;
-//    planetas[0].radius = 20;
-//    planetas[0].mass = 0.3;
-//
-//    planetas[1].color  = WHITE;
-//    planetas[1].nome   = "Tais";
-//    planetas[1].coordX = 200;
-//    planetas[1].coordY = 560;
-//    planetas[1].radius = 30;
-//    planetas[1].mass   = 0.3;
 
     if(getRandomInt(1, 0) == 0) {
         player1.active = true;
@@ -73,18 +61,14 @@ void initGame() {
 
 //    NEWTON = 6.6743 * pow(10, -11);
     NEWTON = 6.6743 * innerPow(10, 1);
-    limitWalls = false;
 }
 
+// Encerra uma partida
 void finishGame(){
-    int SAVEGAMEMODE = (int) GAMESTATE;
     GAMESTATE = TRANSITION;
-    waitTime((float) 2.5);
-    initGame();
-    activeMap++;
-    GAMESTATE = (GAMEMODE) SAVEGAMEMODE;
 }
 
+// Processa a gravidade
 void moveBall() {
 
     for (int i = 0; i < planetaSize; ++i) {
@@ -151,6 +135,7 @@ void moveBall() {
 
 } //acaba o moveball
 
+// Alterna as partidas dos jogadores
 void gameSwitch(){
     if (gameRound) {
         player1.active = true;
@@ -160,20 +145,26 @@ void gameSwitch(){
     gameRound = !gameRound;
 }
 
+// Renderiza os planetas
 void readCreatePlanetsBullets(){
-    for (int i = 0; i < planetaSize; ++i) {
-        Planeta planeta = planetas[i];
-        al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
-    }
-    if(b.active) {
-        al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
-    }else {
-        al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
-        b.speedX = 0;
-        b.speedY = 0;
+
+    if (player1.life * player2.life != 0) {
+        for (int i = 0; i < planetaSize; ++i) {
+            Planeta planeta = planetas[i];
+            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
+        }
+
+        if(b.active) {
+            al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
+        }else {
+            al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
+            b.speedX = 0;
+            b.speedY = 0;
+        }
     }
 }
 
+// Mede distancias no mapa com pitagoras
 double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
     const int x = (pointAX > pointBX ? (pointAX - pointBX) : (pointBX - pointAX));
     const int y = (pointAY > pointBY ? (pointAY - pointBY) : (pointBY - pointAY));
@@ -181,6 +172,7 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
     return floor(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
+// Muda a posicao da bolinha para as coordenadas passadas
 void setBulletTo(int clickX, int clickY) {
 
     player1.active = false;

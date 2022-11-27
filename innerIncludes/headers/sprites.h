@@ -22,6 +22,8 @@ extern ALLEGRO_BITMAP *spritCatLeft, *spritCatRight, *spritCatSelection, *spritM
 
     void loadSprites();
 
+    void killSprites();
+
     ALLEGRO_BITMAP* getSide(SPRITE im, bool right);
 
     ALLEGRO_BITMAP* getBig(SPRITE im);

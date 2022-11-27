@@ -9,6 +9,7 @@
 #include <innerIncludes/headers/gameCore.h>
 
 
+// Pega o caminho para o arquivo do mapa
 String getMaps(MAP mapsList){
     switch(mapsList){
         case MAP1: {
@@ -29,7 +30,7 @@ String getMaps(MAP mapsList){
     }
 }
 
-
+// Interpreta os mapas em .yaml e cria os planetas
 void readSetPlanet(){
     int here = 0;
     int planeta = -1;

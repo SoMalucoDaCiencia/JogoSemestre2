@@ -25,6 +25,7 @@
         double speedX;
         double speedY;
         bool active;
+        int radius;
     } Bullet;
 
     typedef struct {
@@ -39,7 +40,6 @@
     extern Planeta *planetas;
     extern Bullet b;
     extern float planetaSize;
-    extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
     extern bool gameRound;
