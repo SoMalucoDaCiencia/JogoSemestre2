@@ -12,16 +12,15 @@
 String getMaps(MAP mapsList){
     switch(mapsList){
         case MAP1: {
-            return "../src/assets/mapas/mapa1.txt";
+            return "../src/assets/mapas/mapa1.yaml";
             break;
         }
-
         case MAP2: {
-            return "../src/assets/mapas/mapa2.txt";
+            return "../src/assets/mapas/mapa2.yaml";
             break;
         }
         case MAP3: {
-            return "../src/assets/mapas/mapa3.txt";
+            return "../src/assets/mapas/mapa3.yaml";
             break;
         }
         default: {
@@ -55,13 +54,6 @@ void readSetPlanet(){
             continue;
         }
 
-        // Verifica quando um novo planeta começa
-        if(code[here] == '-' && code[here + 1] == '-'){
-            here += 2;
-            planeta++;
-            continue;
-        }
-
         switch(code[here]){
             case 'c': {
                 int stringStartAt = here + 3;
@@ -72,12 +64,15 @@ void readSetPlanet(){
                 planetas[planeta].color = getColorByHex(getColor);
                 break;
             }
-            case 'n': {
-                int stringStartAt = here + 3;
-                while(code[here] != '\n'){
+            case '-': {
+                here++;
+                int stringStartAt = here;
+                while(code[here] != '-'){
                     here++;
                 }
+                planeta++;
                 planetas[planeta].nome = substring(code, stringStartAt, here);
+                here += 2;
                 break;
             }
             case 'r': {

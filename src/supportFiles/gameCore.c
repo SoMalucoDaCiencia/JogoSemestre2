@@ -19,7 +19,7 @@ struct User player1 , player2;
 
 float planetaSize;
 bool limitWalls;
-bool gameRound = true; //True == player1 and False == player2
+bool gameRound; //True == player1 and False == player2
 double NEWTON;
 double acel;
 
@@ -43,15 +43,23 @@ void initGame() {
 //    planetas[1].radius = 30;
 //    planetas[1].mass   = 0.3;
 
+    if(getRandomInt(1, 0) == 0) {
+        player1.active = true;
+        player2.active = false;
+        gameRound = true;
+    } else {
+        player1.active = false;
+        player2.active = true;
+        gameRound = false;
+    }
+
     player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
     player1.coordX =  planetas[0].coordX;
-    player1.active = true;
-    player1.life   = 1;
+    player1.life   = 5;
     player1.radius = 12;
 
     player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
     player2.coordX =  planetas[1].coordX;
-    player1.active = false;
     player2.life   = 5;
     player2.radius = 12;
 
@@ -71,8 +79,6 @@ void initGame() {
 void finishGame(){
     int SAVEGAMEMODE = (int) GAMESTATE;
     GAMESTATE = TRANSITION;
-//    al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
-//    al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     waitTime((float) 2.5);
     initGame();
     activeMap++;

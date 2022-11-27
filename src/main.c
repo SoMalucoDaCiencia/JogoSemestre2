@@ -74,9 +74,6 @@ int main() {
         font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 90, 0);
     }
 
-    // Inicia constante de newton
-    initGame();
-
     // Inicia pilha de eventos do allegro
     event_queue = al_create_event_queue();
     timer_queue = al_create_event_queue();
@@ -133,6 +130,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if (ev.mouse.x >= (WINDOW_WIDTH / 2) - 200 && ev.mouse.x <= (WINDOW_WIDTH / 2) + 200) {
                         if (ev.mouse.y >= 440 && ev.mouse.y <= 490) {     // play
                             orderRedraw = true;
+                            // Inicia constante de newton
+                            initGame();
                             GAMESTATE = TUTORIAL;
                         } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                             orderRedraw = true;
@@ -388,7 +387,6 @@ void drawGame() {
     }
 
     if(player2.life > 0){
-        al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, LIGHT_BLUE);
         if(gameRound){
             al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
         }
@@ -398,7 +396,6 @@ void drawGame() {
     }
 
     if(player1.life > 0){
-        al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, RED);
         if(!gameRound){
             al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }

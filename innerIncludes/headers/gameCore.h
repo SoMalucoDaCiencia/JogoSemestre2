@@ -7,8 +7,11 @@
 
 #include <allegro5/color.h>
 #include <innerIncludes/headers/Interpreter.h>
+#include <innerIncludes/headers/sprites.h>
+
 
     extern struct User {
+        SPRITE character;
         bool active;
         int coordX;
         int coordY;
