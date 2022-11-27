@@ -11,6 +11,8 @@ include_directories($ENV{ALLEGRO}/include) # Definir pasta do alegro como uma va
 link_directories($ENV{ALLEGRO}/lib)
 
 add_executable(JogoSemestre2
+        innerIncludes/headers/sprites.h
+        innerIncludes/sprites.c
         innerIncludes/headers/Cores.h
         innerIncludes/Cores.c
         innerIncludes/headers/nossaLivraria.h
