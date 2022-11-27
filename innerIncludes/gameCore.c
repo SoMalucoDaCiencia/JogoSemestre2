@@ -74,8 +74,8 @@ void finishGame(){
 //    al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
 //    al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     waitTime((float) 2.5);
-    initGame();
     activeMap++;
+    initGame();
     GAMESTATE = (GAMEMODE) SAVEGAMEMODE;
 }
 
