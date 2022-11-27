@@ -10,10 +10,10 @@
 #include <innerIncludes/headers/nossaLivraria.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
-#include "innerIncludes/headers/Cores.h"
-#include "innerIncludes/headers/gameCore.h"
-#include "outIncludes/headers/algif.h"
-#include "innerIncludes/headers/sprites.h"
+#include <innerIncludes/headers/Cores.h>
+#include <innerIncludes/headers/gameCore.h>
+#include <outIncludes/headers/algif.h>
+#include <innerIncludes/headers/sprites.h>
 
 
 // ========== Window VARS ===========================================
@@ -58,8 +58,11 @@ int main() {
         lifeHeart = al_load_bitmap("../src/assets/heart.png");
     }
 
-//    const char *gif = "../src/assets/tutorial/giphy.gif";
-//    tuto = algif_load_animation(gif);
+    // Inicia o primeiro mapa
+    activeMap = MAP1;
+
+    const char *gif = "../src/assets/tutorial/giphy.gif";
+    tuto = algif_load_animation(gif);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -142,7 +145,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case PLAY: {
                     // BOTÕES DA TELA PLAY
-                    if (!b.active) {
+                    if (!b.active && player1.life > 0 && player2.life > 0) {
                         setBulletTo(ev.mouse.x, ev.mouse.y);
                     }
                     break;
@@ -150,7 +153,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TUTORIAL: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
-                        GAMESTATE = PLAY; // RETORNA A TELA DE MENU
+                        GAMESTATE = PLAY; // SKIPA PARA O JOGO
                     }
                     break;
                 }
@@ -254,7 +257,7 @@ void render(ALLEGRO_EVENT ev) {
                 }
                 break;
             }
-            default: {
+            case TRANSITION: default: {
                 break;
             }
         }
@@ -302,7 +305,7 @@ void drawTutorial() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-//    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
@@ -384,6 +387,26 @@ void drawGame() {
         al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
     }
 
+    if(player2.life > 0){
+        al_draw_filled_circle((float)player1.coordX, (float)player1.coordY, (float)player1.radius, LIGHT_BLUE);
+        if(gameRound){
+            al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
+    }
+
+    if(player1.life > 0){
+        al_draw_filled_circle((float)player2.coordX, (float)player2.coordY, (float)player2.radius, RED);
+        if(!gameRound){
+            al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+        }
+    } else{
+        finishGame();
+        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
+    }
+
     al_draw_text(font45,  (gameRound ? LIGHT_BLUE : RED), 400, 25, 0, (gameRound ? "- VEZ DO JOGADOR 1 -" : "- VEZ DO JOGADOR 2 -"));
     al_flip_display();
 }
@@ -394,7 +417,7 @@ void killNine() {
     al_destroy_bitmap(tittleWorbit);
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
-//    algif_destroy_animation(tuto);
+    algif_destroy_animation(tuto);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);

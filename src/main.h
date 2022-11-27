@@ -12,7 +12,8 @@
         PLAY,
         TUTORIAL,
         CONFIG,
-        CHARACTER
+        CHARACTER,
+        TRANSITION,
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;

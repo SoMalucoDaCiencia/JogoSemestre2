@@ -12,12 +12,51 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <allegro5/allegro_ttf.h>
+#include <innerIncludes/headers/Suporte.h>
+
+extern ALLEGRO_FONT *font;
 
 bool isMAC() {
 #ifdef __APPLE__
     return 1;
 #endif
     return 0;
+}
+
+void clearConsole() {
+    system(isMAC() ? system("clear")  : "cls");
+}
+
+int println(const String format, ...) {
+    va_list arg;
+    int done;
+
+    va_start (arg, format);
+    done = vfprintf (stdout, format, arg);
+    va_end (arg);
+
+    printf("\n");
+    return done;
+}
+
+String readFile(String fileName) {
+    FILE *file = fopen(fileName, "r");
+    String code;
+    size_t n = 0;
+    int c;
+
+    if (file == NULL) return NULL; //could not open file
+    fseek(file, 0, SEEK_END);
+    long f_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    code = malloc(f_size);
+
+    while ((c = fgetc(file)) != EOF) {
+        code[n++] = (char)c;
+    }
+
+    code[n] = '\0';
+    return code;
 }
 
 char* getNow() {
@@ -83,6 +122,19 @@ void insertSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLE
 
 void waitTime(unsigned int t){
     sleep(t);
+}
+
+void err(const String format, ...) {
+
+    printf("\033[1;31m");
+    va_list arg;
+    int done;
+
+    va_start (arg, format);
+    done = vfprintf (stdout, format, arg);
+    va_end (arg);
+    println("\033[0m");
+    exit(0);
 }
 
 

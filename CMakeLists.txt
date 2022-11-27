@@ -25,7 +25,12 @@ add_executable(JogoSemestre2
         outIncludes/bitmap.c
         outIncludes/lzw.c
         src/main.h
-        src/main.c)
+        src/main.c
+        innerIncludes/Interpreter.c
+        innerIncludes/headers/Interpreter.h
+        innerIncludes/headers/Suporte.h
+        innerIncludes/Suporte.c)
+
 
 if (WIN32)
     target_link_libraries(JogoSemestre2 -lmingw32 -lallegro-5.0.10-monolith-md-debug)

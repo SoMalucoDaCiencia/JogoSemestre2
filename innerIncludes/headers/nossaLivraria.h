@@ -4,12 +4,19 @@
 
 #include <stdbool.h>
 #include <allegro5/display.h>
+#include <innerIncludes/headers/Suporte.h>
 
 
 #ifndef JOGOSEMESTRE2_LIVRARIA_H
 #define JOGOSEMESTRE2_LIVRARIA_H
 
     char* isMAC();
+
+    void clearConsole();
+
+    int println (const String format, ...);
+
+    String readFile(String fileName);
 
     char* getNow();
 
@@ -30,5 +37,7 @@
     double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX,int pointBY);
 
     void waitTime(unsigned int t);
+
+    int err(const String format, ...);
 
 #endif //JOGOSEMESTRE2_LIVRARIA_H

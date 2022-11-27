@@ -9,8 +9,10 @@
 #include <math.h>
 #include <allegro5/allegro_primitives.h>
 #include <src/main.h>
+#include <allegro5/allegro_font.h>
 
-Planeta planetas[2];
+Planeta *planetas;
+MAP activeMap;
 Bullet b;
 
 struct User player1 , player2;
@@ -20,31 +22,38 @@ bool limitWalls;
 bool gameRound = true; //True == player1 and False == player2
 double NEWTON;
 double acel;
-double distance;
 
 void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
 
-    player1.life = 5;
-    player2.life = 5;
-
-    planetas[0].color = RED;
-    planetas[0].nome = "Arthur";
-    planetas[0].coordX = WINDOW_WIDTH/2 - 30;
-    planetas[0].coordY = WINDOW_HEIGHT/2;
-    planetas[0].radius = 20;
-    planetas[0].mass = 1;
-
-//    planetas[1].color = DARK_BLUE;
-//    planetas[1].nome = "Tais";
+    readSetPlanet();
+//    planetas[0].color = WHITE;
+//    planetas[0].nome = "Arthur";
+//    planetas[0].coordX = WINDOW_WIDTH/2;
+//    planetas[0].coordY = WINDOW_HEIGHT/2;
+//    planetas[0].radius = 20;
+//    planetas[0].mass = 0.3;
+//
+//    planetas[1].color  = WHITE;
+//    planetas[1].nome   = "Tais";
 //    planetas[1].coordX = 200;
-//    planetas[1].coordY = 590;
+//    planetas[1].coordY = 560;
 //    planetas[1].radius = 30;
-//    planetas[1].mass = 2;
+//    planetas[1].mass   = 0.3;
 
-    planetaSize = sizeof(planetas) / sizeof(Planeta);
+    player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
+    player1.coordX =  planetas[0].coordX;
+    player1.active = true;
+    player1.life   = 1;
+    player1.radius = 12;
+
+    player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
+    player2.coordX =  planetas[1].coordX;
+    player1.active = false;
+    player2.life   = 5;
+    player2.radius = 12;
 
     if (gameRound) {
         b.coordY = player1.coordY;
@@ -55,8 +64,19 @@ void initGame() {
     }
 
 //    NEWTON = 6.6743 * pow(10, -11);
-    NEWTON = 6.6743 * pow(10, 0);
+    NEWTON = 6.6743 * innerPow(10, 1);
     limitWalls = false;
+}
+
+void finishGame(){
+    int SAVEGAMEMODE = (int) GAMESTATE;
+    GAMESTATE = TRANSITION;
+//    al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
+//    al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
+    waitTime((float) 2.5);
+    initGame();
+    activeMap++;
+    GAMESTATE = (GAMEMODE) SAVEGAMEMODE;
 }
 
 void moveBall() {
@@ -67,9 +87,32 @@ void moveBall() {
         double finalYAceleration = 0;
 
         if(planeta.nome != NULL){
-            distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
-            if ((1.0 + planeta.radius >= distance) && b.active) {
+            bool inverter = false;
+            //hitbox planeta
+            double distance = twoPointsDistance(planeta.coordX, planeta.coordY, b.coordX, b.coordY);
+            if ((5.0 + planeta.radius >= distance) && b.active) {
                 b.active = false;
+                inverter = true;
+            }
+
+            //hitbox player1
+              double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
+            if ((5.0 + player1.radius >= distancePlayer1) && b.active && !gameRound) {
+                player2.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            //hitbox player2
+            double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
+            if ((5.0 + player2.radius >= distancePlayer2) && b.active && gameRound) {
+                player1.life--;
+                b.active = false;
+                inverter = true;
+            }
+
+            if(inverter){
+                gameSwitch();
             }
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
@@ -79,8 +122,8 @@ void moveBall() {
                 if (planeta.coordY <= b.coordY && b.coordY < 0) {
                     finalYAceleration *= -1;
                 }
+                (b).speedY += finalYAceleration;
             }
-            (b).speedY += finalYAceleration;
 
             if (b.coordX!=planeta.coordX) {
                 finalXAceleration = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
@@ -94,6 +137,7 @@ void moveBall() {
 
     if((hasXgap() || hasYgap()) && b.active){
         b.active = false;
+        gameSwitch();
     }
 
     (b).coordY += b.speedY;
@@ -101,11 +145,34 @@ void moveBall() {
 
 } //acaba o moveball
 
+void gameSwitch(){
+    if (gameRound) {
+        player1.active = true;
+    } else {
+        player2.active = true;
+    };
+    gameRound = !gameRound;
+}
+
 void readCreatePlanetsBullets(){
     for (int i = 0; i < planetaSize; ++i) {
         Planeta planeta = planetas[i];
         al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
     }
+    if(b.active) {
+        al_draw_filled_circle((float) b.coordX, (float)  b.coordY, 5, WHITE);
+    }else {
+        al_draw_filled_circle((float)WINDOW_WIDTH * 2, (float) WINDOW_HEIGHT * 2, 1, WHITE);
+        b.speedX = 0;
+        b.speedY = 0;
+    }
+}
+
+double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
+    const int x = (pointAX > pointBX ? (pointAX - pointBX) : (pointBX - pointAX));
+    const int y = (pointAY > pointBY ? (pointAY - pointBY) : (pointBY - pointAY));
+
+    return floor(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
 void setBulletTo(int clickX, int clickY) {
@@ -114,7 +181,7 @@ void setBulletTo(int clickX, int clickY) {
     player2.active = false;
     b.active = true;
 
-    int velInit = 40; // Velocidade inicial
+    int velInit = 10; // Velocidade inicial
 
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);
@@ -141,14 +208,6 @@ void setBulletTo(int clickX, int clickY) {
             b.speedX *= -1;
         }
     }
-}
-
-
-double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
-    const int x = (pointAX > pointBX ? (pointAX - pointBX) : (pointBX - pointAX));
-    const int y = (pointAY > pointBY ? (pointAY - pointBY) : (pointBY - pointAY));
-
-    return floor(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
 // Verifica se a bolinha vai bater na esquerda ou na direita
