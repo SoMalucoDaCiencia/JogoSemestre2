@@ -12,7 +12,8 @@
         PLAY,
         TUTORIAL,
         CONFIG,
-        TRANSITION
+        CHARACTER,
+        TRANSITION,
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;
@@ -26,11 +27,11 @@
 
     void drawConfig();
 
+    void drawCharacterSelection(bool all);
+
     void drawGame();
 
     void drawTutorial();
-
-    void drawLifeBar();
 
     void eventHandler(ALLEGRO_EVENT ev);
 
