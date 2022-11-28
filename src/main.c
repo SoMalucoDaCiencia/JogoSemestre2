@@ -54,7 +54,7 @@ int main() {
     }
 
     // Inicia o primeiro mapa
-    activeMap = MAP1;
+    activeMap = 0;
 
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
@@ -320,7 +320,7 @@ void drawMenu() {
 void drawTransition() {
     al_clear_to_color(BLACK);
     al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
-    insertShadowSquare(80, 300, (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
+    insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
 }

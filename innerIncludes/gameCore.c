@@ -39,12 +39,12 @@ void initGame() {
 
     player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
     player1.coordX =  planetas[0].coordX;
-    player1.life   = 1;
+    player1.life   = 5;
     player1.radius = 24;
 
     player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
     player2.coordX =  planetas[1].coordX;
-    player2.life   = 1;
+    player2.life   = 5;
     player2.radius = 24;
 
     if (gameRound) {
@@ -106,7 +106,7 @@ void moveBall() {
 
             if (b.coordY!=planeta.coordY) {
                 finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
-                if (planeta.coordY <= b.coordY && b.coordY < 0) {
+                if (planeta.coordY <= b.coordY) {
                     finalYAceleration *= -1;
                 }
                 (b).speedY += finalYAceleration;
