@@ -20,7 +20,7 @@ struct User player1 , player2;
 float planetaSize; // Quantidade de planetas
 bool gameRound; // True == player1 and False == player2
 double NEWTON;  // Constante newtoniana
-double acel; // Aceleracao somada da grade
+double acel;    // Aceleracao somada da grade
 
 // Inicia as variaveis necessarias do jogo
 void initGame() {
@@ -37,13 +37,15 @@ void initGame() {
         gameRound = false;
     }
 
-    player1.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
-    player1.coordX =  planetas[0].coordX;
-    player1.life   = 5;
+    player1.character = CAT;
+    player1.coordY =  planetas[1].coordY - (planetas[1].radius + 30);
+    player1.coordX =  planetas[1].coordX;
+    player1.life   = 1;
     player1.radius = 24;
 
-    player2.coordY =  planetas[1].coordY - (planetas[1].radius + 30);
-    player2.coordX =  planetas[1].coordX;
+    player2.character = SULLIVAN;
+    player2.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
+    player2.coordX =  planetas[0].coordX;
     player2.life   = 5;
     player2.radius = 24;
 
@@ -85,7 +87,7 @@ void moveBall() {
             //hitbox player1
               double distancePlayer1 = twoPointsDistance(player1.coordX, player1.coordY, b.coordX, b.coordY);
             if ((b.radius + player1.radius >= distancePlayer1) && b.active && !gameRound) {
-                player2.life--;
+                player1.life--;
                 b.active = false;
                 inverter = true;
             }
@@ -93,7 +95,7 @@ void moveBall() {
             //hitbox player2
             double distancePlayer2 = twoPointsDistance(player2.coordX, player2.coordY, b.coordX, b.coordY);
             if ((b.radius + player2.radius >= distancePlayer2) && b.active && gameRound) {
-                player1.life--;
+                player2.life--;
                 b.active = false;
                 inverter = true;
             }

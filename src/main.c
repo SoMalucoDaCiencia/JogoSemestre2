@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <src/main.h>
@@ -13,7 +12,6 @@
 #include <innerIncludes/headers/Cores.h>
 #include <innerIncludes/headers/gameCore.h>
 #include <outIncludes/headers/algif.h>
-#include <innerIncludes/headers/sprites.h>
 
 
 // ========== Window VARS ===========================================
@@ -90,10 +88,6 @@ int main() {
     timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(timer_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
-
-    //PERSONAGENS DEFAULT
-    player1.character = CAT;
-    player2.character = DEMON;
 
     while (1) {
         ALLEGRO_EVENT ev;
@@ -319,7 +313,7 @@ void drawMenu() {
 
 void drawTransition() {
     al_clear_to_color(BLACK);
-    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
     insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
@@ -404,28 +398,16 @@ void drawGame() {
             al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
         }
 
-        al_draw_filled_circle((float) player1.coordX, (float) player1.coordY, (float) player1.radius, BLACK);
-        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
-        al_draw_filled_circle((float) player2.coordX, (float) player2.coordY, (float) player2.radius, BLACK);
-        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
-    }
-
-    if(player2.life > 0){
         if(gameRound){
             al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
-        }
-    } else{
-        finishGame();
-        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
-    }
-
-    if(player1.life > 0){
-        if(!gameRound){
+        } else {
             al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }
-    } else{
+
+        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
+        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
+    } else {
         finishGame();
-        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     }
 
     al_flip_display();
