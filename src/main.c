@@ -145,6 +145,10 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TUTORIAL1: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
+                        GAMESTATE = PLAY; // SKIPA PARTE DO TUTORIAL
+                    }
+                    if (ev.mouse.x >= 1160 && ev.mouse.x <= 1260 && ev.mouse.y >= 650 && ev.mouse.y <= 680) {
+                        orderRedraw = true;
                         GAMESTATE = TUTORIAL2; // SKIPA PARTE DO TUTORIAL
                     }
                     break;
@@ -153,6 +157,10 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = PLAY; // SKIPA PARA O JOGO
+                    }
+                    if (ev.mouse.x >= 1160 && ev.mouse.x <= 1260 && ev.mouse.y >= 650 && ev.mouse.y <= 680) {
+                        orderRedraw = true;
+                        GAMESTATE = PLAY; // SKIPA PARTE DO TUTORIAL
                     }
                     break;
                 }
@@ -381,11 +389,14 @@ void drawTutorial() {
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertFilledSquare(30, 100, 1170, 650, DARK_PURPLE, display);
+    insertFilledSquare(30, 100, 1160, 640, LIGHT_PURPLE, display);
     insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
 
     al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "  Antes de começarmos, você precisa de uma breve explicação sobre a gravidade.    (veja um exemplo a cima)");
     al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "'Quanto mais massa um objeto tem e mais perto ele está, maior sua força de atração sobre outro objeto'");
-    al_draw_text(font25, WHITE, 90, 40, 0, "Next");
+    al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
+    al_draw_text(font15, WHITE, 1185, 648, 0, "Next");
 
     al_flip_display();
 }
@@ -394,15 +405,18 @@ void drawTutorial2() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-    al_draw_bitmap(algif_get_bitmap(tuto2, al_get_time()), WINDOW_WIDTH/2 - 106, WINDOW_HEIGHT/2 - 128, 0);
+    al_draw_bitmap(algif_get_bitmap(tuto2, al_get_time()), WINDOW_WIDTH/2 - 400, WINDOW_HEIGHT/2 - 225, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertFilledSquare(30, 100, 1170, 650, DARK_PURPLE, display);
+    insertFilledSquare(30, 100, 1160, 640, LIGHT_PURPLE, display);
     insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
 
     al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "   ou seja, os maiores planetas irão atrair com mais força o projetil, assim dificultando a sua jogatina");
-    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 4 vezes seu adversário primeiro ganha, boa sorte!!");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 5 vezes seu adversário primeiro ganha, boa sorte!!");
     al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
+    al_draw_text(font15, WHITE, 1185, 648, 0, "Next");
 
     al_flip_display();
 }

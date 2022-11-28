@@ -27,7 +27,7 @@ void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
-    b.radius = 1;
+    b.radius = 3;
 
     if (planetaSize>0) {
         for (int i = 0; i < planetaSize; ++i) {
