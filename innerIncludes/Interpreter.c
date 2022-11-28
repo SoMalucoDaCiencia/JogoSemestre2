@@ -122,6 +122,7 @@ void readSetPlanet(){
             }
         }
     }
+    free(code);
 }
 
 
