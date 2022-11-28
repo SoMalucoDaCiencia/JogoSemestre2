@@ -193,11 +193,13 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
                     if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
-                        for (int i = 0; i < planetaSize; ++i) {
-                            free(planetas[i].nome);
+                        if (planetaSize>0) {
+                            for (int i = 0; i < planetaSize; ++i) {
+                                free(planetas[i].nome);
+                            }
+                            planetaSize = 0;
+                            free(planetas);
                         }
-                        planetaSize = 0;
-                        free(planetas);
                         activeMap = (MAP) (((int) activeMap) + 1);
                         initGame();
                         GAMESTATE = PLAY;
@@ -210,6 +212,13 @@ void eventHandler(ALLEGRO_EVENT ev) {
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
+                if (planetaSize>0) {
+                    for (int i = 0; i < planetaSize; ++i) {
+                        free(planetas[i].nome);
+                    }
+                    planetaSize = 0;
+                    free(planetas);
+                }
                 GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
             break;
