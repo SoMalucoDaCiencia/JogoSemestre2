@@ -5,6 +5,8 @@
 #include <allegro5/bitmap.h>
 #include <allegro5/allegro.h>
 #include <innerIncludes/headers/sprites.h>
+#include <innerIncludes/headers/Cores.h>
+
 
 ALLEGRO_BITMAP *spritCatLeft;               ALLEGRO_BITMAP *spritCatSelection;          ALLEGRO_BITMAP *spritCatRight;
 ALLEGRO_BITMAP *spritMummyLeft;             ALLEGRO_BITMAP *spritMummySelection;        ALLEGRO_BITMAP *spritMummyRight;
@@ -79,4 +81,15 @@ ALLEGRO_BITMAP* getBig(SPRITE im) {
         case WATER    : return spritWaterMonsterSelection;
         case ZOMBIE   : return spritZombieSelection      ;
     }
+}
+
+ ALLEGRO_COLOR getSpriteColor(SPRITE im){
+     switch (im) {
+         case CAT      : return ORANGE;
+         case MUMMY    : return GRAY;
+         case SULLIVAN : return OCEAN_BLUE;
+         case DEMON    : return RED;
+         case WATER    : return BLUE;
+         case ZOMBIE   : return GREEN;
+     }
 }

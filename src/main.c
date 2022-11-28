@@ -412,20 +412,20 @@ void drawGame() {
 
     if(player2.life > 0){
         if(gameRound){
-            al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+            al_draw_text( font45, getSpriteColor(player1.character), 400, 25, 0, "- VEZ DO JOGADOR 1 -");
         }
     } else{
         finishGame();
-        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
+        al_draw_text(font90, getSpriteColor(player2.character), 150, 60, 0, "JOGADOR 2 VENCEU!");
     }
 
     if(player1.life > 0){
         if(!gameRound){
-            al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+            al_draw_text( font45, getSpriteColor(player2.character), 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }
     } else{
         finishGame();
-        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
+        al_draw_text(font90, getSpriteColor(player1.character), 150, 60, 0, "JOGADOR 1 VENCEU!");
     }
 
     al_flip_display();

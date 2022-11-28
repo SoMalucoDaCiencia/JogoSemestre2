@@ -14,14 +14,19 @@
     extern ALLEGRO_COLOR LIGHT_PURPLE;
     extern ALLEGRO_COLOR RED         ;
     extern ALLEGRO_COLOR YELLOW      ;
+    extern ALLEGRO_COLOR GREEN       ;
     extern ALLEGRO_COLOR LIGHT_GREEN ;
     extern ALLEGRO_COLOR DARK_GREEN  ;
+    extern ALLEGRO_COLOR BLUE        ;
     extern ALLEGRO_COLOR LIGHT_BLUE  ;
     extern ALLEGRO_COLOR DARK_BLUE   ;
+    extern ALLEGRO_COLOR OCEAN_BLUE  ;
     extern ALLEGRO_COLOR PINK        ;
     extern ALLEGRO_COLOR ORANGE      ;
     extern ALLEGRO_COLOR BROWN       ;
+    extern ALLEGRO_COLOR GRAY       ;
 
-    void init_colors();
+
+void init_colors();
 
 #endif //JOGOSEMESTRE2_CORES_H

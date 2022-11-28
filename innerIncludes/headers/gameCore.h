@@ -39,7 +39,6 @@
     extern Planeta *planetas;
     extern Bullet b;
     extern float planetaSize;
-    extern bool limitWalls;
     extern double NEWTON;
     extern double acel;
     extern bool gameRound;

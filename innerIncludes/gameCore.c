@@ -27,7 +27,7 @@ void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
-    b.radius = 1;
+    b.radius = 5;
 
     readSetPlanet();
 
@@ -40,12 +40,12 @@ void initGame() {
     player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
     player1.coordX =  planetas[0].coordX;
     player1.life   = 1;
-    player1.radius = 12;
+    player1.radius = 24;
 
     player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
     player2.coordX =  planetas[1].coordX;
-    player2.life   = 5;
-    player2.radius = 12;
+    player2.life   = 1;
+    player2.radius = 24;
 
     if (gameRound) {
         b.coordY = player1.coordY;
@@ -56,7 +56,7 @@ void initGame() {
     }
 
 //    NEWTON = 6.6743 * pow(10, -11);
-    NEWTON = 6.6743 * innerPow(10, 1);
+    NEWTON = 21;
 }
 
 // Encerra uma partida

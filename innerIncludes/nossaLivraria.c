@@ -72,6 +72,27 @@ int getRandomInt(int max, int min) {
     return (rand() % (max - min + 1)) + min;
 }
 
+//double root(int basis, int exponent) {
+//    return pow(basis, 1./exponent);
+//}
+
+double innerPow(double basis, int exponent) {
+    double ret;
+    if (exponent>0) {
+        ret = basis;
+        for (int i=1; i<exponent; i++) {
+            ret *= basis;
+        }
+    } else {
+        ret = 1/basis;
+        int i = -1;
+        for (; i>exponent; i--) {
+            ret *= 1/basis;
+        }
+    }
+    return ret;
+}
+
 void insertFilledSquare(int height, int width, int x, int y, ALLEGRO_COLOR color, ALLEGRO_DISPLAY *display) {
     ALLEGRO_BITMAP *square = al_create_bitmap(width, height);
     al_set_target_bitmap(square);
@@ -124,20 +145,4 @@ double getComposedCoefficient(double force, int pointAX, int pointAY,int pointBX
     return (y2 < 0 ? y2*(-1) : y2);
 }
 
-double innerPow(double basis, int exponent) {
-    double ret;
-    if (exponent>0) {
-        ret = basis;
-        for (int i=1; i<exponent; i++) {
-            ret = basis;
-        }
-    } else {
-        ret = 1/basis;
-        int i = -1;
-        for (; i>exponent; i--) {
-            ret= 1/basis;
-        }
-    }
-    return ret;
-}
 
