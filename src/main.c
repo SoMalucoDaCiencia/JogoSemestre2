@@ -28,9 +28,9 @@ float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart; // Imagens principais do jogo
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue; // Fila de eventos do usuario e FPS
-ALLEGRO_FONT *font25, *font90, *font45; // Fontes do jogo
+ALLEGRO_FONT *font15, *font25, *font90, *font45; // Fontes do jogo
 ALLEGRO_DISPLAY *display; // Display do jogo
-ALGIF_ANIMATION *tuto; // gif do tutorial
+ALGIF_ANIMATION *tuto, *tuto2; // gif do tutorial
 ALLEGRO_TIMER *timer;
 
 GAMEMODE GAMESTATE; //  Estado do q o usuario esta fazendo
@@ -58,12 +58,15 @@ int main() {
 
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
+    const char *gif2 = "../src/assets/tutorial/giphy2.gif";
+    tuto2 = algif_load_animation(gif2);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
 
     // Carrega as fontes do jogo
     if (al_init_font_addon() && al_init_ttf_addon()) {
+        font15 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 15, 0);
         font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 25, 0);
         font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 45, 0);
         font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 90, 0);
@@ -128,7 +131,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                             orderRedraw = true;
                             // Inicia constante de newton
                             initGame();
-                            GAMESTATE = TUTORIAL;
+                            GAMESTATE = TUTORIAL1;
                         } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                             orderRedraw = true;
                             GAMESTATE = CONFIG;
@@ -145,7 +148,14 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     }
                     break;
                 }
-                case TUTORIAL: {
+                case TUTORIAL1: {
+                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+                        orderRedraw = true;
+                        GAMESTATE = TUTORIAL2; // SKIPA PARTE DO TUTORIAL
+                    }
+                    break;
+                }
+                case TUTORIAL2: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = PLAY; // SKIPA PARA O JOGO
@@ -238,7 +248,7 @@ void render(ALLEGRO_EVENT ev) {
                 drawGame();
                 break;
             }
-            case TUTORIAL: {
+            case TUTORIAL1: {
                 if (GAME_FREQUENCY_POLARITY) {
                     drawTutorial();
                     if (orderRedraw) {
@@ -248,6 +258,16 @@ void render(ALLEGRO_EVENT ev) {
                 }
                 break;
             }
+            case TUTORIAL2: {
+            if (GAME_FREQUENCY_POLARITY) {
+                drawTutorial2();
+                if (orderRedraw) {
+                    printf(" - Drawing Tutorial....[%s]\n", getNow());
+                    orderRedraw = false;
+                }
+            }
+            break;
+        }
             case CONFIG: {
                 // TELA CONFIG
                 if (orderRedraw) {
@@ -325,16 +345,36 @@ void drawTransition() {
     al_flip_display();
 }
 
-// Desenha as tutoriais
+// Desenha os tutoriais
 void drawTutorial() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 300, WINDOW_HEIGHT/2 - 169, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
 
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "  Antes de começarmos, você precisa de uma breve explicação sobre a gravidade.    (veja um exemplo a cima)");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "'Quanto mais massa um objeto tem e mais perto ele está, maior sua força de atração sobre outro objeto'");
+    al_draw_text(font25, WHITE, 90, 40, 0, "Next");
+
+    al_flip_display();
+}
+
+void drawTutorial2() {
+// TELA DE TUROTIAL
+    al_clear_to_color(BLACK);
+
+    al_draw_bitmap(algif_get_bitmap(tuto2, al_get_time()), WINDOW_WIDTH/2 - 106, WINDOW_HEIGHT/2 - 128, 0);
+
+    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
+    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
+
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "   ou seja, os maiores planetas irão atrair com mais força o projetil, assim dificultando a sua jogatina");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 4 vezes seu adversário primeiro ganha, boa sorte!!");
     al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
 
     al_flip_display();
@@ -376,6 +416,7 @@ void drawCharacterSelection(bool all) {
     insertShadowSquare(250, 200, 410, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player1.character), (float) 430, 260, 0);
     insertShadowSquare(40, 200, 410, 490, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font25, WHITE, 410 + 45, 490 + 7, 0, "CHANGE");
 //
     insertShadowSquare(40, 200, 710, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 742, 40, 0, "PLAYER 2");
@@ -384,6 +425,7 @@ void drawCharacterSelection(bool all) {
     insertShadowSquare(250, 200, 710, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player2.character), (float) 730, 260, 0);
     insertShadowSquare(40, 200, 710, 490, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font25, WHITE, 710 + 45, 490 + 7, 0, "CHANGE");
 
     al_flip_display();
 }
@@ -439,6 +481,7 @@ void killNine() {
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
     algif_destroy_animation(tuto);
+    algif_destroy_animation(tuto2);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
