@@ -30,13 +30,19 @@ void initGame() {
     b.radius = 5;
 
     if (planetaSize>0) {
-        for (int i = 0; i < planetaSize; ++i) {
-            free(planetas[i].nome);
-        }
+//        for (int i = 0; i < planetaSize; ++i) {
+//            free(planetas[i].nome);
+//        }
         planetaSize = 0;
         free(planetas);
     }
-    readSetPlanet();
+//    readSetPlanet();
+    switch (activeMap) {
+        case MAP1: setMap1(); break;
+        case MAP2: setMap2(); break;
+        case MAP3: setMap3();break;
+        default: break;
+    }
 
     if(getRandomInt(1, 0) == 0) {
         gameRound = true;
@@ -68,7 +74,7 @@ void initGame() {
 
 // Encerra uma partida
 void finishGame(){
-    if(activeMap==MAP3) {
+    if(activeMap==MAP2) {
         activeMap = 0;
         initGame();
         playAgain();
@@ -155,8 +161,13 @@ void readCreatePlanetsBullets(){
 
     if (player1.life * player2.life != 0) {
         for (int i = 0; i < planetaSize; ++i) {
-            Planeta planeta = planetas[i];
-            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float) planeta.radius, planeta.color);
+//            Planeta planeta = planetas[i];
+//            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, planeta.radius, planeta.color);
+            float x = (float) planetas[i].coordX * 1.0f;
+            float y = (float) planetas[i].coordY * 1.0f;
+            float r = (float) planetas[i].radius * 1.0f;
+
+            al_draw_filled_circle(x, y, r, planetas[i].color);
         }
 
         if(b.active) {

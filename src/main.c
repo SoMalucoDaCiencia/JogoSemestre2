@@ -60,7 +60,7 @@ int main() {
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
     const char *gif2 = "../src/assets/tutorial/giphy2.gif";
-    tuto2 = algif_load_animation(gif2);
+//    tuto2 = algif_load_animation(gif2);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
@@ -148,7 +148,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TUTORIAL1: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
-                        GAMESTATE = TUTORIAL2; // SKIPA PARTE DO TUTORIAL
+//                        GAMESTATE = TUTORIAL2; // SKIPA PARTE DO TUTORIAL
+                        GAMESTATE = PLAY;
                     }
                     break;
                 }
@@ -204,9 +205,9 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
                         if (planetaSize>0) {
-                            for (int i = 0; i < planetaSize; ++i) {
-                                free(planetas[i].nome);
-                            }
+//                            for (int i = 0; i < planetaSize; ++i) {
+//                                free(planetas[i].nome);
+//                            }
                             planetaSize = 0;
                             free(planetas);
                         }
@@ -237,9 +238,9 @@ void eventHandler(ALLEGRO_EVENT ev) {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
                 if (planetaSize>0) {
-                    for (int i = 0; i < planetaSize; ++i) {
-                        free(planetas[i].nome);
-                    }
+//                    for (int i = 0; i < planetaSize; ++i) {
+//                        free(planetas[i].nome);
+//                    }
                     planetaSize = 0;
                     free(planetas);
                 }
@@ -521,7 +522,7 @@ void killNine() {
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
     algif_destroy_animation(tuto);
-    algif_destroy_animation(tuto2);
+//    algif_destroy_animation(tuto2);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);

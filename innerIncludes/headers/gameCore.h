@@ -27,7 +27,7 @@
         float radius;
     } Bullet;
 
-    typedef struct {
+    typedef struct planeta {
         ALLEGRO_COLOR color;
         char *nome;
         int coordX;
