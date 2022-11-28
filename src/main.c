@@ -193,6 +193,8 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
                     if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
+                        planetaSize = 0;
+                        free(planetas);
                         activeMap = (MAP) (((int) activeMap) + 1);
                         initGame();
                         GAMESTATE = PLAY;

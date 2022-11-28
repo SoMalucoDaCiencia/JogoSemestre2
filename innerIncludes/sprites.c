@@ -37,24 +37,24 @@ void loadSprites() {
 
 // Libera a memoria usada pelos sprites
 void killSprites() {
-    free(spritCatLeft);
-    free(spritCatRight);
-    free(spritCatSelection);
-    free(spritMummyLeft);
-    free(spritMummyRight);
-    free(spritMummySelection);
-    free(spritSullivanLeft);
-    free(spritSullivanRight);
-    free(spritSullivanSelection);
-    free(spritDemonLeft);
-    free(spritDemonRight);
-    free(spritDemonSelection);
-    free(spritWaterMonsterLeft);
-    free(spritWaterMonsterRight);
-    free(spritWaterMonsterSelection);
-    free(spritZombieLeft);
-    free(spritZombieRight);
-    free(spritZombieSelection);
+    al_destroy_bitmap(spritCatLeft);
+    al_destroy_bitmap(spritCatRight);
+    al_destroy_bitmap(spritCatSelection);
+    al_destroy_bitmap(spritMummyLeft);
+    al_destroy_bitmap(spritMummyRight);
+    al_destroy_bitmap(spritMummySelection);
+    al_destroy_bitmap(spritSullivanLeft);
+    al_destroy_bitmap(spritSullivanRight);
+    al_destroy_bitmap(spritSullivanSelection);
+    al_destroy_bitmap(spritDemonLeft);
+    al_destroy_bitmap(spritDemonRight);
+    al_destroy_bitmap(spritDemonSelection);
+    al_destroy_bitmap(spritWaterMonsterLeft);
+    al_destroy_bitmap(spritWaterMonsterRight);
+    al_destroy_bitmap(spritWaterMonsterSelection);
+    al_destroy_bitmap(spritZombieLeft);
+    al_destroy_bitmap(spritZombieRight);
+    al_destroy_bitmap(spritZombieSelection);
 }
 
 // Pega um sprite por um lado especifico
