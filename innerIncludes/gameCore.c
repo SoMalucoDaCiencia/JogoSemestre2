@@ -37,12 +37,12 @@ void initGame() {
         gameRound = false;
     }
 
-    player1.coordY =  planetas[0].coordY - ((planetas[0].radius + player1.radius) * 2);
+    player1.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
     player1.coordX =  planetas[0].coordX;
     player1.life   = 1;
     player1.radius = 12;
 
-    player2.coordY =  planetas[1].coordY - ((planetas[1].radius + player2.radius) * 1.5);
+    player2.coordY =  planetas[1].coordY - (planetas[1].radius + 30);
     player2.coordX =  planetas[1].coordX;
     player2.life   = 5;
     player2.radius = 12;
@@ -138,7 +138,7 @@ void readCreatePlanetsBullets(){
     if (player1.life * player2.life != 0) {
         for (int i = 0; i < planetaSize; ++i) {
             Planeta planeta = planetas[i];
-            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float)  planeta.radius, planeta.color);
+            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, planeta.radius, planeta.color);
         }
 
         if(b.active) {
