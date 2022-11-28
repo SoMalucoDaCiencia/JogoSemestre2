@@ -17,7 +17,7 @@ Bullet b; // Bolinha
 
 struct User player1 , player2;
 
-float planetaSize; // Quantidade de planetas
+int planetaSize; // Quantidade de planetas
 bool gameRound; // True == player1 and False == player2
 double NEWTON;  // Constante newtoniana
 double acel;    // Aceleracao somada da grade
