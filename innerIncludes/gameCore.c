@@ -12,15 +12,15 @@
 #include <allegro5/allegro_font.h>
 
 Planeta *planetas; // Lista de planetas
-MAP activeMap; // Mapa atual sendo usado
-Bullet b; // Bolinha
+MAP activeMap;     // Mapa atual sendo usado
+Bullet b;          // Bolinha
 
 struct User player1 , player2;
 
 int planetaSize; // Quantidade de planetas
-bool gameRound; // True == player1 and False == player2
-double NEWTON;  // Constante newtoniana
-double acel;    // Aceleracao somada da grade
+bool gameRound;  // True == player1 and False == player2
+double NEWTON;   // Constante newtoniana
+double acel;     // Aceleracao somada da grade
 
 // Inicia as variaveis necessarias do jogo
 void initGame() {
@@ -29,6 +29,13 @@ void initGame() {
     b.speedY = 0;
     b.radius = 1;
 
+    if (planetaSize>0) {
+        for (int i = 0; i < planetaSize; ++i) {
+            free(planetas[i].nome);
+        }
+        planetaSize = 0;
+        free(planetas);
+    }
     readSetPlanet();
 
     if(getRandomInt(1, 0) == 0) {
@@ -63,7 +70,18 @@ void initGame() {
 
 // Encerra uma partida
 void finishGame(){
-    GAMESTATE = TRANSITION;
+    if(activeMap==MAP3) {
+        activeMap = 0;
+        initGame();
+        playAgain();
+    } else {
+        GAMESTATE = TRANSITION;
+        orderRedraw = true;
+    }
+}
+
+void playAgain(){
+    GAMESTATE = PLAY_AGAIN;
     orderRedraw = true;
 }
 

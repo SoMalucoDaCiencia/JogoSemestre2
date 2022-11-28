@@ -50,6 +50,8 @@
 
     void finishGame();
 
+    void playAgain();
+
     void setBulletTo(int clickX, int clickY);
 
     void moveBall();

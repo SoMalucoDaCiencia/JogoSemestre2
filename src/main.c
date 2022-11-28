@@ -184,9 +184,6 @@ void eventHandler(ALLEGRO_EVENT ev) {
 
                         break;
                     }
-                    default: {
-                        break;
-                    }
                 }
                 case TRANSITION: {
                     // BOTÕES DA tela de transicao
@@ -204,10 +201,24 @@ void eventHandler(ALLEGRO_EVENT ev) {
                         initGame();
                         GAMESTATE = PLAY;
                     }
+                    break;
                 }
-
-                break;
+                case PLAY_AGAIN: {
+                    if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
+                            orderRedraw = true;
+                            GAMESTATE = PLAY;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415) {
+                            orderRedraw = true;
+                            GAMESTATE = CONFIG;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558) {
+                            orderRedraw = true;
+                            GAMESTATE = MENU;
+                    }
+                    break;
+                }
+                default: break;
             }
+            break;
         }
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
@@ -275,6 +286,14 @@ void render(ALLEGRO_EVENT ev) {
             case TRANSITION: {
                 if (orderRedraw) {
                     drawTransition();
+                    orderRedraw = false;
+                }
+                break;
+            }
+            case PLAY_AGAIN: {
+                // TELA JOGAR DE NOVO
+                if (orderRedraw) {
+                    drawPlayAgain();
                     orderRedraw = false;
                 }
                 break;
@@ -423,6 +442,28 @@ void drawGame() {
     } else {
         finishGame();
     }
+
+    al_flip_display();
+}
+
+void drawPlayAgain(){
+    al_clear_to_color(BLACK);
+    drawStars();
+
+    insertFilledSquare(500, 900, 210, 140, DARK_PURPLE, display);
+    insertFilledSquare(500, 900, 190, 120, LIGHT_PURPLE, display);
+
+    insertFilledSquare(130, 610, 345, 152, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 162, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 502, 195, 0, "Play Again");
+
+    insertFilledSquare(130, 610, 345, 295, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 305, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 545, 335, 0, "Config");
+
+    insertFilledSquare(130, 610, 345, 438, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 448, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 568, 473, 0, "Menu");
 
     al_flip_display();
 }
