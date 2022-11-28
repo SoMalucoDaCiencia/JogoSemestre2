@@ -63,6 +63,7 @@ void readSetPlanet(){
                 }
                 String getColor = substring(code, stringStartAt, here);
                 planetas[planeta].color = getColorByHex(getColor);
+                free(getColor);
                 break;
             }
             case '-': {
