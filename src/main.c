@@ -54,6 +54,9 @@ int main() {
     // Inicia o primeiro mapa
     activeMap = 0;
 
+    player1.character = CAT;
+    player2.character = SULLIVAN;
+
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
     const char *gif2 = "../src/assets/tutorial/giphy2.gif";
