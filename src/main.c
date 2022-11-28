@@ -198,24 +198,19 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 case TRANSITION: {
                     // BOTÕES DA TELA TRANSITION
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
-//                    if(activeMap > 2){
-//                        GAMESTATE = PLAY_AGAIN;
-//                        orderRedraw = true;
-//                    } else
                         if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
+                            activeMap = (MAP) (((int) activeMap) + 1);
                             for (int i = 0; i < planetaSize; ++i) {
                                 free(planetas[i].nome);
                             }
                             planetaSize = 0;
                             free(planetas);
+                            initGame();
+                            GAMESTATE = PLAY;
                         }
-                        activeMap = (MAP) (((int) activeMap) + 1);
-                        initGame();
-                        GAMESTATE = PLAY;
-//                            if(activeMap > 1){
-//                                GAMESTATE = PLAY_AGAIN;
-//                            }
+
+
                     }
 
                 case PLAY_AGAIN: {
