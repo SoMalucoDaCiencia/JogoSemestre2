@@ -45,7 +45,7 @@ char append(String initial, String append) {
 }
 
 int IntString(String str) {
-    return (int) strtol(str, (String)NULL, 10);
+    return (int) strtol(str, (char **) (String) NULL, 10);
 }
 
 double doubleString(String s) {

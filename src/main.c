@@ -165,52 +165,88 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case CHARACTER: {
                     // BOTÕES DA TELA CONFIG
-                     if(ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80){
+                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = CONFIG; //RETORNA PARA AS CONFIGURAÇÕES
                     } else {
                         if (ev.mouse.x >= 410 && ev.mouse.x <= 610) {
                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                player1.character = (SPRITE) (((int) player1.character + 1) > 5 ? 0 : player1.character + 1);
+                                player1.character = (SPRITE) (((int) player1.character + 1) > 5 ? 0 :
+                                                              player1.character + 1);
                                 drawCharacterSelection(false);
                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                player1.character = (SPRITE) (((int) player1.character - 1) < 0 ? 5 : player1.character - 1);
+                                player1.character = (SPRITE) (((int) player1.character - 1) < 0 ? 5 :
+                                                              player1.character - 1);
                                 drawCharacterSelection(false);
                             }
                         }
                         if (ev.mouse.x >= 710 && ev.mouse.x <= 910) {
                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                player2.character = (SPRITE) (((int) player2.character + 1) > 5 ? 0 : player2.character + 1);
+                                player2.character = (SPRITE) (((int) player2.character + 1) > 5 ? 0 :
+                                                              player2.character + 1);
                                 drawCharacterSelection(false);
                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                player2.character = (SPRITE) (((int) player2.character - 1) < 0 ? 5 : player2.character - 1);
+                                player2.character = (SPRITE) (((int) player2.character - 1) < 0 ? 5 :
+                                                              player2.character - 1);
                                 drawCharacterSelection(false);
                             }
                         }
 
                         break;
                     }
-                    default: {
-                        break;
-                    }
                 }
                 case TRANSITION: {
-                    // BOTÕES DA tela de transicao
+                    // BOTÕES DA TELA TRANSITION
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
-                    if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
+//                    if(activeMap > 2){
+//                        GAMESTATE = PLAY_AGAIN;
+//                        orderRedraw = true;
+//                    } else
+                        if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
+                            for (int i = 0; i < planetaSize; ++i) {
+                                free(planetas[i].nome);
+                            }
+                            planetaSize = 0;
+                            free(planetas);
+                        }
                         activeMap = (MAP) (((int) activeMap) + 1);
                         initGame();
                         GAMESTATE = PLAY;
+//                            if(activeMap > 1){
+//                                GAMESTATE = PLAY_AGAIN;
+//                            }
                     }
+
+                case PLAY_AGAIN: {
+                    if(activeMap > 2){
+                        if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
+                            orderRedraw = true;
+                            GAMESTATE = PLAY;
+
+                        }else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415){
+                            orderRedraw = true;
+                            GAMESTATE = CONFIG;
+                        }else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558){
+                            orderRedraw = true;
+                            GAMESTATE = MENU;
+                        }
+                    }
+                    break;
                 }
 
-                break;
             }
+            break;
         }
+
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
+                for (int i = 0; i < planetaSize; ++i) {
+                    free(planetas[i].nome);
+                }
+                planetaSize = 0;
+                free(planetas);
                 GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
             break;
@@ -221,6 +257,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
         }
     }
 }
+
 
 // Renderiza qualquer tela
 void render(ALLEGRO_EVENT ev) {
@@ -265,11 +302,20 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case TRANSITION: {
+                // TELA DE TRANSIÇÃO ENTRE OS MAPAS
                 if (orderRedraw) {
                     drawTransition();
                     orderRedraw = false;
                 }
                 break;
+            }
+            case PLAY_AGAIN: {
+                // TELA JOGAR DE NOVO
+                if (orderRedraw) {
+                    drawPlayAgain();
+                    orderRedraw = false;
+                }
+//                break;
             }
             default: {
                 break;
@@ -368,22 +414,28 @@ void drawCharacterSelection(bool all) {
 
     insertShadowSquare(50, 200, 30, 30, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 90, 40, 0, "Back");
-//
+
     insertShadowSquare(40, 200, 410, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 446, 40, 0, "PLAYER 1");
 
     insertShadowSquare(40, 200, 410, 160, LIGHT_PURPLE, DARK_PURPLE, display);
+//    al_draw_text(font45, WHITE, 200, 160, 0, "NEXT");
     insertShadowSquare(250, 200, 410, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player1.character), (float) 430, 260, 0);
     insertShadowSquare(40, 200, 410, 490, LIGHT_PURPLE, DARK_PURPLE, display);
-//
+//    al_draw_text(font45, WHITE, 540, 490, 0, "PREVIOUS");
+
     insertShadowSquare(40, 200, 710, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 742, 40, 0, "PLAYER 2");
-//
+
     insertShadowSquare(40, 200, 710, 160, LIGHT_PURPLE, DARK_PURPLE, display);
+//    al_draw_text(font45, WHITE, 200, 160, 0, "NEXT");
     insertShadowSquare(250, 200, 710, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player2.character), (float) 730, 260, 0);
     insertShadowSquare(40, 200, 710, 490, LIGHT_PURPLE, DARK_PURPLE, display);
+//    al_draw_text(font45, WHITE, 270, 490, 0, "PREVIOUS");
+
+
 
     al_flip_display();
 }
@@ -427,6 +479,28 @@ void drawGame() {
         finishGame();
         al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     }
+
+    al_flip_display();
+}
+
+void drawPlayAgain(){
+    al_clear_to_color(BLACK);
+    drawStars();
+
+    insertFilledSquare(500, 900, 210, 140, DARK_PURPLE, display);
+    insertFilledSquare(500, 900, 190, 120, LIGHT_PURPLE, display);
+
+    insertFilledSquare(130, 610, 345, 152, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 162, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 502, 195, 0, "Play Again");
+
+    insertFilledSquare(130, 610, 345, 295, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 305, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 545, 335, 0, "Config");
+
+    insertFilledSquare(130, 610, 345, 438, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 448, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 568, 473, 0, "Menu");
 
     al_flip_display();
 }

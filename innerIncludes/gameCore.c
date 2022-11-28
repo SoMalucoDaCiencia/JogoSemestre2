@@ -17,7 +17,7 @@ Bullet b; // Bolinha
 
 struct User player1 , player2;
 
-float planetaSize; // Quantidade de planetas
+int planetaSize; // Quantidade de planetas
 bool gameRound; // True == player1 and False == player2
 double NEWTON;  // Constante newtoniana
 double acel; // Aceleracao somada da grade
@@ -27,7 +27,7 @@ void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
-    b.radius = 1;
+    b.radius = 5;
 
     readSetPlanet();
 
@@ -39,7 +39,7 @@ void initGame() {
 
     player1.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
     player1.coordX =  planetas[0].coordX;
-    player1.life   = 5;
+    player1.life   = 1;
     player1.radius = 24;
 
     player2.coordY =  planetas[1].coordY - (planetas[1].radius + 30);
@@ -62,6 +62,11 @@ void initGame() {
 // Encerra uma partida
 void finishGame(){
     GAMESTATE = TRANSITION;
+    orderRedraw = true;
+}
+
+void playAgain(){
+    GAMESTATE = PLAY_AGAIN;
     orderRedraw = true;
 }
 
@@ -104,7 +109,7 @@ void moveBall() {
 
             acel = NEWTON * planeta.mass / twoPointsDistance(b.coordX, b.coordY, planeta.coordX, planeta.coordY);
 
-            if (b.coordY!=planeta.coordY) {
+            if (b.coordY != planeta.coordY) {
                 finalYAceleration += getComposedCoefficient(acel, b.coordX, b.coordY, planeta.coordX, planeta.coordY);
                 if (planeta.coordY <= b.coordY) {
                     finalYAceleration *= -1;
@@ -112,7 +117,7 @@ void moveBall() {
                 (b).speedY += finalYAceleration;
             }
 
-            if (b.coordX!=planeta.coordX) {
+            if (b.coordX != planeta.coordX) {
                 finalXAceleration = (double) sqrt(acel * acel - finalYAceleration * finalYAceleration);
                 if (planeta.coordX <= b.coordX) {
                     finalXAceleration *= -1;
@@ -138,7 +143,7 @@ void readCreatePlanetsBullets(){
     if (player1.life * player2.life != 0) {
         for (int i = 0; i < planetaSize; ++i) {
             Planeta planeta = planetas[i];
-            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, planeta.radius, planeta.color);
+            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float) planeta.radius, planeta.color);
         }
 
         if(b.active) {
