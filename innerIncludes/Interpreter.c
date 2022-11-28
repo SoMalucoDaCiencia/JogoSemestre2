@@ -46,7 +46,7 @@ void readSetPlanet(){
     planetaSize = qtdPlanetas/2;
 
     // Lê, conta e inicializa quantos planetas tem
-    planetas = malloc(sizeof(Planeta) * planetaSize);
+    planetas = (Planeta*) malloc(sizeof(Planeta) * (planetaSize));
 
     while(code[here]){
         // Pula espaços e tabs
@@ -63,6 +63,7 @@ void readSetPlanet(){
                 }
                 String getColor = substring(code, stringStartAt, here);
                 planetas[planeta].color = getColorByHex(getColor);
+                free(getColor);
                 break;
             }
             case '-': {
@@ -121,6 +122,7 @@ void readSetPlanet(){
             }
         }
     }
+    free(code);
 }
 
 

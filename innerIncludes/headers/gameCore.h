@@ -38,7 +38,7 @@
 
     extern Planeta *planetas;
     extern Bullet b;
-    extern float planetaSize;
+    extern int planetaSize;
     extern double NEWTON;
     extern double acel;
     extern bool gameRound;
@@ -49,6 +49,8 @@
     void initGame();
 
     void finishGame();
+
+    void playAgain();
 
     void setBulletTo(int clickX, int clickY);
 

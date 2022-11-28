@@ -15,6 +15,7 @@
         CONFIG,
         CHARACTER,
         TRANSITION,
+        PLAY_AGAIN
     } GAMEMODE;
 
     extern GAMEMODE GAMESTATE;
@@ -34,6 +35,8 @@
     void drawCharacterSelection(bool all);
 
     void drawGame();
+
+    void drawPlayAgain();
 
     void drawTutorial();
 

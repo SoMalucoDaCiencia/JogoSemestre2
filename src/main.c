@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <src/main.h>
@@ -13,7 +12,6 @@
 #include <innerIncludes/headers/Cores.h>
 #include <innerIncludes/headers/gameCore.h>
 #include <outIncludes/headers/algif.h>
-#include <innerIncludes/headers/sprites.h>
 
 
 // ========== Window VARS ===========================================
@@ -54,7 +52,7 @@ int main() {
     }
 
     // Inicia o primeiro mapa
-    activeMap = MAP1;
+    activeMap = 0;
 
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
@@ -93,10 +91,6 @@ int main() {
     timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(timer_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
-
-    //PERSONAGENS DEFAULT
-    player1.character = CAT;
-    player2.character = DEMON;
 
     while (1) {
         ALLEGRO_EVENT ev;
@@ -200,27 +194,52 @@ void eventHandler(ALLEGRO_EVENT ev) {
 
                         break;
                     }
-                    default: {
-                        break;
-                    }
                 }
                 case TRANSITION: {
                     // BOTÕES DA tela de transicao
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
                     if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
+                        if (planetaSize>0) {
+                            for (int i = 0; i < planetaSize; ++i) {
+                                free(planetas[i].nome);
+                            }
+                            planetaSize = 0;
+                            free(planetas);
+                        }
                         activeMap = (MAP) (((int) activeMap) + 1);
                         initGame();
                         GAMESTATE = PLAY;
                     }
+                    break;
                 }
-
-                break;
+                case PLAY_AGAIN: {
+                    if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
+                            orderRedraw = true;
+                            GAMESTATE = PLAY;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415) {
+                            orderRedraw = true;
+                            GAMESTATE = CONFIG;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558) {
+                            orderRedraw = true;
+                            GAMESTATE = MENU;
+                    }
+                    break;
+                }
+                default: break;
             }
+            break;
         }
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
+                if (planetaSize>0) {
+                    for (int i = 0; i < planetaSize; ++i) {
+                        free(planetas[i].nome);
+                    }
+                    planetaSize = 0;
+                    free(planetas);
+                }
                 GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
             break;
@@ -291,6 +310,14 @@ void render(ALLEGRO_EVENT ev) {
                 }
                 break;
             }
+            case PLAY_AGAIN: {
+                // TELA JOGAR DE NOVO
+                if (orderRedraw) {
+                    drawPlayAgain();
+                    orderRedraw = false;
+                }
+                break;
+            }
             default: {
                 break;
             }
@@ -339,8 +366,8 @@ void drawMenu() {
 
 void drawTransition() {
     al_clear_to_color(BLACK);
-    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
-    insertShadowSquare(80, 300, (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
 }
@@ -446,29 +473,39 @@ void drawGame() {
             al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
         }
 
-        al_draw_filled_circle((float) player1.coordX, (float) player1.coordY, (float) player1.radius, BLACK);
-        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
-        al_draw_filled_circle((float) player2.coordX, (float) player2.coordY, (float) player2.radius, BLACK);
-        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
-    }
-
-    if(player2.life > 0){
         if(gameRound){
             al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
-        }
-    } else{
-        finishGame();
-        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
-    }
-
-    if(player1.life > 0){
-        if(!gameRound){
+        } else {
             al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }
-    } else{
+
+        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
+        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
+    } else {
         finishGame();
-        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     }
+
+    al_flip_display();
+}
+
+void drawPlayAgain(){
+    al_clear_to_color(BLACK);
+    drawStars();
+
+    insertFilledSquare(500, 900, 210, 140, DARK_PURPLE, display);
+    insertFilledSquare(500, 900, 190, 120, LIGHT_PURPLE, display);
+
+    insertFilledSquare(130, 610, 345, 152, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 162, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 502, 195, 0, "Play Again");
+
+    insertFilledSquare(130, 610, 345, 295, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 305, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 545, 335, 0, "Config");
+
+    insertFilledSquare(130, 610, 345, 438, DARK_PURPLE, display);
+    insertFilledSquare(110, 590, 355, 448, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 568, 473, 0, "Menu");
 
     al_flip_display();
 }
