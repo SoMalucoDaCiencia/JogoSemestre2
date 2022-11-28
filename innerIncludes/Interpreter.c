@@ -48,7 +48,7 @@ void readSetPlanet(){
     // Lê, conta e inicializa quantos planetas tem
     planetas = (Planeta*) malloc(sizeof(Planeta) * (planetaSize));
 
-    while(code[here]){
+    while(code[here] != '\0'){
         // Pula espaços e tabs
         if(code[here] == ' ' || code[here] == '\t') {
             here++;

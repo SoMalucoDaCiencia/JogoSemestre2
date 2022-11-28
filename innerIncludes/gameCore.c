@@ -27,7 +27,7 @@ void initGame() {
 
     b.speedX = 0;
     b.speedY = 0;
-    b.radius = 1;
+    b.radius = 5;
 
     if (planetaSize>0) {
         for (int i = 0; i < planetaSize; ++i) {
@@ -158,7 +158,7 @@ void readCreatePlanetsBullets(){
     if (player1.life * player2.life != 0) {
         for (int i = 0; i < planetaSize; ++i) {
             Planeta planeta = planetas[i];
-            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, planeta.radius, planeta.color);
+            al_draw_filled_circle((float) planeta.coordX, (float)  planeta.coordY, (float) planeta.radius, planeta.color);
         }
 
         if(b.active) {
