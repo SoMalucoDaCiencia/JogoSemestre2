@@ -44,13 +44,11 @@ void initGame() {
         gameRound = false;
     }
 
-    player1.character = CAT;
     player1.coordY =  planetas[1].coordY - (planetas[1].radius + 30);
     player1.coordX =  planetas[1].coordX;
     player1.life   = 1;
     player1.radius = 24;
 
-    player2.character = SULLIVAN;
     player2.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
     player2.coordX =  planetas[0].coordX;
     player2.life   = 5;
