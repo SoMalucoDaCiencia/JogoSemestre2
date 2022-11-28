@@ -1,13 +1,69 @@
--davi-:
+-planetaDefault1-:
     c: #9547ed
-    r: 40
-    m: 0.3
-    x: 854
-    y: 450
+    r: 30
+    m: 0.9
+    x: 1025
+    y: 415
 
--luan-:
+-planetaDefault2-:
     c: #ff7b00
     r: 30
-    m: 0.3
-    x: 350
-    y: 460
+    m: 0.9
+    x: 150
+    y: 485
+
+-planeta1-:
+    c: #0fc1eb
+    r: 35
+    m: 1.3
+    x: 645
+    y: 200
+
+-planeta2-:
+    c: #0fc1eb
+    r: 25
+    m: 0.7
+    x: 820
+    y: 525
+
+-planeta3-:
+    c: #0fc1eb
+    r: 15
+    m: 0.5
+    x: 358
+    y: 333
+
+-planeta4-:
+    c: #0fc1eb
+    r: 20
+    m: 0.6
+    x: 458
+    y: 475
+
+-planeta5-:
+    c: #0fc1eb
+    r: 18
+    m: 0.65
+    x: 680
+    y: 433
+
+-planeta6-:
+    c: #0fc1eb
+    r: 12
+    m: 0.4
+    x: 788
+    y: 322
+
+-planeta7-:
+    c: #0fc1eb
+    r: 12
+    m: 0.4
+    x: 888
+    y: 400
+
+-planeta8-:
+    c: #0fc1eb
+    r: 25
+    m: 0.8
+    x: 945
+    y: 200

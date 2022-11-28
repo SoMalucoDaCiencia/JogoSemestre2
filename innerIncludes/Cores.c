@@ -33,10 +33,10 @@ void init_colors(){
     LIGHT_PURPLE = getColorByHex((char*) "#9547ed");
     RED          = getColorByHex((char*) "#fa2347");
     YELLOW       = getColorByHex((char*) "#ffcc00");
-    GREEN  = getColorByHex((char*) "#8cbb4f");
+    GREEN        = getColorByHex((char*) "#8cbb4f");
     LIGHT_GREEN  = getColorByHex((char*) "#60d642");
     DARK_GREEN   = getColorByHex((char*) "#143d09");
-    BLUE   = getColorByHex((char*) "#0fc1eb");
+    BLUE         = getColorByHex((char*) "#0fc1eb");
     LIGHT_BLUE   = getColorByHex((char*) "#477eff");
     OCEAN_BLUE   = getColorByHex((char*) "#56f1d1");
     DARK_BLUE    = getColorByHex((char*) "#0a2563");

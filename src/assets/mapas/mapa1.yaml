@@ -1,14 +1,51 @@
--tais-:
+-planetaDefault1-:
     c: #ffffff
-    r: 20
-    m: 0.9
-    x: 640
+    r: 30
+    m: .9
+    x: 1000
     y: 360
 
--arthur-:
-    c: #fa2347
+-planetaDefault2-:
+    c: #ffffff
     r: 30
-    m: 1.2
-    x: 300
+    m: .9
+    x: 150
     y: 450
+
+-planeta1-:
+    c: #0fc1eb
+    r: 50
+    m: 1.4
+    x: 570
+    y: 335
+
+-planeta2-:
+    c: #56f1d1
+    r: 30
+    m: 1
+    x: 720
+    y: 585
+
+-planeta3-:
+    c: #56f1d1
+    r: 30
+    m: 1
+    x: 730
+    y: 155
+
+-planeta4-:
+    c: #0a2563
+    r: 30
+    m: 1
+    x: 425
+    y: 525
+
+-planeta5-:
+    c: #477eff"
+    r: 28
+    m: 0.8
+    x: 315
+    y: 200
+
+
 

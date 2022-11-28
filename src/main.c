@@ -54,7 +54,7 @@ int main() {
     }
 
     // Inicia o primeiro mapa
-    activeMap = 0;
+    activeMap = 1;
 
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
@@ -404,9 +404,7 @@ void drawGame() {
             al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
         }
 
-        al_draw_filled_circle((float) player1.coordX, (float) player1.coordY, (float) player1.radius, BLACK);
         al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
-        al_draw_filled_circle((float) player2.coordX, (float) player2.coordY, (float) player2.radius, BLACK);
         al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
     }
 
