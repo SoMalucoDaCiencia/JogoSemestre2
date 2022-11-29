@@ -377,7 +377,7 @@ void drawMenu() {
 
 void drawTransition() {
     al_clear_to_color(BLACK);
-    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    al_draw_text(font90, LIGHT_PURPLE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
     insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
@@ -491,9 +491,9 @@ void drawGame() {
         }
 
         if(gameRound){
-            al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
+            al_draw_text( font45, LIGHT_PURPLE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
         } else {
-            al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
+            al_draw_text( font45, DARK_PURPLE, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }
 
         al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);

@@ -40,7 +40,8 @@ void initGame() {
     switch (activeMap) {
         case MAP1: setMap1(); break;
         case MAP2: setMap2(); break;
-        case MAP3: setMap3();break;
+        case MAP3: setMap3(); break;
+        case MAP4: setMap4(); break;
         default: break;
     }
 
@@ -57,7 +58,7 @@ void initGame() {
 
     player2.coordY =  planetas[0].coordY - (planetas[0].radius + 30);
     player2.coordX =  planetas[0].coordX;
-    player2.life   = 5;
+    player2.life   = 3;
     player2.radius = 24;
 
     if (gameRound) {
@@ -74,7 +75,7 @@ void initGame() {
 
 // Encerra uma partida
 void finishGame(){
-    if(activeMap==MAP2) {
+    if(activeMap==MAP4) {
         activeMap = 0;
         initGame();
         playAgain();
