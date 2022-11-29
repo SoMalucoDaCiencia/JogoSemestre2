@@ -16,6 +16,7 @@
         int coordY;
         int radius;
         int life;
+        int score;
     } player1 , player2;
 
     typedef struct {

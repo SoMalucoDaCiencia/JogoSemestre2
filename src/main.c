@@ -172,7 +172,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = MENU; // RETORNA A TELA DE MENU
-                    } else if (ev.mouse.x >= 270 && ev.mouse.x <= 1020 && ev.mouse.y >= 180 && ev.mouse.y <= 300) {
+                    } else if (ev.mouse.x >= 270 && ev.mouse.x <= 1020 && ev.mouse.y >= 320 && ev.mouse.y <= 440) {
                         orderRedraw = true;
                         GAMESTATE = CHARACTER; //VAI PARA TELA DE SELEÇÃO DE PERSONAGEM
                     }
@@ -225,13 +225,13 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     break;
                 }
                 case PLAY_AGAIN: {
-                    if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
+                    if (ev.mouse.x >= 390 && ev.mouse.x <= 900 && ev.mouse.y >= 152 && ev.mouse.y <= 242) {
                             orderRedraw = true;
                             GAMESTATE = PLAY;
-                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415) {
+                    } else if(ev.mouse.x >= 390 && ev.mouse.x <= 900 && ev.mouse.y >= 375 && ev.mouse.y <= 365) {
                             orderRedraw = true;
                             GAMESTATE = CONFIG;
-                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558) {
+                    } else if(ev.mouse.x >= 390 && ev.mouse.x <= 900 && ev.mouse.y >= 398 && ev.mouse.y <= 488) {
                             orderRedraw = true;
                             GAMESTATE = MENU;
                     }
@@ -377,7 +377,16 @@ void drawMenu() {
 
 void drawTransition() {
     al_clear_to_color(BLACK);
-    al_draw_text(font90, LIGHT_PURPLE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    drawStars();
+    al_draw_text(font90, LIGHT_PURPLE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu!" : "Jogador 1 venceu!");
+
+    // Desenha o placar
+    al_draw_text(font45, DARK_PURPLE, (float) WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 100, 0, "Placar");
+    al_draw_text( font45, WHITE, (float) WINDOW_WIDTH/2 - 60, WINDOW_HEIGHT/2 - 50, 0, StringInt(player1.score));
+    al_draw_text( font45, WHITE, (float) WINDOW_WIDTH/2 - 24, WINDOW_HEIGHT/2 - 50, 0, "-");
+    al_draw_text( font45, WHITE, (float) WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - 50, 0, StringInt(player2.score));
+
+    // Desenha o botão de próximo
     insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
@@ -434,12 +443,12 @@ void drawConfig() {
     insertShadowSquare(50, 200, 30, 30, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 90, 40, 0, "Back");
 
-    insertShadowSquare(120, 750, 270, 180, LIGHT_PURPLE, DARK_PURPLE, display);
-    al_draw_text(font45, WHITE, 360, 220, 0, "CHARACTER SELECTION");
+    insertShadowSquare(120, 750, 270, WINDOW_HEIGHT/2 - 40, LIGHT_PURPLE, DARK_PURPLE, display);
+    al_draw_text(font45, WHITE, 360, WINDOW_HEIGHT/2 - 10, 0, "CHARACTER SELECTION");
 
-    insertShadowSquare(120, 750, 270, 350, LIGHT_PURPLE, DARK_PURPLE, display);
+//    insertShadowSquare(120, 750, 270, 350, LIGHT_PURPLE, DARK_PURPLE, display);
 
-    insertShadowSquare(120, 750, 270, 520, LIGHT_PURPLE, DARK_PURPLE, display);
+//    insertShadowSquare(120, 750, 270, 520, LIGHT_PURPLE, DARK_PURPLE, display);
 
     printf(" - Drawing SETTINGS....[%s]\n", getNow());
     al_flip_display();
@@ -460,7 +469,9 @@ void drawCharacterSelection(bool all) {
     insertShadowSquare(250, 200, 410, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player1.character), (float) 430, 260, 0);
     insertShadowSquare(40, 200, 410, 490, LIGHT_PURPLE, DARK_PURPLE, display);
-    al_draw_text(font25, WHITE, 410 + 45, 490 + 7, 0, "CHANGE");
+    al_draw_text(font25, WHITE, 445, 167, 0, "PREVIOUS");
+
+    al_draw_text(font25, WHITE, 475, 497, 0, "NEXT");
 //
     insertShadowSquare(40, 200, 710, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 742, 40, 0, "PLAYER 2");
@@ -469,7 +480,9 @@ void drawCharacterSelection(bool all) {
     insertShadowSquare(250, 200, 710, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player2.character), (float) 730, 260, 0);
     insertShadowSquare(40, 200, 710, 490, LIGHT_PURPLE, DARK_PURPLE, display);
-    al_draw_text(font25, WHITE, 710 + 45, 490 + 7, 0, "CHANGE");
+    al_draw_text(font25, WHITE, 745, 167, 0, "PREVIOUS");
+
+    al_draw_text(font25, WHITE, 775, 497, 0, "NEXT");
 
     al_flip_display();
 }
@@ -509,20 +522,26 @@ void drawPlayAgain(){
     al_clear_to_color(BLACK);
     drawStars();
 
-    insertFilledSquare(500, 900, 210, 140, DARK_PURPLE, display);
-    insertFilledSquare(500, 900, 190, 120, LIGHT_PURPLE, display);
+    insertFilledSquare(400, 720, 295, 140, DARK_PURPLE, display);
+    insertFilledSquare(400, 720, 275, 120, LIGHT_PURPLE, display);
 
-    insertFilledSquare(130, 610, 345, 152, DARK_PURPLE, display);
-    insertFilledSquare(110, 590, 355, 162, LIGHT_PURPLE, display);
-    al_draw_text( font45, WHITE, (float) 502, 195, 0, "Play Again");
+    insertFilledSquare(90, 510, 390, 152, DARK_PURPLE, display);
+    insertFilledSquare(70, 490, 400, 162, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 502, 175, 0, "Play Again");
 
-    insertFilledSquare(130, 610, 345, 295, DARK_PURPLE, display);
-    insertFilledSquare(110, 590, 355, 305, LIGHT_PURPLE, display);
-    al_draw_text( font45, WHITE, (float) 545, 335, 0, "Config");
+    insertFilledSquare(90, 510, 390, 275, DARK_PURPLE, display);
+    insertFilledSquare(70, 490, 400, 285, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 545, 295, 0, "Config");
 
-    insertFilledSquare(130, 610, 345, 438, DARK_PURPLE, display);
-    insertFilledSquare(110, 590, 355, 448, LIGHT_PURPLE, display);
-    al_draw_text( font45, WHITE, (float) 568, 473, 0, "Menu");
+    insertFilledSquare(90, 510, 390, 398, DARK_PURPLE, display);
+    insertFilledSquare(70, 490, 400, 408, LIGHT_PURPLE, display);
+    al_draw_text( font45, WHITE, (float) 568, 418, 0, "Menu");
+
+    insertFilledSquare(110, 220, 528, 580, LIGHT_PURPLE, display);
+    al_draw_text(font45, DARK_PURPLE, (float) 548, 580, 0, "Placar");
+    al_draw_text( font45, WHITE, (float) 583, 630, 0, StringInt(player1.score));
+    al_draw_text( font45, WHITE, (float) 620, 630, 0, "-");
+    al_draw_text( font45, WHITE, (float) 648, 630, 0, StringInt(player2.score));
 
     al_flip_display();
 }

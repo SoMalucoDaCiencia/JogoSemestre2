@@ -313,4 +313,65 @@ void setMap4() {
     planetas[5].color = getColorByHex("#c45542"); //coral
 }
 
+void setMap5() {
+    if (planetaSize>0) {
+//        for (int i = 0; i < planetaSize; ++i) {
+//            free(planetas[i].nome);
+//        }
+        planetaSize = 0;
+        free(planetas);
+    }
+
+    planetaSize = 7;
+    planetas = (Planeta*) malloc(sizeof(Planeta) * 7);
+    planetas[0].nome = "p1";
+    planetas[0].radius = 30;
+    planetas[0].mass = 0.12;
+    planetas[0].coordX = 1120;
+    planetas[0].coordY = 380;
+    planetas[0].color = getColorByHex("#bd639b"); //rosa
+
+    planetas[1].nome = "p2";
+    planetas[1].radius = 30;
+    planetas[1].mass = 0.12;
+    planetas[1].coordX = 400;
+    planetas[1].coordY = 220;
+    planetas[1].color = getColorByHex("#ad9579"); //areia
+
+    planetas[2].nome = "p3";
+    planetas[2].radius = 55;
+    planetas[2].mass = 0.32;
+    planetas[2].coordX = 640;
+    planetas[2].coordY = 370;
+    planetas[2].color = getColorByHex("#a57d8f"); //rosa escuro
+
+    planetas[3].nome = "p3";
+    planetas[3].radius = 45;
+    planetas[3].mass = 0.32;
+    planetas[3].coordX = 800;
+    planetas[3].coordY = 160;
+    planetas[3].color = getColorByHex("#f4d7c1"); //areia claro
+
+    planetas[4].nome = "p4";
+    planetas[4].radius = 20;
+    planetas[4].mass = 0.12;
+    planetas[4].coordX = 310;
+    planetas[4].coordY = 400;
+    planetas[4].color = getColorByHex("#6c4b54"); //vinho
+
+    planetas[5].nome = "p1";
+    planetas[5].radius = 30;
+    planetas[5].mass = 0.12;
+    planetas[5].coordX = 230;
+    planetas[5].coordY = 200;
+    planetas[5].color = getColorByHex("#f7cedc"); //rosa claro
+
+    planetas[6].nome = "p4";
+    planetas[6].radius = 45;
+    planetas[6].mass = 0.22;
+    planetas[6].coordX = 980;
+    planetas[6].coordY = 560;
+    planetas[6].color = getColorByHex("#86453d"); //terra
+}
+
 

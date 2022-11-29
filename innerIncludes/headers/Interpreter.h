@@ -11,7 +11,8 @@ typedef enum {
     MAP1,
     MAP2,
     MAP3,
-    MAP4
+    MAP4,
+    MAP5
 } MAP;
 
 String getMap(MAP mapsList);
@@ -25,5 +26,7 @@ void setMap2();
 void setMap3();
 
 void setMap4();
+
+void setMap5();
 
 #endif //JOGOSEMESTRE2_INTERPRETER_H
