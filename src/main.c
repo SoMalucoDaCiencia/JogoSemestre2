@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <src/main.h>
@@ -13,7 +12,6 @@
 #include <innerIncludes/headers/Cores.h>
 #include <innerIncludes/headers/gameCore.h>
 #include <outIncludes/headers/algif.h>
-#include <innerIncludes/headers/sprites.h>
 
 
 // ========== Window VARS ===========================================
@@ -28,9 +26,9 @@ float const GAME_FREQUENCY      = 60; // Quantos ciclos de atualizacao acontecem
 
 ALLEGRO_BITMAP *astro, *tittleWorbit, *tittleWelcome, *lifeHeart; // Imagens principais do jogo
 ALLEGRO_EVENT_QUEUE *event_queue, *timer_queue; // Fila de eventos do usuario e FPS
-ALLEGRO_FONT *font25, *font90, *font45; // Fontes do jogo
+ALLEGRO_FONT *font15, *font25, *font90, *font45; // Fontes do jogo
 ALLEGRO_DISPLAY *display; // Display do jogo
-ALGIF_ANIMATION *tuto; // gif do tutorial
+ALGIF_ANIMATION *tuto, *tuto2; // gif do tutorial
 ALLEGRO_TIMER *timer;
 
 GAMEMODE GAMESTATE; //  Estado do q o usuario esta fazendo
@@ -56,14 +54,20 @@ int main() {
     // Inicia o primeiro mapa
     activeMap = 0;
 
+    player1.character = CAT;
+    player2.character = SULLIVAN;
+
     const char *gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
+    const char *gif2 = "../src/assets/tutorial/giphy2.gif";
+    tuto2 = algif_load_animation(gif2);
 
     // Inicia biblioteca de primitives
     al_init_primitives_addon();
 
     // Carrega as fontes do jogo
     if (al_init_font_addon() && al_init_ttf_addon()) {
+        font15 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 15, 0);
         font25 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 25, 0);
         font45 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 45, 0);
         font90 = al_load_ttf_font("../src/assets/fonts/Bungee-Regular.ttf", 90, 0);
@@ -90,10 +94,6 @@ int main() {
     timer = al_create_timer(1.0 / GAME_FREQUENCY);
     al_register_event_source(timer_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
-
-    //PERSONAGENS DEFAULT
-    player1.character = CAT;
-    player2.character = DEMON;
 
     while (1) {
         ALLEGRO_EVENT ev;
@@ -128,7 +128,7 @@ void eventHandler(ALLEGRO_EVENT ev) {
                             orderRedraw = true;
                             // Inicia constante de newton
                             initGame();
-                            GAMESTATE = TUTORIAL;
+                            GAMESTATE = TUTORIAL1;
                         } else if (ev.mouse.y >= 520 && ev.mouse.y <= 570) {     // config
                             orderRedraw = true;
                             GAMESTATE = CONFIG;
@@ -145,10 +145,25 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     }
                     break;
                 }
-                case TUTORIAL: {
+                case TUTORIAL1: {
+                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+                        orderRedraw = true;
+                        GAMESTATE = PLAY; // SKIPA PARTE DO TUTORIAL
+                    }
+                    if (ev.mouse.x >= 1160 && ev.mouse.x <= 1260 && ev.mouse.y >= 650 && ev.mouse.y <= 680) {
+                        orderRedraw = true;
+                        GAMESTATE = TUTORIAL2; // SKIPA PARTE DO TUTORIAL
+                    }
+                    break;
+                }
+                case TUTORIAL2: {
                     if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
                         orderRedraw = true;
                         GAMESTATE = PLAY; // SKIPA PARA O JOGO
+                    }
+                    if (ev.mouse.x >= 1160 && ev.mouse.x <= 1260 && ev.mouse.y >= 650 && ev.mouse.y <= 680) {
+                        orderRedraw = true;
+                        GAMESTATE = PLAY; // SKIPA PARTE DO TUTORIAL
                     }
                     break;
                 }
@@ -165,29 +180,25 @@ void eventHandler(ALLEGRO_EVENT ev) {
                 }
                 case CHARACTER: {
                     // BOTÕES DA TELA CONFIG
-                    if (ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80) {
+                     if(ev.mouse.x >= 30 && ev.mouse.x <= 230 && ev.mouse.y >= 30 && ev.mouse.y <= 80){
                         orderRedraw = true;
                         GAMESTATE = CONFIG; //RETORNA PARA AS CONFIGURAÇÕES
                     } else {
                         if (ev.mouse.x >= 410 && ev.mouse.x <= 610) {
                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                player1.character = (SPRITE) (((int) player1.character + 1) > 5 ? 0 :
-                                                              player1.character + 1);
+                                player1.character = (SPRITE) (((int) player1.character + 1) > 5 ? 0 : player1.character + 1);
                                 drawCharacterSelection(false);
                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                player1.character = (SPRITE) (((int) player1.character - 1) < 0 ? 5 :
-                                                              player1.character - 1);
+                                player1.character = (SPRITE) (((int) player1.character - 1) < 0 ? 5 : player1.character - 1);
                                 drawCharacterSelection(false);
                             }
                         }
                         if (ev.mouse.x >= 710 && ev.mouse.x <= 910) {
                             if (ev.mouse.y >= 160 && ev.mouse.y <= 200) {
-                                player2.character = (SPRITE) (((int) player2.character + 1) > 5 ? 0 :
-                                                              player2.character + 1);
+                                player2.character = (SPRITE) (((int) player2.character + 1) > 5 ? 0 : player2.character + 1);
                                 drawCharacterSelection(false);
                             } else if (ev.mouse.y >= 490 && ev.mouse.y <= 540) {
-                                player2.character = (SPRITE) (((int) player2.character - 1) < 0 ? 5 :
-                                                              player2.character - 1);
+                                player2.character = (SPRITE) (((int) player2.character - 1) < 0 ? 5 : player2.character - 1);
                                 drawCharacterSelection(false);
                             }
                         }
@@ -196,52 +207,50 @@ void eventHandler(ALLEGRO_EVENT ev) {
                     }
                 }
                 case TRANSITION: {
-                    // BOTÕES DA TELA TRANSITION
+                    // BOTÕES DA tela de transicao
                     // (float) WINDOW_WIDTH/2 - 150, (float) WINDOW_HEIGHT/2 + 130
-                        if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
+                    if((ev.mouse.x >= WINDOW_WIDTH/2 - 150) && (ev.mouse.x <= WINDOW_WIDTH/2 + 150) && (ev.mouse.y >= WINDOW_HEIGHT/2 + 130) && (ev.mouse.y <= WINDOW_HEIGHT/2 + 210)) {
                         orderRedraw = true;
-                            activeMap = (MAP) (((int) activeMap) + 1);
-                            for (int i = 0; i < planetaSize; ++i) {
-                                free(planetas[i].nome);
-                            }
+                        if (planetaSize>0) {
+//                            for (int i = 0; i < planetaSize; ++i) {
+//                                free(planetas[i].nome);
+//                            }
                             planetaSize = 0;
                             free(planetas);
-                            initGame();
-                            GAMESTATE = PLAY;
                         }
-
-
-                    }
-
-                case PLAY_AGAIN: {
-                    if(activeMap > 2){
-                        if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
-                            orderRedraw = true;
-                            GAMESTATE = PLAY;
-
-                        }else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415){
-                            orderRedraw = true;
-                            GAMESTATE = CONFIG;
-                        }else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558){
-                            orderRedraw = true;
-                            GAMESTATE = MENU;
-                        }
+                        activeMap = (MAP) (((int) activeMap) + 1);
+                        initGame();
+                        GAMESTATE = PLAY;
                     }
                     break;
                 }
-
+                case PLAY_AGAIN: {
+                    if (ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 162 && ev.mouse.y <= 272) {
+                            orderRedraw = true;
+                            GAMESTATE = PLAY;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 305 && ev.mouse.y <= 415) {
+                            orderRedraw = true;
+                            GAMESTATE = CONFIG;
+                    } else if(ev.mouse.x >= 355 && ev.mouse.x <= 945 && ev.mouse.y >= 448 && ev.mouse.y <= 558) {
+                            orderRedraw = true;
+                            GAMESTATE = MENU;
+                    }
+                    break;
+                }
+                default: break;
             }
             break;
         }
-
         case ALLEGRO_EVENT_KEY_DOWN: {
             if (ev.keyboard.keycode == 59) {
                 orderRedraw = true;
-                for (int i = 0; i < planetaSize; ++i) {
-                    free(planetas[i].nome);
+                if (planetaSize>0) {
+//                    for (int i = 0; i < planetaSize; ++i) {
+//                        free(planetas[i].nome);
+//                    }
+                    planetaSize = 0;
+                    free(planetas);
                 }
-                planetaSize = 0;
-                free(planetas);
                 GAMESTATE = MENU; // RETORNA A TELA DE MENU
             }
             break;
@@ -252,7 +261,6 @@ void eventHandler(ALLEGRO_EVENT ev) {
         }
     }
 }
-
 
 // Renderiza qualquer tela
 void render(ALLEGRO_EVENT ev) {
@@ -270,7 +278,7 @@ void render(ALLEGRO_EVENT ev) {
                 drawGame();
                 break;
             }
-            case TUTORIAL: {
+            case TUTORIAL1: {
                 if (GAME_FREQUENCY_POLARITY) {
                     drawTutorial();
                     if (orderRedraw) {
@@ -280,6 +288,16 @@ void render(ALLEGRO_EVENT ev) {
                 }
                 break;
             }
+            case TUTORIAL2: {
+            if (GAME_FREQUENCY_POLARITY) {
+                drawTutorial2();
+                if (orderRedraw) {
+                    printf(" - Drawing Tutorial....[%s]\n", getNow());
+                    orderRedraw = false;
+                }
+            }
+            break;
+        }
             case CONFIG: {
                 // TELA CONFIG
                 if (orderRedraw) {
@@ -297,7 +315,6 @@ void render(ALLEGRO_EVENT ev) {
                 break;
             }
             case TRANSITION: {
-                // TELA DE TRANSIÇÃO ENTRE OS MAPAS
                 if (orderRedraw) {
                     drawTransition();
                     orderRedraw = false;
@@ -310,7 +327,7 @@ void render(ALLEGRO_EVENT ev) {
                     drawPlayAgain();
                     orderRedraw = false;
                 }
-//                break;
+                break;
             }
             default: {
                 break;
@@ -360,23 +377,49 @@ void drawMenu() {
 
 void drawTransition() {
     al_clear_to_color(BLACK);
-    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
+    al_draw_text(font90, WHITE, (float) WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 250, 0, player1.life<=0 ? "Jogador 2 venceu" : "Jogador 1 venceu");
     insertShadowSquare(80, 300, WINDOW_WIDTH/2 - 150, WINDOW_HEIGHT/2 + 130, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, (float) WINDOW_WIDTH/2 - 60, (float) WINDOW_HEIGHT/2 + 160, 0, "Próximo");
     al_flip_display();
 }
 
-// Desenha as tutoriais
+// Desenha os tutoriais
 void drawTutorial() {
 // TELA DE TUROTIAL
     al_clear_to_color(BLACK);
 
-    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 110, WINDOW_HEIGHT/2 - 110, 0);
+    al_draw_bitmap(algif_get_bitmap(tuto, al_get_time()), WINDOW_WIDTH/2 - 300, WINDOW_HEIGHT/2 - 169, 0);
 
     insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
     insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertFilledSquare(30, 100, 1170, 650, DARK_PURPLE, display);
+    insertFilledSquare(30, 100, 1160, 640, LIGHT_PURPLE, display);
+    insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
 
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "  Antes de começarmos, você precisa de uma breve explicação sobre a gravidade.    (veja um exemplo a cima)");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "'Quanto mais massa um objeto tem e mais perto ele está, maior sua força de atração sobre outro objeto'");
     al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
+    al_draw_text(font15, WHITE, 1185, 648, 0, "Next");
+
+    al_flip_display();
+}
+
+void drawTutorial2() {
+// TELA DE TUROTIAL
+    al_clear_to_color(BLACK);
+
+    al_draw_bitmap(algif_get_bitmap(tuto2, al_get_time()), WINDOW_WIDTH/2 - 300, WINDOW_HEIGHT/2 - 169, 0);
+
+    insertFilledSquare(50, 200, 40, 40, DARK_PURPLE, display);
+    insertFilledSquare(50, 200, 30, 30, LIGHT_PURPLE, display);
+    insertFilledSquare(30, 100, 1170, 650, DARK_PURPLE, display);
+    insertFilledSquare(30, 100, 1160, 640, LIGHT_PURPLE, display);
+    insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
+
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "   ou seja, os maiores planetas irão atrair com mais força o projetil, assim dificultando a sua jogatina");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 5 vezes seu adversário primeiro ganha, boa sorte!!");
+    al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
+    al_draw_text(font15, WHITE, 1185, 648, 0, "Next");
 
     al_flip_display();
 }
@@ -409,28 +452,24 @@ void drawCharacterSelection(bool all) {
 
     insertShadowSquare(50, 200, 30, 30, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 90, 40, 0, "Back");
-
+//
     insertShadowSquare(40, 200, 410, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 446, 40, 0, "PLAYER 1");
 
     insertShadowSquare(40, 200, 410, 160, LIGHT_PURPLE, DARK_PURPLE, display);
-//    al_draw_text(font45, WHITE, 200, 160, 0, "NEXT");
     insertShadowSquare(250, 200, 410, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player1.character), (float) 430, 260, 0);
     insertShadowSquare(40, 200, 410, 490, LIGHT_PURPLE, DARK_PURPLE, display);
-//    al_draw_text(font45, WHITE, 540, 490, 0, "PREVIOUS");
-
+    al_draw_text(font25, WHITE, 410 + 45, 490 + 7, 0, "CHANGE");
+//
     insertShadowSquare(40, 200, 710, 35, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_text(font25, WHITE, 742, 40, 0, "PLAYER 2");
-
+//
     insertShadowSquare(40, 200, 710, 160, LIGHT_PURPLE, DARK_PURPLE, display);
-//    al_draw_text(font45, WHITE, 200, 160, 0, "NEXT");
     insertShadowSquare(250, 200, 710, 220, LIGHT_PURPLE, DARK_PURPLE, display);
     al_draw_bitmap(getBig(player2.character), (float) 730, 260, 0);
     insertShadowSquare(40, 200, 710, 490, LIGHT_PURPLE, DARK_PURPLE, display);
-//    al_draw_text(font45, WHITE, 270, 490, 0, "PREVIOUS");
-
-
+    al_draw_text(font25, WHITE, 710 + 45, 490 + 7, 0, "CHANGE");
 
     al_flip_display();
 }
@@ -451,28 +490,16 @@ void drawGame() {
             al_draw_bitmap(lifeHeart, WINDOW_WIDTH - (30 * (i + 1)), 20, 0);
         }
 
-        al_draw_filled_circle((float) player1.coordX, (float) player1.coordY, (float) player1.radius, BLACK);
-        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
-        al_draw_filled_circle((float) player2.coordX, (float) player2.coordY, (float) player2.radius, BLACK);
-        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
-    }
-
-    if(player2.life > 0){
         if(gameRound){
             al_draw_text( font45, LIGHT_BLUE, 400, 25, 0, "- VEZ DO JOGADOR 1 -");
-        }
-    } else{
-        finishGame();
-        al_draw_text(font90, RED, 150, 60, 0, "JODADOR 2 VENCEU!");
-    }
-
-    if(player1.life > 0){
-        if(!gameRound){
+        } else {
             al_draw_text( font45, RED, 400, 25, 0, "- VEZ DO JOGADOR 2 -");
         }
-    } else{
+
+        al_draw_bitmap((b.coordX > player1.coordX ? getSide(player1.character, 1) : getSide(player1.character, 0)), (float) player1.coordX - 36, player1.coordY - 36, 0);
+        al_draw_bitmap((b.coordX > player2.coordX ? getSide(player2.character, 1) : getSide(player2.character, 0)), (float) player2.coordX - 36, player2.coordY - 36, 0);
+    } else {
         finishGame();
-        al_draw_text(font90, LIGHT_BLUE, 150, 60, 0, "JODADOR 1 VENCEU!");
     }
 
     al_flip_display();
@@ -508,6 +535,7 @@ void killNine() {
     al_destroy_bitmap(astro);
     al_destroy_bitmap(lifeHeart);
     algif_destroy_animation(tuto);
+    algif_destroy_animation(tuto2);
     al_destroy_event_queue(timer_queue);
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);

@@ -17,4 +17,10 @@ String getMap(MAP mapsList);
 
 void readSetPlanet();
 
+void setMap1();
+
+void setMap2();
+
+void setMap3();
+
 #endif //JOGOSEMESTRE2_INTERPRETER_H

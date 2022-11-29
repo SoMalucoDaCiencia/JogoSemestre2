@@ -50,5 +50,5 @@ int IntString(String str) {
 
 double doubleString(String s) {
     String t;
-    return strtod(s, &t);
+    return strtof(s, &t);
 }

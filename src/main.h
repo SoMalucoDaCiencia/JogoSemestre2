@@ -10,7 +10,8 @@
     typedef enum {
         MENU,
         PLAY,
-        TUTORIAL,
+        TUTORIAL1,
+        TUTORIAL2,
         CONFIG,
         CHARACTER,
         TRANSITION,
@@ -38,6 +39,8 @@
     void drawPlayAgain();
 
     void drawTutorial();
+
+    void drawTutorial2();
 
     void eventHandler(ALLEGRO_EVENT ev);
 
