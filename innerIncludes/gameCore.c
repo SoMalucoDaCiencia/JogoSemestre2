@@ -76,6 +76,9 @@ void initGame() {
 
 // Encerra uma partida
 void finishGame(){
+    if(player1.life == 0) player2.score++;
+    if(player2.life == 0) player1.score++;
+
     if(activeMap==MAP5) {
         activeMap = 0;
         initGame();
@@ -85,8 +88,7 @@ void finishGame(){
         orderRedraw = true;
     }
 
-    if(player1.life == 0) player2.score++;
-    if(player2.life == 0) player1.score++;
+
 }
 
 void playAgain(){
@@ -197,7 +199,12 @@ double twoPointsDistance(int pointAX, int pointAY,int pointBX,int pointBY) {
 void setBulletTo(int clickX, int clickY) {
     b.active = true;
 
-    int velInit = 10; // Velocidade inicial
+    int velInit = 0;
+    if (gameRound) {
+        velInit = twoPointsDistance(clickX, clickY, player1.coordX, player1.coordY) / 50; // Velocidade inicial
+    } else {
+        velInit = twoPointsDistance(clickX, clickY, player2.coordX, player2.coordY) / 50; // Velocidade inicial
+    }
 
     if(gameRound){
         b.speedY = getComposedCoefficient(velInit, player1.coordX, player1.coordY, clickX, clickY);

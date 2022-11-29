@@ -426,7 +426,7 @@ void drawTutorial2() {
     insertShadowSquare(50, 1000, (WINDOW_WIDTH / 2) - 500, 620, LIGHT_PURPLE, DARK_PURPLE, display);
 
     al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 627, 0, "   ou seja, os maiores planetas irão atrair com mais força o projetil, assim dificultando a sua jogatina");
-    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 5 vezes seu adversário primeiro ganha, boa sorte!!");
+    al_draw_text(font15, WHITE, (float) (WINDOW_WIDTH / 2.0) - 475, 648, 0, "Está pronto para está batalha espacial? Quem acertar 3 vezes seu adversário primeiro ganha, boa sorte!!");
     al_draw_text(font25, WHITE, 90, 40, 0, "Skip");
     al_draw_text(font15, WHITE, 1185, 648, 0, "Next");
 
