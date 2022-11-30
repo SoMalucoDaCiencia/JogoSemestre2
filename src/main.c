@@ -57,9 +57,9 @@ int main() {
     player1.character = CAT;
     player2.character = SULLIVAN;
 
-    const char *gif = "../src/assets/tutorial/giphy.gif";
+    String gif = "../src/assets/tutorial/giphy.gif";
     tuto = algif_load_animation(gif);
-    const char *gif2 = "../src/assets/tutorial/giphy2.gif";
+    String gif2 = "../src/assets/tutorial/giphy2.gif";
     tuto2 = algif_load_animation(gif2);
 
     // Inicia biblioteca de primitives
